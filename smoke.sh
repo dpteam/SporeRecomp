@@ -1,38 +1,49 @@
-#!/bin/bash
-# Smoke-test the aarch64 binary under qemu-user, without a device.
+#!/usr/bin/env bash
+# Smoke-test the aarch64 binary under qemu-aarch64, without a device.
 #
-#   ./smoke.sh                 run against refs/SporeBin/SporeApp.exe.unpacked.exe
-#   ./smoke.sh --timeout 30    give up after 30 s (default 120)
+#   ./smoke.sh                 run with the reference exe, 30 s timeout
+#   ./smoke.sh -t 120          longer timeout
+#   ./smoke.sh -e path/to.exe  different guest executable
 #
-# Checks: the binary loads, the PE parses, imports bind, and the guest reaches its entry
-# point. Prints the log tail and the exit code. This is the fastest feedback loop we have;
-# the device is only needed for anything that touches the GPU or the panel.
+# This catches everything that does not need a GPU or the panel: PE loading, import binding,
+# CRT startup, the boot ladder and the first guest calls. It is the fastest feedback loop
+# available, so it runs before every deploy.
 set -uo pipefail
 cd "$(dirname "$0")"
 
-TIMEOUT=120
-[ "${1:-}" = "--timeout" ] && TIMEOUT="${2:-120}"
+TIMEOUT=30
+EXE="refs/SporeBin/SporeApp.exe.unpacked.exe"
+while getopts "t:e:" opt; do
+  case "$opt" in
+    t) TIMEOUT="$OPTARG" ;;
+    e) EXE="$OPTARG" ;;
+    *) echo "usage: $0 [-t seconds] [-e exe]" >&2; exit 2 ;;
+  esac
+done
 
 BIN="build/aarch64/spore"
-[ -f "$BIN" ] || { echo "missing $BIN; run ./build.sh aarch64" >&2; exit 1; }
+[ -f "$BIN" ] || { echo "missing $BIN — run ./build.sh aarch64" >&2; exit 1; }
+[ -f "$EXE" ] || { echo "missing guest exe $EXE" >&2; exit 1; }
 
-# Stage a game directory with just the executable: the boot ladder should get past the PE
-# load and CRT startup without any assets.
 STAGE="${SR_STAGE:-/tmp/spore-smoke}"
 rm -rf "$STAGE" && mkdir -p "$STAGE/gamedata"
-cp refs/SporeBin/SporeApp.exe.unpacked.exe "$STAGE/gamedata/SporeApp.exe"
+cp "$EXE" "$STAGE/gamedata/SporeApp.exe"
 cp "$BIN" "$STAGE/spore"
+chmod +x "$STAGE/spore"
 
 cd "$STAGE"
-echo "=== running under qemu-aarch64 (timeout ${TIMEOUT}s)"
-timeout "$TIMEOUT" qemu-aarch64-static -cpu max ./spore gamedata > run.log 2>&1
+echo "[smoke] qemu-aarch64, ${TIMEOUT}s timeout, guest exe $(stat -c%s gamedata/SporeApp.exe) bytes"
+timeout "$TIMEOUT" qemu-aarch64-static -cpu max ./spore gamedata "$@" > qemu.log 2>&1
 RC=$?
-echo "=== exit code: $RC  (124 = timed out, which usually means the guest kept running)"
-echo "=== log ($(wc -l < run.log) lines)"
+echo "[smoke] exit $RC $([ $RC -eq 124 ] && echo '(timeout — the guest was still running)')"
+echo "[smoke] --- stdout/stderr ---"
+head -20 qemu.log
+echo "[smoke] --- log.txt (first 60) ---"
 if [ -f log.txt ]; then
-  head -40 log.txt
-  echo "  ..."
-  tail -25 log.txt
+  head -60 log.txt
+  echo "[smoke] --- log.txt (last 30) ---"
+  tail -30 log.txt
+  echo "[smoke] $(wc -l < log.txt) lines, $(grep -c 'UNSUPPORTED' log.txt || true) unsupported instructions"
 else
-  tail -40 run.log
+  echo "(no log.txt)"
 fi

@@ -12,7 +12,7 @@ in `analysis/`.
 | Instructions assigned to a function | 4,763,173 (86.66%) |
 | Functions recovered | **108,528** (102,913 real + 5,615 orphan data groups) |
 | Basic blocks | 235,256 |
-| Instructions lifted to C++ | **4,747,722** |
+| Instructions lifted to C++ | **4,747,729** |
 | Unhandled mnemonics | **0** |
 | Imported functions | 495 across 20 DLLs |
 | Imports implemented | 397 (98 remain, all in subsystems not started) |
@@ -104,3 +104,7 @@ These are worth recording because each one would have cost a debugging session o
   reported loudly when it happens.
 * `fcomi`/`fucomi` without an explicit second operand default to `st(0)` (the disassembler
   omits the implicit operand).
+* Indirect jumps (`jmp [table + reg*4]`) call `guest_tail` on the computed target, which works
+  because every table entry is a function start. A table entry pointing *into* a function would
+  be mis-dispatched; the census reports 231 such sites out of 4.7M instructions, and the
+  dispatch table falls back to a logged failure rather than a wrong result.

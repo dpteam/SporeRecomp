@@ -10,11 +10,15 @@
 #include <cstring>
 
 #include "rt/d3d9/com.h"
+#include "rt/d3d9/d3d9.h"
 #include "rt/guest.h"
 #include "rt/mem.h"
 #include "rt/shim.h"
+#include "rt/win32/win32.h"
 
 namespace sr::d3d {
+
+using w32::write_cstr;
 
 Caps g_caps;
 Stats g_stats;
@@ -559,8 +563,6 @@ const ComHandler kD3D9[] = {
     d3d_get_adapter_monitor, d3d_create_device,                       // 15-16
 };
 
-}  // namespace
-
 void d3d_create_device(CpuState* s, const u32* a, ComObject*) {
   // CreateDevice(adapter, type, hFocusWindow, behaviorFlags, pPresentationParameters,
   //              ppReturnedDeviceInterface)
@@ -669,6 +671,8 @@ void dev_create_pixel_shader_ex(CpuState* s, const u32* a, ComObject*) {
   ++g_stats.ps_created;
   s->r[0] = 0;
 }
+
+}  // namespace
 
 // ---------------------------------------------------------------------------
 // IDirect3DTexture9 / buffers / shaders: mostly QueryInterface/AddRef/Release plus

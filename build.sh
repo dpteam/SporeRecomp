@@ -71,13 +71,15 @@ export CXX CXXFLAGS GENFLAGS FORCE NEWEST_HDR
 
 echo "[build] $TARGET: $(echo "$SRC" | wc -w) runtime + $(echo "$GEN" | wc -w) generated"
 
+TOTAL=0
 TODO=()
 for f in $SRC $GEN; do
+  TOTAL=$((TOTAL + 1))
   base=$(basename "${f%.cpp}")
   obj="$OUT/$base.o"
   if needs_build "$obj" "$f"; then TODO+=("$f"); fi
 done
-echo "[build] $((${#TODO[@]})) files to compile, $((${#SRC[@]} + $(echo "$GEN" | wc -w) - ${#TODO[@]})) up to date"
+  echo "[build] ${#TODO[@]} files to compile, $((TOTAL - ${#TODO[@]})) up to date"
 
 if [ ${#TODO[@]} -gt 0 ]; then
   printf '%s\n' "${TODO[@]}" | xargs -P "$JOBS" -I{} bash -c '

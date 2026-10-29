@@ -1,0 +1,38 @@
+# GPTOKEYB profile for Spore (RG 35 XX H / muOS).
+#
+# Keyboard-only for now: the game currently runs on its Win32 message loop, so the pad is
+# mapped to the keys Spore binds by default. Once the DInput8 layer lands this file becomes
+# unnecessary — the game will read the pad directly, with the layout below as the mapping.
+back = esc
+start = return
+
+a = space
+b = return
+x = escape
+y = tab
+
+l1 = q
+l2 = pageup
+r1 = e
+r2 = pagedown
+
+up = up
+down = down
+left = left
+right = right
+
+left_analog_up = up
+left_analog_down = down
+left_analog_left = left
+left_analog_right = right
+
+right_analog_up = mouse_up
+right_analog_down = mouse_down
+right_analog_left = mouse_left
+right_analog_right = mouse_right
+
+deadzone_mode = axial
+deadzone = 3000
+
+hotkey = select
+hotkey_start = esc
