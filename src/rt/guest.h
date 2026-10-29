@@ -32,12 +32,27 @@ struct GuestEntry {
 extern GuestEntry g_functions[];
 extern const unsigned g_function_count;
 
+// A function's code range, with an optional mid-entry dispatcher for blocks that other
+// functions jump into.
+struct FunctionRange {
+  u32 start;
+  u32 end;
+  GuestFn fn;
+  void (*mid)(CpuState*, u32);
+};
+extern const FunctionRange g_function_ranges[];
+extern const unsigned g_function_range_count;
+
 GuestFn find_function(u32 addr);   // binary search over g_functions
+// Finds the function containing `addr` (not necessarily starting at it).
+const FunctionRange* find_range(u32 addr);
 
 // Calls a guest function by address (indirect call sites, vtables, callbacks).
 // The caller has already pushed a guest return address; the callee's `ret` pops it.
 void guest_call_indirect(CpuState* s, u32 addr);
 // Tail call: no return address is pushed, so the callee returns to *our* caller.
+// The address may point into the middle of a function (MSVC shares code tails), in which case
+// the function is entered at that block through its mid-entry dispatcher.
 void guest_tail(CpuState* s, u32 addr);
 void guest_jump_indirect(CpuState* s, u32 addr);
 

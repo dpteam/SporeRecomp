@@ -46,18 +46,44 @@ void guest_call_indirect(CpuState* s, u32 addr) {
   fn(s);
 }
 
+const FunctionRange* find_range(u32 addr) {
+  unsigned lo = 0, hi = g_function_range_count;
+  while (lo < hi) {
+    unsigned mid = (lo + hi) / 2;
+    if (addr < g_function_ranges[mid].start) {
+      hi = mid;
+    } else if (addr >= g_function_ranges[mid].end) {
+      lo = mid + 1;
+    } else {
+      return &g_function_ranges[mid];
+    }
+  }
+  return nullptr;
+}
+
 void guest_tail(CpuState* s, u32 addr) {
   const imports::Desc* desc = nullptr;
   if (imports::HostFn imp = imports::resolve_stub(addr, &desc)) {
     imports::invoke(desc, s);
     return;
   }
-  GuestFn fn = find_function(addr);
-  if (!fn) {
-    unsupported("tail call to unmapped guest address", addr);
+  // Exact function start?
+  if (GuestFn fn = find_function(addr)) {
+    fn(s);
     return;
   }
-  fn(s);
+  // Otherwise it may be a block inside a function: MSVC shares code tails between
+  // functions, so a `jmp` into another function's body is legitimate.
+  if (const FunctionRange* r = find_range(addr)) {
+    if (r->mid) {
+      r->mid(s, addr);
+      return;
+    }
+    SR_LOG("guest jump to 0x%08x, inside function 0x%08x but not a block entry", addr,
+           r->start);
+    return;
+  }
+  unsupported("tail call to unmapped guest address", addr);
 }
 
 void guest_jump_indirect(CpuState* s, u32 addr) {
