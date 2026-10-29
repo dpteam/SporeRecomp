@@ -5,6 +5,7 @@
 #include <cstring>
 
 #include "rt/guest.h"
+#include "rt/d3d9/d3d9.h"
 
 namespace sr::shim {
 
@@ -34,6 +35,7 @@ void init(const Config& cfg) {
 }
 
 void shutdown() {
+  d3d::shutdown();
   if (g_log && g_log != stderr) {
     std::fclose(g_log);
     g_log = nullptr;
@@ -63,6 +65,10 @@ void log_verbose(const char* fmt, ...) {
 bool setup_process(PeImage* img) {
   g_image = img;
   auto& mem = gmem();
+
+  if (!d3d::init()) {
+    SR_LOG("WARNING: D3D shim init failed; the guest will not get a device");
+  }
 
   // Thread stack: reserve and commit the whole thing (1 MB is cheap and Spore's CRT probes
   // guard pages during _resetstkoflw).

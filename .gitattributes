@@ -1,0 +1,9 @@
+# Normalise line endings so the tree is identical on Windows and Linux.
+* text=auto eol=lf
+
+# Binary artefacts and caches
+*.pkl binary
+*.bin binary
+*.exe binary
+*.dll binary
+*.o binary

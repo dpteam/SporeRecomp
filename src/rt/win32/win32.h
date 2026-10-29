@@ -76,6 +76,22 @@ void seh_handler4_common(CpuState* s, const u32* a);
 void seh_cxx_frame_handler3(CpuState* s, const u32* a);
 void seh_cxx_throw(CpuState* s, const u32* a);
 
+// --- d3d9 / d3dx / dinput / dsound / winsock ------------------------------
+void d3d_create9(CpuState* s, const u32* a);
+void d3dx_check_version(CpuState* s, const u32* a);
+void d3dx_get_ps_profile(CpuState* s, const u32* a);
+void d3dx_get_vs_profile(CpuState* s, const u32* a);
+void d3dx_compile_shader(CpuState* s, const u32* a);
+void d3dx_matrix_multiply(CpuState* s, const u32* a);
+void d3dx_matrix_multiply_transpose(CpuState* s, const u32* a);
+void d3dx_matrix_transpose(CpuState* s, const u32* a);
+void d3dx_vec3_transform(CpuState* s, const u32* a);
+void d3dx_vec3_transform_normal(CpuState* s, const u32* a);
+void dinput8_create(CpuState* s, const u32* a);
+void dsound_create(CpuState* s, const u32* a);
+void dsound_noop(CpuState* s, const u32* a);
+void ws_noop(CpuState* s, const u32* a);
+
 // --- kernel32 -------------------------------------------------------------
 void GlobalMemoryStatusEx(CpuState* s, const u32* a);
 void QueryPerformanceFrequency(CpuState* s, const u32* a);

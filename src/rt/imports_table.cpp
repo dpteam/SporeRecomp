@@ -315,8 +315,21 @@ void crt_wspawnv(CpuState* s, const u32* a);
 void crt_wstat64i32(CpuState* s, const u32* a);
 void crt_wtol(CpuState* s, const u32* a);
 void crt_wtoupper(CpuState* s, const u32* a);
+void d3d_create9(CpuState* s, const u32* a);
+void d3dx_check_version(CpuState* s, const u32* a);
+void d3dx_compile_shader(CpuState* s, const u32* a);
+void d3dx_get_ps_profile(CpuState* s, const u32* a);
+void d3dx_get_vs_profile(CpuState* s, const u32* a);
+void d3dx_matrix_multiply(CpuState* s, const u32* a);
+void d3dx_matrix_multiply_transpose(CpuState* s, const u32* a);
+void d3dx_matrix_transpose(CpuState* s, const u32* a);
+void d3dx_vec3_transform(CpuState* s, const u32* a);
+void d3dx_vec3_transform_normal(CpuState* s, const u32* a);
 void dbghelp_noop(CpuState* s, const u32* a);
+void dinput8_create(CpuState* s, const u32* a);
 void drag_query_file(CpuState* s, const u32* a);
+void dsound_create(CpuState* s, const u32* a);
+void dsound_noop(CpuState* s, const u32* a);
 void imm_get_context(CpuState* s, const u32* a);
 void imm_noop(CpuState* s, const u32* a);
 void ole_init(CpuState* s, const u32* a);
@@ -343,6 +356,7 @@ void usp_noop(CpuState* s, const u32* a);
 void version_noop(CpuState* s, const u32* a);
 void version_query(CpuState* s, const u32* a);
 void version_size(CpuState* s, const u32* a);
+void ws_noop(CpuState* s, const u32* a);
 }  // namespace sr::w32
 
 namespace sr::imports {
@@ -360,9 +374,9 @@ const Desc g_import_table[] = {
   {"ADVAPI32.dll", "RegOpenKeyExW", 0, 5, true, sr::w32::reg_open_key},
   {"ADVAPI32.dll", "RegCloseKey", 0, 1, true, sr::w32::reg_close_key},
   {"ADVAPI32.dll", "GetUserNameA", 0, 2, true, sr::w32::advapi_get_user_name},
-  {"DINPUT8.dll", "DirectInput8Create", 0, 0, true, nullptr},
-  {"DSOUND.dll", "#1", 1, 0, true, nullptr},
-  {"DSOUND.dll", "#9", 9, 0, true, nullptr},
+  {"DINPUT8.dll", "DirectInput8Create", 0, 5, true, sr::w32::dinput8_create},
+  {"DSOUND.dll", "#1", 1, 3, true, sr::w32::dsound_create},
+  {"DSOUND.dll", "#9", 9, 0, true, sr::w32::dsound_noop},
   {"GDI32.dll", "CreateSolidBrush", 0, 1, true, nullptr},
   {"GDI32.dll", "DeleteObject", 0, 1, true, nullptr},
   {"GDI32.dll", "ExtEscape", 0, 6, true, nullptr},
@@ -791,42 +805,42 @@ const Desc g_import_table[] = {
   {"WINMM.dll", "timeEndPeriod", 0, 1, true, sr::w32::timeEndPeriod},
   {"WINMM.dll", "timeBeginPeriod", 0, 1, true, sr::w32::timeBeginPeriod},
   {"WINMM.dll", "timeGetTime", 0, 0, true, sr::w32::timeGetTime},
-  {"WS2_32.dll", "WSAIoctl", 0, 9, true, nullptr},
-  {"WS2_32.dll", "#112", 112, 0, true, nullptr},
-  {"WS2_32.dll", "WSASocketA", 0, 389, true, nullptr},
-  {"WSOCK32.dll", "#19", 19, 4, true, nullptr},
-  {"WSOCK32.dll", "#13", 13, 12, true, nullptr},
-  {"WSOCK32.dll", "#4", 4, 3, true, nullptr},
-  {"WSOCK32.dll", "#1", 1, 5, true, nullptr},
-  {"WSOCK32.dll", "#6", 6, 6, true, nullptr},
-  {"WSOCK32.dll", "#7", 7, 6, true, nullptr},
-  {"WSOCK32.dll", "#151", 151, 0, true, nullptr},
-  {"WSOCK32.dll", "#18", 18, 5, true, nullptr},
-  {"WSOCK32.dll", "#16", 16, 4, true, nullptr},
-  {"WSOCK32.dll", "#10", 10, 1, true, nullptr},
-  {"WSOCK32.dll", "#52", 52, 1, true, nullptr},
-  {"WSOCK32.dll", "#3", 3, 1, true, nullptr},
-  {"WSOCK32.dll", "#115", 115, 102, true, nullptr},
-  {"WSOCK32.dll", "#116", 116, 0, true, nullptr},
-  {"WSOCK32.dll", "#111", 111, 1, true, nullptr},
-  {"WSOCK32.dll", "#20", 20, 7, true, nullptr},
-  {"WSOCK32.dll", "#17", 17, 6, true, nullptr},
-  {"WSOCK32.dll", "#12", 12, 3, true, nullptr},
-  {"WSOCK32.dll", "#23", 23, 3, true, nullptr},
-  {"WSOCK32.dll", "#2", 2, 0, true, nullptr},
-  {"WSOCK32.dll", "#22", 22, 2, true, nullptr},
-  {"WSOCK32.dll", "#5", 5, 5, true, nullptr},
-  {"WSOCK32.dll", "#21", 21, 6, true, nullptr},
-  {"d3d9.dll", "Direct3DCreate9", 0, 0, true, nullptr},
-  {"d3dx9_27.dll", "D3DXVec3Transform", 0, 0, true, nullptr},
-  {"d3dx9_27.dll", "D3DXVec3TransformNormal", 0, 0, true, nullptr},
-  {"d3dx9_27.dll", "D3DXCheckVersion", 0, 0, true, nullptr},
-  {"d3dx9_27.dll", "D3DXGetPixelShaderProfile", 0, 0, true, nullptr},
-  {"d3dx9_27.dll", "D3DXGetVertexShaderProfile", 0, 0, true, nullptr},
-  {"d3dx9_27.dll", "D3DXMatrixMultiplyTranspose", 0, 0, true, nullptr},
-  {"d3dx9_27.dll", "D3DXMatrixTranspose", 0, 0, true, nullptr},
-  {"d3dx9_27.dll", "D3DXMatrixMultiply", 0, 0, true, nullptr},
-  {"d3dx9_27.dll", "D3DXCompileShader", 0, 0, true, nullptr},
+  {"WS2_32.dll", "WSAIoctl", 0, 9, true, sr::w32::ws_noop},
+  {"WS2_32.dll", "#112", 112, 0, true, sr::w32::ws_noop},
+  {"WS2_32.dll", "WSASocketA", 0, 389, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#19", 19, 4, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#13", 13, 12, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#4", 4, 3, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#1", 1, 5, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#6", 6, 6, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#7", 7, 6, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#151", 151, 0, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#18", 18, 5, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#16", 16, 4, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#10", 10, 1, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#52", 52, 1, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#3", 3, 1, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#115", 115, 102, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#116", 116, 0, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#111", 111, 1, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#20", 20, 7, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#17", 17, 6, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#12", 12, 3, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#23", 23, 3, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#2", 2, 0, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#22", 22, 2, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#5", 5, 5, true, sr::w32::ws_noop},
+  {"WSOCK32.dll", "#21", 21, 6, true, sr::w32::ws_noop},
+  {"d3d9.dll", "Direct3DCreate9", 0, 1, true, sr::w32::d3d_create9},
+  {"d3dx9_27.dll", "D3DXVec3Transform", 0, 3, true, sr::w32::d3dx_vec3_transform},
+  {"d3dx9_27.dll", "D3DXVec3TransformNormal", 0, 3, true, sr::w32::d3dx_vec3_transform_normal},
+  {"d3dx9_27.dll", "D3DXCheckVersion", 0, 2, true, sr::w32::d3dx_check_version},
+  {"d3dx9_27.dll", "D3DXGetPixelShaderProfile", 0, 1, true, sr::w32::d3dx_get_ps_profile},
+  {"d3dx9_27.dll", "D3DXGetVertexShaderProfile", 0, 1, true, sr::w32::d3dx_get_vs_profile},
+  {"d3dx9_27.dll", "D3DXMatrixMultiplyTranspose", 0, 3, true, sr::w32::d3dx_matrix_multiply_transpose},
+  {"d3dx9_27.dll", "D3DXMatrixTranspose", 0, 2, true, sr::w32::d3dx_matrix_transpose},
+  {"d3dx9_27.dll", "D3DXMatrixMultiply", 0, 3, true, sr::w32::d3dx_matrix_multiply},
+  {"d3dx9_27.dll", "D3DXCompileShader", 0, 10, true, sr::w32::d3dx_compile_shader},
   {"dbghelp.dll", "UnDecorateSymbolName", 0, 4, true, sr::w32::dbghelp_noop},
   {"dbghelp.dll", "SymLoadModule64", 0, 6, true, sr::w32::dbghelp_noop},
   {"dbghelp.dll", "SymInitialize", 0, 3, true, sr::w32::dbghelp_noop},

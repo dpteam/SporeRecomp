@@ -16,6 +16,24 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from import_sig import SIG  # noqa: E402
 
+# D3D / D3DX / DInput / DSound / Winsock signatures.
+EXTRA_SIG = {
+    ("d3d9.dll", "Direct3DCreate9"): (1, True),
+    ("d3dx9_27.dll", "D3DXCheckVersion"): (2, True),
+    ("d3dx9_27.dll", "D3DXGetPixelShaderProfile"): (1, True),
+    ("d3dx9_27.dll", "D3DXGetVertexShaderProfile"): (1, True),
+    ("d3dx9_27.dll", "D3DXCompileShader"): (10, True),
+    ("d3dx9_27.dll", "D3DXMatrixMultiply"): (3, True),
+    ("d3dx9_27.dll", "D3DXMatrixMultiplyTranspose"): (3, True),
+    ("d3dx9_27.dll", "D3DXMatrixTranspose"): (2, True),
+    ("d3dx9_27.dll", "D3DXVec3Transform"): (3, True),
+    ("d3dx9_27.dll", "D3DXVec3TransformNormal"): (3, True),
+    ("DINPUT8.dll", "DirectInput8Create"): (5, True),
+    ("DSOUND.dll", "#1"): (3, True),
+    ("DSOUND.dll", "#9"): (0, True),
+}
+SIG.update(EXTRA_SIG)
+
 RESOLVED = Path("analysis/imports_resolved.json")
 OUT = Path("src/rt/imports_table.cpp")
 
@@ -310,6 +328,49 @@ IMPL.update({
     ("IMM32.dll", "ImmSetCompositionStringW"): "imm_noop",
     ("IMM32.dll", "ImmSimulateHotKey"): "imm_noop",
     ("IMM32.dll", "ImmGetCandidateListW"): "imm_noop",
+})
+
+# ---- Direct3D / D3DX / DInput / DSound / Winsock ----
+IMPL.update({
+    ("d3d9.dll", "Direct3DCreate9"): "d3d_create9",
+    ("d3dx9_27.dll", "D3DXCheckVersion"): "d3dx_check_version",
+    ("d3dx9_27.dll", "D3DXGetPixelShaderProfile"): "d3dx_get_ps_profile",
+    ("d3dx9_27.dll", "D3DXGetVertexShaderProfile"): "d3dx_get_vs_profile",
+    ("d3dx9_27.dll", "D3DXCompileShader"): "d3dx_compile_shader",
+    ("d3dx9_27.dll", "D3DXMatrixMultiply"): "d3dx_matrix_multiply",
+    ("d3dx9_27.dll", "D3DXMatrixMultiplyTranspose"): "d3dx_matrix_multiply_transpose",
+    ("d3dx9_27.dll", "D3DXMatrixTranspose"): "d3dx_matrix_transpose",
+    ("d3dx9_27.dll", "D3DXVec3Transform"): "d3dx_vec3_transform",
+    ("d3dx9_27.dll", "D3DXVec3TransformNormal"): "d3dx_vec3_transform_normal",
+    ("DINPUT8.dll", "DirectInput8Create"): "dinput8_create",
+    ("DSOUND.dll", "#1"): "dsound_create",
+    ("DSOUND.dll", "#9"): "dsound_noop",
+    ("WSOCK32.dll", "#1"): "ws_noop",
+    ("WSOCK32.dll", "#2"): "ws_noop",
+    ("WSOCK32.dll", "#3"): "ws_noop",
+    ("WSOCK32.dll", "#4"): "ws_noop",
+    ("WSOCK32.dll", "#5"): "ws_noop",
+    ("WSOCK32.dll", "#6"): "ws_noop",
+    ("WSOCK32.dll", "#7"): "ws_noop",
+    ("WSOCK32.dll", "#10"): "ws_noop",
+    ("WSOCK32.dll", "#12"): "ws_noop",
+    ("WSOCK32.dll", "#13"): "ws_noop",
+    ("WSOCK32.dll", "#16"): "ws_noop",
+    ("WSOCK32.dll", "#17"): "ws_noop",
+    ("WSOCK32.dll", "#18"): "ws_noop",
+    ("WSOCK32.dll", "#19"): "ws_noop",
+    ("WSOCK32.dll", "#20"): "ws_noop",
+    ("WSOCK32.dll", "#21"): "ws_noop",
+    ("WSOCK32.dll", "#22"): "ws_noop",
+    ("WSOCK32.dll", "#23"): "ws_noop",
+    ("WSOCK32.dll", "#52"): "ws_noop",
+    ("WSOCK32.dll", "#111"): "ws_noop",
+    ("WSOCK32.dll", "#115"): "ws_noop",
+    ("WSOCK32.dll", "#116"): "ws_noop",
+    ("WSOCK32.dll", "#151"): "ws_noop",
+    ("WS2_32.dll", "WSAIoctl"): "ws_noop",
+    ("WS2_32.dll", "#112"): "ws_noop",
+    ("WS2_32.dll", "WSASocketA"): "ws_noop",
 })
 
 # Default argument counts for functions the inference could not see (no call sites).

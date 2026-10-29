@@ -1,4 +1,4 @@
-// SporeRecomp — Win32 import dispatch.
+﻿// SporeRecomp — Win32 import dispatch.
 //
 // The guest is a Windows PE: every external call goes through an IAT slot. We give each
 // import a unique *guest* address (a stub inside a reserved page) and fill the IAT with it,
@@ -27,7 +27,7 @@ struct Desc {
   const char* dll;
   const char* name;   // "" for ordinal imports
   uint16_t ordinal;
-  uint8_t nargs;      // number of 32-bit arguments
+  uint16_t nargs;      // number of 32-bit arguments
   bool stdcall;       // true: the callee pops the arguments
   HostFn fn;          // nullptr while unimplemented
 };
@@ -55,3 +55,4 @@ void report_missing();
 unsigned missing_count();
 
 }  // namespace sr::imports
+

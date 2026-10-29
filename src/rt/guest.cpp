@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cstring>
 
+#include "rt/d3d9/com.h"
 #include "rt/imports.h"
 #include "rt/mem.h"
 #include "rt/shim.h"
@@ -24,7 +25,13 @@ GuestFn find_function(u32 addr) {
 }
 
 void guest_call_indirect(CpuState* s, u32 addr) {
-  // Import stubs come first: the IAT is full of them, so this is the hot path for every
+  // D3D9 COM methods (vtable dispatch) — checked before the plain function table because the
+  // stub range is small and the comparison is cheap.
+  if (addr >= d3d::kComStubBase && addr < d3d::kComStubBase +
+      d3d::kComMaxKinds * d3d::kComMaxMethods * d3d::kComStubStride) {
+    if (d3d::com_dispatch(s, addr)) return;
+  }
+  // Import stubs come next: the IAT is full of them, so this is the hot path for every
   // Win32 call the guest makes.
   const imports::Desc* desc = nullptr;
   if (imports::HostFn imp = imports::resolve_stub(addr, &desc)) {
