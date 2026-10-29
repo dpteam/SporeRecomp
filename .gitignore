@@ -22,6 +22,14 @@ dist/
 recomp/gen/
 recomp/cache/
 
+# Disassembly cache and derived tables (regenerable; the reports next to them are committed)
+analysis/census/
+analysis/*.pkl
+analysis/*.jsonl
+
+# Device logs pulled back by deploy.sh
+device-log.txt
+
 # Python
 __pycache__/
 *.pyc
