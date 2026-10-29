@@ -35,12 +35,11 @@ extern const unsigned g_function_count;
 GuestFn find_function(u32 addr);   // binary search over g_functions
 
 // Calls a guest function by address (indirect call sites, vtables, callbacks).
+// The caller has already pushed a guest return address; the callee's `ret` pops it.
 void guest_call_indirect(CpuState* s, u32 addr);
-// Tail call: the callee returns to *our* caller.
+// Tail call: no return address is pushed, so the callee returns to *our* caller.
 void guest_tail(CpuState* s, u32 addr);
 void guest_jump_indirect(CpuState* s, u32 addr);
-// Returns from a lifted function: unwinds to the return address on the guest stack.
-void guest_return(CpuState* s, u32 ret_addr);
 
 // ---------------------------------------------------------------------------
 // Guest stack
@@ -150,6 +149,9 @@ void x87_store(CpuState* s, X87Op op, int size);
 void x87_pop_store(CpuState* s, X87Op op, int size);
 void x87_load_int(CpuState* s, X87Op op, int size);
 void x87_pop_store_int(CpuState* s, X87Op op, int size);
+void x87_store_int(CpuState* s, X87Op op, int size);
+void rep_movsw(CpuState* s);
+void atomic_xchg(CpuState* s, u32 addr, int size, u32 v);
 void x87_add(CpuState* s, X87Op a, X87Op b);
 void x87_sub(CpuState* s, X87Op a, X87Op b);
 void x87_mul(CpuState* s, X87Op a, X87Op b);
@@ -272,6 +274,8 @@ V4 mmx_pminub(CpuState* s, V4 a, V4 b);
 V4 mmx_pmaxub(CpuState* s, V4 a, V4 b);
 V4 mmx_pshufw(CpuState* s, V4 a, u32 imm);
 V4 mmx_paddusb(CpuState* s, V4 a, V4 b);
+V4 mmx_psubusb(CpuState* s, V4 a, V4 b);
+u32 mmx_pmovmskb(CpuState* s, V4 a);
 V4 mmx_psubusb(CpuState* s, V4 a, V4 b);
 void x87_fisubr(CpuState* s, u32 addr, int size);
 void x87_fidivr(CpuState* s, u32 addr, int size);

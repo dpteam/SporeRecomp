@@ -171,6 +171,16 @@ void x87_pop_store_int(CpuState* s, X87Op op, int size) {
   pop(s);
 }
 
+void x87_store_int(CpuState* s, X87Op op, int size) {
+  double v = get(s, 0);
+  switch (size) {
+    case 2: store<s16>(op.addr, static_cast<s16>(std::lrint(v))); break;
+    case 4: store<s32>(op.addr, static_cast<s32>(std::lrint(v))); break;
+    case 8: store<s64>(op.addr, static_cast<s64>(std::llrint(v))); break;
+    default: break;
+  }
+}
+
 void x87_add(CpuState* s, X87Op a, X87Op b) { put(s, a.st, operand(s, a, 8) + operand(s, b, 8)); }
 void x87_sub(CpuState* s, X87Op a, X87Op b) { put(s, a.st, operand(s, a, 8) - operand(s, b, 8)); }
 void x87_mul(CpuState* s, X87Op a, X87Op b) { put(s, a.st, operand(s, a, 8) * operand(s, b, 8)); }

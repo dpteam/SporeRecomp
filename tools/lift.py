@@ -274,30 +274,33 @@ class Lifter:
 
     def i_call(self, insn):
         op = insn.operands[0]
+        # The guest return address is pushed so that ESP stays balanced and the guest's own
+        # stack walking (SEH, __alloca probes) sees a normal frame. Control flow, however,
+        # uses the *native* call stack: the callee's `ret` pops the guest slot and returns
+        # from its C++ function. That is what makes recursion and callbacks work.
+        ret = insn.address + insn.size
         if op.type == csx.X86_OP_IMM:
             tgt = op.imm & 0xFFFFFFFF
             if tgt in self._lifted:
                 return [
-                    f"  sr::guest_push_ret(s, 0x{insn.address + insn.size:08x}u);",
+                    f"  sr::guest_push_ret(s, 0x{ret:08x}u);",
                     f"  sub_{tgt:08x}(s);",
                 ]
             return [
-                f"  sr::guest_push_ret(s, 0x{insn.address + insn.size:08x}u);",
+                f"  sr::guest_push_ret(s, 0x{ret:08x}u);",
                 f"  sr::guest_call_indirect(s, 0x{tgt:08x}u);",
             ]
-        # indirect: dispatch through the guest function table
         return [
-            f"  sr::guest_push_ret(s, 0x{insn.address + insn.size:08x}u);",
+            f"  sr::guest_push_ret(s, 0x{ret:08x}u);",
             f"  sr::guest_call_indirect(s, (u32)({self.read_op(insn, op, 4)}));",
         ]
 
     def i_ret(self, insn):
         n = insn.operands[0].imm if insn.operands else 0
-        lines = ["  { u32 _ret = sr::guest_pop_ret(s);"]
-        if n:
-            lines.append(f"    s->r[4] += {n}u;")
-        lines.append("    sr::guest_return(s, _ret); }")
-        return lines
+        # Pop the return address the caller pushed (the value itself is not needed: the native
+        # return does the work) plus any stdcall arguments, then return natively.
+        pop = 4 + n
+        return [f"  s->r[4] += {pop}u;", "  return;"]
 
     def i_jmp(self, insn):
         op = insn.operands[0]
@@ -305,6 +308,8 @@ class Lifter:
             tgt = op.imm & 0xFFFFFFFF
             if tgt in self._labels:
                 return [f"  goto L_{tgt:08x};"]
+            # Tail call: no return address is pushed, so the callee's `ret` returns to *our*
+            # caller. Native tail call, guest stack unchanged.
             return [f"  sr::guest_tail(s, 0x{tgt:08x}u); return;"]
         return [f"  {{ sr::guest_jump_indirect(s, (u32)({self.read_op(insn, op, 4)})); return; }}"]
 
@@ -1226,6 +1231,62 @@ class Lifter:
     def i_rep_ret(self, insn):
         return self.i_ret(insn)
 
+    # -- last stragglers ----------------------------------------------------
+    def i_fist(self, insn):
+        op = insn.operands[0]
+        return [f"  sr::x87_store_int(s, {self._x87_addr(insn, op)}, {op_size(op)});"]
+    def i_fistpnce(self, insn):
+        return self.i_fistp(insn)
+    def i_fnsave(self, insn):
+        return [f"  sr::x87_save_state(s, {self.mem_addr_expr(insn, insn.operands[0])});"]
+    def i_fnstenv(self, insn):
+        return [f"  sr::x87_save_state(s, {self.mem_addr_expr(insn, insn.operands[0])});"]
+    def i_ffreep(self, i): return ["  sr::x87_free(s);"]
+    def i_movsw(self, i): return ["  sr::rep_movsw(s);"]
+    def i_lock_xchg(self, insn):
+        size = op_size(insn.operands[0])
+        return [f"  sr::atomic_xchg(s, (u32)({self.mem_addr_expr(insn, insn.operands[0])}), "
+                f"{size}, (u32)({self.read_op(insn, insn.operands[1], size)}));"]
+    def i_xchg_lock(self, insn):
+        return self.i_lock_xchg(insn)
+    def i_xrelease_xchg(self, insn):
+        return self.i_lock_xchg(insn)
+    def i_bnd_jmp(self, insn):
+        # MPX bounds check prefix: the jump itself is an ordinary jmp
+        return self.i_jmp(insn)
+    def i_fcmove(self, insn):
+        return [f"  if (sr::eval_cc(s, 0x4)) sr::x87_fcmov(s, "
+                f"{self._x87_addr(insn, insn.operands[1])});"]
+    def i_fcmovbe(self, insn):
+        return [f"  if (sr::eval_cc(s, 0x6)) sr::x87_fcmov(s, "
+                f"{self._x87_addr(insn, insn.operands[1])});"]
+    def i_fcmovne(self, insn):
+        return [f"  if (sr::eval_cc(s, 0x5)) sr::x87_fcmov(s, "
+                f"{self._x87_addr(insn, insn.operands[1])});"]
+    def i_fcmovb(self, insn):
+        return [f"  if (sr::eval_cc(s, 0x2)) sr::x87_fcmov(s, "
+                f"{self._x87_addr(insn, insn.operands[1])});"]
+    def i_fcmovnb(self, insn):
+        return [f"  if (sr::eval_cc(s, 0x3)) sr::x87_fcmov(s, "
+                f"{self._x87_addr(insn, insn.operands[1])});"]
+    def i_ud0(self, i): return ["  sr::unsupported(\"ud0\", s->eip); return;"]
+    def i_ud1(self, i): return ["  sr::unsupported(\"ud1\", s->eip); return;"]
+    def i_fstpnce(self, insn):
+        op = insn.operands[0]
+        return [f"  sr::x87_pop_store(s, {self._x87_addr(insn, op)}, {op_size(op)});"]
+    def i_frstor(self, insn):
+        return [f"  sr::x87_restore_state(s, {self.mem_addr_expr(insn, insn.operands[0])});"]
+    def i_pmovmskb(self, insn):
+        return [f"  {self.write_op(insn, insn.operands[0], f'sr::mmx_pmovmskb(s, {self._sse_read(insn, insn.operands[1])})', 4)}"]
+    def i_notrack_jmp(self, insn):
+        return self.i_jmp(insn)
+    def i_fcmovns(self, insn):
+        return [f"  if (sr::eval_cc(s, 0x9)) sr::x87_fcmov(s, "
+                f"{self._x87_addr(insn, insn.operands[1])});"]
+    def i_fcmovnp(self, insn):
+        return [f"  if (sr::eval_cc(s, 0xB)) sr::x87_fcmov(s, "
+                f"{self._x87_addr(insn, insn.operands[1])});"]
+
     # -- function emission -------------------------------------------------
     def lift_function(self, f: dict) -> str:
         start = f["start"]
@@ -1245,7 +1306,7 @@ class Lifter:
             out.append(f"L_{b['start']:08x}:;")
             addr = b["start"]
             while addr < b["end"]:
-                o = self.pe.off(addr)
+                o = self.pe.off_va(addr)
                 got = None
                 for insn in self.md.disasm(code[o:o + 16], addr):
                     got = insn

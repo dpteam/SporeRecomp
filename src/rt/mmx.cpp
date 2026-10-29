@@ -500,6 +500,26 @@ void rep_stosw(CpuState* s) {
   s->r[1] = 0;
 }
 
+void rep_movsw(CpuState* s) {
+  u32 n = s->r[1];
+  int step = (s->flags & kDF) ? -2 : 2;
+  u32 src = s->r[6], dst = s->r[7];
+  for (u32 i = 0; i < n; ++i) {
+    store<u16>(dst, load<u16>(src));
+    src += step;
+    dst += step;
+  }
+  s->r[6] = src;
+  s->r[7] = dst;
+  s->r[1] = 0;
+}
+
+void atomic_xchg(CpuState* s, u32 addr, int size, u32 v) {
+  u32* p = reinterpret_cast<u32*>(gmem().base() + addr);
+  u32 old = __atomic_exchange_n(p, v, __ATOMIC_SEQ_CST);
+  s->r[0] = old;
+}
+
 void lodsb(CpuState* s) {
   u8 v = load<u8>(s->r[6]);
   s->r[6] += (s->flags & kDF) ? -1 : 1;
@@ -645,6 +665,13 @@ V4 mmx_psubusb(CpuState* s, V4 a, V4 b) {
     put_byte(r, i, u8(x > y ? x - y : 0));
   }
   return r;
+}
+
+u32 mmx_pmovmskb(CpuState* s, V4 a) {
+  (void)s;
+  u32 m = 0;
+  for (int i = 0; i < 8; ++i) m |= ((get_byte(a, i) >> 7) & 1u) << i;
+  return m;
 }
 
 }  // namespace sr

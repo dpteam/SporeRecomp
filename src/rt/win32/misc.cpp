@@ -193,33 +193,6 @@ void imm_get_context(CpuState* s, const u32*) { s->r[0] = 0; }
 
 void crt_noop(CpuState* s, const u32*) { s->r[0] = 0; }
 
-// ---------------------------------------------------------------------------
-// SEH / C++ exceptions
-//
-// The guest installs a frame at FS:[0] (a linked list of EXCEPTION_REGISTRATION records) and
-// the CRT's _except_handler4_common walks it. We emulate the parts Spore actually uses:
-// the /GS cookie check and the __try/__except filters that guard asset loading.
-// ---------------------------------------------------------------------------
-void seh_handler3(CpuState* s, const u32* a) {
-  // _except_handler3(record, frame, context, dispatcher)
-  SR_LOG("SEH: _except_handler3 reached (exception during guest execution)");
-  s->r[0] = 1;  // ExceptionContinueSearch
-}
-
-void seh_handler4_common(CpuState* s, const u32* a) {
-  SR_LOG("SEH: _except_handler4_common reached");
-  s->r[0] = 1;
-}
-
-void seh_cxx_frame_handler3(CpuState* s, const u32* a) {
-  SR_LOG("SEH: __CxxFrameHandler3 reached (a C++ exception was thrown)");
-  s->r[0] = 1;
-}
-
-void seh_cxx_throw(CpuState* s, const u32* a) {
-  SR_LOG("SEH: _CxxThrowException(0x%08x)", a[0]);
-  s->r[0] = 0;
-}
-
 }  // namespace sr::w32
+
 

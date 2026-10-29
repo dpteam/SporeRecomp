@@ -466,10 +466,7 @@ void GetFileType(CpuState* s, const u32*) { s->r[0] = 2; }  // FILE_TYPE_CHAR
 
 void SetUnhandledExceptionFilter(CpuState* s, const u32*) { s->r[0] = 0; }
 void UnhandledExceptionFilter(CpuState* s, const u32*) { s->r[0] = 1; }
-void RaiseException(CpuState* s, const u32* a) {
-  SR_LOG("guest RaiseException code=0x%08x flags=0x%x", a[0], a[1]);
-  s->r[0] = 0;
-}
+// RaiseException is implemented in seh.cpp: it walks the guest's FS:[0] chain.
 void TerminateProcess(CpuState* s, const u32* a) {
   SR_LOG("guest TerminateProcess(exit=%u)", a[1]);
   exit(int(a[1]));

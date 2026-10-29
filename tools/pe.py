@@ -42,10 +42,21 @@ class PE:
         return next(s for s in self.sections if s["name"] == name)
 
     def off(self, rva: int) -> int | None:
+        """RVA -> file offset."""
         for s in self.sections:
             if s["va"] <= rva < s["va"] + max(s["vsz"], s["rsz"]):
                 return s["roff"] + (rva - s["va"])
         return None
+
+    def off_va(self, va: int) -> int | None:
+        """Guest virtual address -> file offset. The guest's own pointers are VAs."""
+        return self.off(va - self.imagebase)
+
+    def rva(self, va: int) -> int:
+        return va - self.imagebase
+
+    def va(self, rva: int) -> int:
+        return rva + self.imagebase
 
     def in_section(self, rva: int, name: str) -> bool:
         s = self.section(name)

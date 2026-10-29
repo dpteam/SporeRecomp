@@ -23,10 +23,13 @@ else
   CXX="${CXX:-aarch64-linux-gnu-g++}"
   CXXFLAGS="-std=c++20 -O2 -g -Isrc -Irecomp/gen"
   # The lifted code is long, straight-line and branch-predictable: -O1 gives the same
-  # performance as -O2 for it and compiles roughly twice as fast (400 s -> 200 s per chunk).
-  GENFLAGS="-std=c++20 -O1 -g -Isrc -Irecomp/gen"
+  # performance as -O2 for it and compiles roughly twice as fast. No -g: debug info for four
+  # million instructions costs hundreds of MB of object files and slows every link.
+  GENFLAGS="-std=c++20 -O1 -Isrc -Irecomp/gen"
 fi
-JOBS=$(nproc)
+# Default to a modest job count: on a thermally limited machine 32 parallel compilers fight
+# for the same power budget and finish later than 12 would. Override with SR_JOBS=32.
+JOBS="${SR_JOBS:-12}"
 
 GEN=$(ls recomp/gen/funcs_*.cpp 2>/dev/null || true)
 if [ -z "$GEN" ]; then

@@ -64,19 +64,6 @@ void guest_jump_indirect(CpuState* s, u32 addr) {
   guest_tail(s, addr);
 }
 
-void guest_return(CpuState* s, u32 ret_addr) {
-  // A lifted function returns by jumping to the guest return address. If that address is
-  // inside a lifted function we continue there; if it is the sentinel the caller planted,
-  // we simply stop.
-  if (ret_addr == 0xFFFFFFFFu) return;
-  GuestFn fn = find_function(ret_addr);
-  if (fn) {
-    fn(s);
-    return;
-  }
-  unsupported("return to unmapped guest address", ret_addr);
-}
-
 // ---------------------------------------------------------------------------
 // pushad / popad / enter
 // ---------------------------------------------------------------------------

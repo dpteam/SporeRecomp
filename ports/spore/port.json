@@ -1,0 +1,41 @@
+{
+    "version": 4,
+    "name": "spore.zip",
+    "items": [
+        "Spore.sh",
+        "spore/"
+    ],
+    "items_opt": null,
+    "attr": {
+        "title": "Spore",
+        "desc": "Native static binary recompilation of Spore (SporeApp.exe, Galactic Adventures) for ARM64 Linux handhelds.",
+        "inst": "Copy your retail PC Spore installation into ports/spore/gamedata/ (SporeApp.exe plus the Data/ folder with the .package files).",
+        "genres": [
+            "simulation",
+            "strategy"
+        ],
+        "portver": "0.1.0",
+        "runtime": [],
+        "reqs": [
+            "640x480",
+            "1GB RAM"
+        ],
+        "arch": [
+            "aarch64"
+        ],
+        "porter": [],
+        "image": {},
+        "rtr": false,
+        "exp": true,
+        "min_glibc": ""
+    },
+    "status": {
+        "source": "Unknown",
+        "md5": null,
+        "status": "Work in progress"
+    },
+    "files": {
+        "port.json": "spore/port.json",
+        "spore/": "spore/"
+    }
+}

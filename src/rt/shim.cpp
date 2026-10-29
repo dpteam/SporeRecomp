@@ -6,6 +6,9 @@
 
 #include "rt/guest.h"
 #include "rt/d3d9/d3d9.h"
+#include "rt/win32/msvcr90.h"
+
+#include <exception>
 
 namespace sr::shim {
 
@@ -15,14 +18,19 @@ FILE* g_log = nullptr;
 PeImage* g_image = nullptr;
 CpuState* g_cpu = nullptr;
 
-// Guest layout (matches a 32-bit Windows process closely enough for Spore):
+// Guest layout (mirrors a 32-bit Windows process):
 //   0x00400000  image
-//   0x20000000  guest heap arena
-//   0x7FF00000  default thread stack (1 MB, grows down)
-//   0x7FFDF000  TEB
-constexpr uint32_t kStackTop = 0x7FFE0000;
+//   0x20000000  guest heap arena (grows up)
+//   0x71000000  import stubs
+//   0x72000000  COM method stubs
+//   0x73000000  COM objects and vtables
+//   0x7FEC0000  default thread stack (1 MB, grows down from 0x7FFC0000)
+//   0x7FFD0000  PEB
+//   0x7FFDF000  TEB   <- below the stack, so the stack can never overwrite it
+constexpr uint32_t kStackTop = 0x7FFC0000;
 constexpr uint32_t kStackSize = 0x00100000;
 constexpr uint32_t kTebBase = 0x7FFDF000;
+constexpr uint32_t kPebBase = 0x7FFD0000;
 }  // namespace
 
 const Config& config() { return g_cfg; }
@@ -101,7 +109,6 @@ bool setup_process(PeImage* img) {
   store<uint32_t>(kTebBase + 0x24, 1);            // ClientId.UniqueThread
 
   // The CRT also wants the PEB pointer in the TEB at +0x30.
-  constexpr uint32_t kPebBase = 0x7FFD0000;
   if (!mem.map(kPebBase, 0x1000)) {
     SR_LOG("cannot map PEB");
     return false;
@@ -122,7 +129,13 @@ void run_guest(const PeImage& img) {
            img.base + img.entry_point);
     return;
   }
-  entry(g_cpu);
+  try {
+    entry(g_cpu);
+  } catch (const w32::Longjmp& lj) {
+    SR_LOG("guest stack unwound by longjmp to 0x%08x (value %u)", lj.target, lj.value);
+  } catch (const std::exception& e) {
+    SR_LOG("FATAL: host exception escaped the guest: %s", e.what());
+  }
 }
 
 }  // namespace sr::shim

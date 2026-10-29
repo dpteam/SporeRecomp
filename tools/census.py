@@ -64,7 +64,11 @@ class Census:
     def __init__(self):
         self.pe = PE(EXE.read_bytes())
         t = self.pe.section(".text")
-        self.tva, self.tsz = t["va"], t["vsz"]
+        # Everything in this tool works in *guest virtual addresses*: the guest's own code
+        # pointers (vtables, callbacks, jump tables in data) are VAs, so keying the function
+        # table by VA is the only way the runtime can match them without conversion bugs.
+        self.tva = self.pe.va(t["va"])
+        self.tsz = t["vsz"]
         self.tend = self.tva + self.tsz
         self.code = self.pe.section_bytes(".text")
         # instruction map: address -> index into arrays
@@ -156,7 +160,7 @@ class Census:
         funcs: list[dict] = []
 
         # ---- roots -----------------------------------------------------
-        roots: list[int] = [self.pe.entry]
+        roots: list[int] = [self.pe.va(self.pe.entry)]
         roots.extend(sorted(self.call_targets))
         # prologue-looking instruction starts
         for i, a in enumerate(addrs):
@@ -193,7 +197,7 @@ class Census:
         # Strong roots: entry, call targets, code pointers. A walk stops when it reaches
         # one of these, so tail-called functions do not get merged into their caller.
         strong: set[int] = set(self.call_targets)
-        strong.add(self.pe.entry)
+        strong.add(self.pe.va(self.pe.entry))
         for r in root_set:
             if r in strong:
                 continue
@@ -334,7 +338,7 @@ class Census:
         lines = []
         w = lines.append
         w("# Instruction census — SporeApp.exe\n")
-        w(f"* .text: {self.tsz:,} bytes at 0x{self.tva:x}")
+        w(f"* .text: {self.tsz:,} bytes at VA 0x{self.tva:x} (image base 0x{self.pe.imagebase:x})")
         w(f"* instructions: {total:,} ({self.bad_bytes:,} undecodable bytes)")
         w(f"* instructions assigned to a function: {owned:,} ({100*owned/total:.2f}%)")
         w(f"* orphan (unreachable but decodable) instructions: {self.orphan_insns:,}")

@@ -16,6 +16,11 @@ namespace sr {
 constexpr uint64_t kGuestSpaceSize = 0x1'0000'0000ull;
 constexpr uint32_t kImageBase = 0x00400000;
 
+// Guest heap arena: 1.5 GB of *virtual* space. Nothing is committed until it is used, so the
+// 1 GB of physical RAM on the device is not touched by the reservation itself.
+constexpr uint32_t kHeapStart = 0x1000'0000;
+constexpr uint32_t kHeapEnd = 0x7000'0000;
+
 class GuestMemory {
  public:
   static GuestMemory& instance();
@@ -33,9 +38,13 @@ class GuestMemory {
   bool make_executable(uint32_t addr, uint32_t size);
 
   // Growable heap on top of the same window. Returns 0 on failure.
+  // A real allocator: size-class free lists over the arena, so repeated alloc/free cycles
+  // (which Spore does constantly) reuse memory instead of growing the arena forever.
   uint32_t heap_alloc(uint32_t size, uint32_t align = 16);
   void heap_free(uint32_t addr);
   uint32_t heap_realloc(uint32_t addr, uint32_t size);
+  // Bytes currently handed out to the guest (for the memory report).
+  uint64_t heap_in_use() const { return heap_used_; }
 
   // Total committed bytes (for the memory report).
   uint64_t committed() const { return committed_; }
@@ -52,9 +61,15 @@ class GuestMemory {
   uint8_t* base_ = nullptr;
   uint64_t committed_ = 0;
 
-  // bump allocator for the guest heap
-  uint32_t heap_ptr_ = 0x2000'0000;  // start of the heap arena
-  uint32_t heap_end_ = 0x3F00'0000;  // grows up towards the stack
+  // Bump pointer for the arena and a set of size-class free lists.
+  uint32_t heap_ptr_ = kHeapStart;
+  uint64_t heap_used_ = 0;
+  // One free list per 16-byte size class up to 64 KB; larger blocks are kept in a sorted
+  // list so they can be split or coalesced.
+  static constexpr uint32_t kClasses = 4096;              // 16 bytes .. 64 KB
+  static constexpr uint32_t kClassShift = 4;              // size >> 4
+  uint32_t free_lists_[kClasses]{};
+  uint32_t big_free_head_ = 0;                            // linked list of large free blocks
 };
 
 inline GuestMemory& gmem() { return GuestMemory::instance(); }

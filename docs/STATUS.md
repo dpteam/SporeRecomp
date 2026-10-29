@@ -1,80 +1,106 @@
 # Status
 
-## What works right now
+Measured facts, not estimates. Every number below comes from a tool in `tools/` and a report
+in `analysis/`.
 
-| Piece | State |
+## Numbers
+
+| Piece | Value |
 |---|---|
-| PE analysis | **done** — headers, sections, imports, relocations, TLS, debug dir (`docs/ANALYSIS.md`, `docs/pe_report.md`) |
-| Function census | **done** — 5,496,576 instructions decoded, 100,738 functions (53,596 real + 47,142 orphan data groups), 86.7% of `.text` claimed by real functions (`analysis/census_report.md`) |
-| Lifter | **done for the whole binary** — 4,077,456 instructions → 53,596 C++ functions, **0 unhandled mnemonics** (`analysis/lift_report.md`) |
-| Guest memory | done — 4 GB reserved, committed on demand, guest heap arena |
-| CPU state | done — GPRs, lazy EFLAGS, x87 stack, SSE bank, MXCSR, FS/GS bases, TEB fields |
-| SSE / x87 / MMX helpers | done — scalar and packed, saturating, shifts, converts |
-| PE loader | done — maps at 0x400000, walks relocations, binds imports |
-| Import dispatch | mechanism done (stub page + stack-based argument marshalling), table being generated |
-| Win32 shims | in progress — kernel32 (memory/time/version/strings/sync/threads/TLS/files) and MSVCR90 (allocator, printf family, strings, math, time, stdio, wide chars, setjmp) written |
-| D3D9 / DInput / DSound | **not started** |
-| Build | 215 generated chunks compile individually; full link pending |
+| `.text` | 16,559,914 bytes at VA 0x401000 |
+| Instructions decoded | 5,496,576 (457 undecodable bytes, 0.003%) |
+| Instructions assigned to a function | 4,763,173 (86.66%) |
+| Functions recovered | **108,528** (102,913 real + 5,615 orphan data groups) |
+| Basic blocks | 235,256 |
+| Instructions lifted to C++ | **4,747,722** |
+| Unhandled mnemonics | **0** |
+| Imported functions | 495 across 20 DLLs |
+| Imports implemented | 397 (98 remain, all in subsystems not started) |
+| Generated code | 412 chunks, ~460 MB of C++ |
 
-## How the numbers were obtained
+## What is implemented
 
-Nothing here is estimated. Each claim has a reproducible tool behind it:
+**Analysis** — `tools/pe_report.py`, `census.py`, `imports.py`. Function boundaries come from
+a linear instruction sweep (the binary decodes almost perfectly) partitioned by reachability
+from strong roots, not from heuristic seeds. Everything is keyed by **guest virtual address**,
+because the guest's own code pointers (vtables, callbacks, data tables) are VAs.
 
-```bash
-python tools/pe_report.py --out     # docs/pe_report.md
-python tools/census.py              # analysis/census_report.md + analysis/census/
-python tools/lift.py                # recomp/gen/ (215 chunks) + analysis/lift_report.md
-python tools/imports.py             # analysis/imports_resolved.json
-```
+**Lifter** — `tools/lift.py`. x86-32 → C++, one C++ function per guest function.
+* every instruction has a counterpart; an unhandled one is a *build-time* error, never a
+  runtime surprise
+* direct calls become native calls, indirect calls go through the dispatch table
+* jump tables become `goto`/`switch` labels inside the function
+* SSE, x87 (80-bit stack), MMX, and the saturating/packed integer ops are all modelled
+* lazy EFLAGS: only `jcc`/`setcc`/`adc`/`sbb` materialise them
 
-## Design decisions worth knowing
+**Runtime** — `src/rt/`
+* 4 GB guest window reserved with `MAP_NORESERVE`, committed page by page
+* guest heap: size-class free lists with 16-byte headers and magic words, so a double free is
+  reported instead of silently corrupting memory
+* `CpuState`: GPRs, lazy flags, x87 stack with rotating top, SSE bank, MXCSR, FS/GS bases, TEB
+* PE loader: maps at 0x400000, walks relocations, binds imports
+* import dispatch: every import gets a unique guest stub address; arguments are read straight
+  off the guest stack; `nargs` and calling convention come from documented Win32 signatures
+  (cross-checked against call-site inference)
+* **COM dispatch**: D3D9 objects are built *in guest memory* with real vtables of stub
+  addresses, so `device->lpVtbl->DrawPrimitive(...)` works exactly as on Windows
+* SEH: walks the guest's real `FS:[0]` chain calling guest handlers
+* Win32 shims: kernel32, user32, gdi32, advapi32 (registry), msvcr90 (CRT), winmm, psapi,
+  version, ole32, shell32, dbghelp, usp10, imm32, steam_api
+* D3D9: `IDirect3D9`, `IDirect3DDevice9` (all 119 methods), `IDirect3DTexture9`,
+  `IDirect3DVertexBuffer9`/`IndexBuffer9`, shaders, with real host-side resource records.
+  Currently a **null backend**: it counts every call, keeps real resource objects, and returns
+  success so the guest's own logic can run end to end.
+* D3DX: real matrix/vector math; `D3DXCompileShader` logs every request and fails cleanly
 
-**The lifter has no interpreter fallback.** If an instruction is not handled, the build
-report says so; the shipped binary never silently degrades. This is why "0 unhandled" is a
-meaningful milestone rather than a rounding error.
+## Bugs found and fixed during bring-up
 
-**Function boundaries come from an instruction stream, not from seeds.** The first attempt
-(seeds + recursive descent) produced 14,285 functions that "hit a decode limit", i.e. it was
-merging unrelated code. The census now decodes `.text` linearly (only 457 bytes of 16.5 MB
-are undecodable), then partitions that instruction stream by reachability from strong roots
-(call targets + entry). Tail calls stop at another function's entry instead of absorbing it.
+These are worth recording because each one would have cost a debugging session on the device:
 
-**Orphan groups are not lifted.** 47,142 groups of decodable-but-unreachable instructions are
-jump tables and data that happen to decode as x86. Lifting them would add ~1.4M instructions
-of garbage.
+1. **Return addresses are mid-function.** The first design dispatched `ret` by looking up the
+   return address in the function table — but a return address points *inside* the caller, not
+   at its start. Every `ret` would have failed. Control flow now uses the native call stack;
+   the guest return address is still pushed so ESP stays balanced for the guest's own stack
+   walking.
+2. **Stack overlapped the TEB.** The thread stack ran up to 0x7FFE0000 while the TEB sat at
+   0x7FFDF000. The first deep call chain would have overwritten the TEB. The stack now tops out
+   at 0x7FFC0000, below the PEB and TEB.
+3. **RVA vs VA.** The census keyed functions by RVA while the guest's pointers are VAs. Fixing
+   this turned 41,527 "orphan data groups" into real reachable functions — the count went from
+   53,596 to 102,913.
+4. **`heap_free` was a no-op.** With a bump allocator, Spore's constant alloc/free churn would
+   have exhausted the arena in minutes. Replaced with a real allocator.
+5. **`ret n` popped the wrong amount.** stdcall returns must pop the return address *and* the
+   arguments.
 
-**Guest addresses are host addresses.** The whole 4 GB guest space is one `mmap` reservation
-with a fixed offset, so lifted code and shims use plain pointers. On a 1 GB device nothing is
-committed until the game asks for it.
+## What is not started
 
-**Imports get real guest addresses.** Each import is a stub inside a reserved page; the IAT is
-filled with those addresses. `call dword ptr [IAT]` therefore lands in `guest_call_indirect`,
-which dispatches to the host implementation. Arguments are read straight off the guest stack,
-and `nargs` + calling convention are **inferred from the guest's own call sites** (walk back
-over the contiguous `push` sequence; stdcall if the code after the call does not adjust ESP)
-rather than typed in from memory.
+| Subsystem | State |
+|---|---|
+| GLES renderer behind D3D9 | not started (null backend in place) |
+| Shader path (`D3DXCompileShader`) | logged, fails cleanly — needs an HLSL front end or bytecode translation |
+| Real guest threads | `CreateThread` returns a handle; no native thread yet |
+| Input (DInput8) | fails cleanly so the guest takes its no-device path |
+| Audio (DSound) | fails cleanly |
+| Networking (Winsock) | stubs |
+| Device performance work | not started |
 
 ## Next steps, in order
 
-1. Finish the import table and link the binary. Boot and read `log.txt`.
-2. The first failures will be CRT startup (`_initterm`, `__getmainargs`, SEH setup). Fix in
-   the order the log reports them.
-3. SEH: `FS:[0]` chain + `_except_handler3/4` + `__CxxFrameHandler3`. Spore's C++ code throws
-   and catches; the exception path must work before the app gets far.
-4. Multi-threading: `CreateThread` currently logs and returns a handle. Spore's streaming
-   threads need real native threads with their own `CpuState`.
-5. D3D9 → GLES: the largest remaining subsystem (see `docs/PLAN.md` risk #2).
-6. Package I/O: `CreateFileW` maps to the game directory, but Spore reads `.package` files
-   with its own code, so this may already work once file I/O is right.
+1. Link and run on the device. The log will name the first real failure.
+2. Fix CRT startup in the order the log reports it (`_initterm`, `__getmainargs`, SEH setup).
+3. Real guest threads: Spore's streaming threads need their own `CpuState` and guest stack.
+4. Measure the shader situation: how many `D3DXCompileShader` requests, and whether the
+   packages also carry pre-compiled bytecode. This decides the size of the renderer job.
+5. GLES backend behind the existing D3D9 interface.
 
-## Known limitations of the current lift
+## Known limitations
 
-* `fcomi`/`fucomi`/`fcompp` without explicit operands compare st(0) against st(0); the
-  disassembler omits the implicit operand, so the lifter defaults to `st(0)`.
-* MMX registers are given their own storage in the XMM bank instead of aliasing x87. The
-  binary uses MMX 1,500 times, all in byte-shuffling paths, so this is safe in practice but
-  not architecturally exact.
-* `rcl`/`rcr` call `unsupported()`; they appear twice in 4M instructions.
-* `enter`/`leave` are supported, but `retf`/`iret` are traps (4 and 3 sites).
-* `bsr`/`bsf` zero-result flag handling is implemented; `bsr`'s destination-undefined case is
-  not (it leaves the register untouched, as documented for modern Intel).
+* `rcl`/`rcr` call `unsupported()` (2 sites in 4.7M instructions).
+* `retf`/`iret`/`iretd` are traps (4+3 sites).
+* MMX registers have their own storage instead of aliasing x87. The binary uses MMX ~1,500
+  times, all in byte shuffling; architecturally inexact but safe here.
+* `longjmp` unwinds the whole guest native stack instead of resuming the target frame; it is
+  reported loudly when it happens.
+* `fcomi`/`fucomi` without an explicit second operand default to `st(0)` (the disassembler
+  omits the implicit operand).

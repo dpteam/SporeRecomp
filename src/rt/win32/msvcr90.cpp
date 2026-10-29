@@ -24,8 +24,12 @@
 #include "rt/shim.h"
 #include "rt/win32/internal.h"
 #include "rt/win32/win32.h"
+#include "rt/win32/msvcr90.h"
 
 namespace sr::w32 {
+
+// Thrown by longjmp to unwind the guest's native call stack.
+// (Declared in msvcr90.h so the entry point can catch it.)
 
 namespace {
 
@@ -1063,30 +1067,37 @@ void crt_getenv(CpuState* s, const u32* a) {
 }
 
 void crt_setjmp3(CpuState* s, const u32* a) {
-  // _setjmp3(buf, count, ...) — stores the register set in the guest buffer.
+  // _setjmp3(buf, count, ...) — stores the register set in the guest buffer. The buffer
+  // layout is the CRT's private one; we use it as scratch for our own record.
   u32 buf = a[0];
   store<u32>(buf + 0, s->r[5]);   // ebp
   store<u32>(buf + 4, s->r[3]);   // ebx
   store<u32>(buf + 8, s->r[6]);   // esi
   store<u32>(buf + 12, s->r[7]);  // edi
-  store<u32>(buf + 16, load<u32>(s->r[4]));  // return address
-  store<u32>(buf + 20, s->r[4] + 4);         // esp after return
+  store<u32>(buf + 16, s->eip);   // where the setjmp was called
+  store<u32>(buf + 20, s->r[4]);  // esp at the setjmp point
   s->r[0] = 0;
 }
 
 void crt_longjmp(CpuState* s, const u32* a) {
+  // A longjmp has to abandon every native frame between here and the setjmp. There is no
+  // portable way to do that from inside a lifted function, so we unwind the whole guest
+  // call stack and report it. Spore uses setjmp/longjmp only in its own guard code, and a
+  // loud report is better than silently resuming in the wrong frame.
   u32 buf = a[0];
+  SR_LOG("longjmp: unwinding the guest stack to the frame that called setjmp at 0x%08x",
+         load<u32>(buf + 16));
   s->r[5] = load<u32>(buf + 0);
   s->r[3] = load<u32>(buf + 4);
   s->r[6] = load<u32>(buf + 8);
   s->r[7] = load<u32>(buf + 12);
-  u32 ret = load<u32>(buf + 16);
   s->r[4] = load<u32>(buf + 20);
   s->r[0] = a[1] ? a[1] : 1;
-  guest_return(s, ret);
+  throw Longjmp{load<u32>(buf + 16), s->r[0]};
 }
 
 }  // namespace sr::w32
+
 
 
 
