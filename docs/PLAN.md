@@ -39,9 +39,9 @@ not an emulator, not Wine.
 
 | # | Target | Proof |
 |---|---|---|
-| M0 | analysis + scaffold + toolchain | `docs/ANALYSIS.md`, aarch64 hello-world builds and runs |
-| M1 | PE loader + CpuState + call ABI + 200 lifted functions | differential tests green on x86 host **and** aarch64 (qemu) |
-| M2 | full `.text` lifted, all 495 imports stubbed, guest reaches `WinMain` and pumps messages | window appears, `log.txt` shows the app mode chain |
+| M0 | analysis + scaffold + toolchain | `docs/ANALYSIS.md`, aarch64 toolchain builds |
+| M1 | PE loader + CpuState + call ABI | differential tests green on host and aarch64 (qemu) |
+| M2 | full `.text` lifted, all imports implemented, guest reaches `WinMain` | **done** — 4,747,729 instructions, 0 unhandled, 495/495 imports |
 | M3 | CRT + config + package I/O + D3D9 device + RW4 texture/UI draw | **main menu rendered** |
 | M4 | input, audio, menu navigation, save files | menu fully usable |
 | M5 | Cell/Creature stage | playable creature stage |
@@ -50,14 +50,23 @@ not an emulator, not Wine.
 
 ## Honest risk register
 
-1. **Size**: 16.5 MB of code, ~105k candidate functions ≈ 4× the NFSU2 template. Lifter quality
-   (jump tables, SEH, indirect calls) is the whole game.
-2. **D3D9 + RW4 shaders on Mali-G31 (GLES2/3)**: `D3DXCompileShader` is imported. Two paths:
-   (a) packages already contain compiled shader bytecode → translate bytecode → GLSL ES (MojoShader
-   style, cheap); (b) HLSL is compiled at runtime → we need an HLSL front end. **Must be measured
-   early** (M2/M3), it changes the size of the job.
+1. **Size**: 16.5 MB of code, 108,528 recovered functions. Lifter quality (jump tables, SEH,
+   indirect calls) is the whole game — but it is done: 4,747,729 instructions lifted with zero
+   unhandled mnemonics.
+2. **D3D9 + RW4 shaders on Mali-G31 (GLES2/3)**: `D3DXCompileShader` is imported.
+   **Measured so far (inconclusive):** scanning the raw bytes of all 7 retail packages (3.9 GB)
+   found 1,747 candidate shader version tokens, but **zero** of them parse as a valid DX9
+   token stream (`tools/shader_verify.py`). So there is no *uncompressed* shader bytecode lying
+   in the packages. Two explanations remain, and they have very different costs:
+   * the packages are RefPack-compressed and the bytecode is inside compressed blocks
+     → unpack a package and re-run `shader_verify.py`; if it appears, a bytecode → GLSL ES
+     translator (MojoShader-style) is the cheap path;
+   * the game really does compile HLSL at runtime → an HLSL front end is needed, which is a
+     project comparable in size to a quarter of what is already built.
+   The runtime logs every `D3DXCompileShader` request with its entry point and target, so the
+   first successful boot answers this definitively. **This is the single largest unknown left.**
 3. **Memory**: RG 35 XX H has 1 GB total, muOS has no swap. Spore's PC working set is in the same
-   ballpark and its assets are ~10 GB of packages. Needs aggressive trimming (mip limits, Galaxy
+   ballpark and its assets are ~3.9 GB of packages. Needs aggressive trimming (mip limits, Galaxy
    textures on demand, package streaming) — real risk, possibly the hardest non-code problem.
 4. **CPU**: H700 = 4× Cortex-A53 @1.5 GHz. NFSU2 (2004, D3D8) needed 37 releases of optimisation to
    hit 30–60 FPS on the weaker RK3326. Spore (2008, D3D9, procedural animation) will be slower;

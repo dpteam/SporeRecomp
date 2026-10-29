@@ -7,10 +7,18 @@
 #include "rt/win32/win32.h"
 
 namespace sr::w32 {
+void AdjustWindowRectEx(CpuState* s, const u32* a);
+void BeginPaint(CpuState* s, const u32* a);
+void CallNextHookEx(CpuState* s, const u32* a);
 void CancelIo(CpuState* s, const u32* a);
+void ChangeClipboardChain(CpuState* s, const u32* a);
+void CheckDlgButton(CpuState* s, const u32* a);
+void ClientToScreen(CpuState* s, const u32* a);
+void CloseClipboard(CpuState* s, const u32* a);
 void CloseHandle(CpuState* s, const u32* a);
 void CompareStringW(CpuState* s, const u32* a);
 void CopyFileW(CpuState* s, const u32* a);
+void CreateDCA(CpuState* s, const u32* a);
 void CreateDirectoryA(CpuState* s, const u32* a);
 void CreateDirectoryW(CpuState* s, const u32* a);
 void CreateEventA(CpuState* s, const u32* a);
@@ -18,25 +26,47 @@ void CreateFileA(CpuState* s, const u32* a);
 void CreateFileW(CpuState* s, const u32* a);
 void CreateMutexA(CpuState* s, const u32* a);
 void CreateSemaphoreA(CpuState* s, const u32* a);
+void CreateSolidBrush(CpuState* s, const u32* a);
 void CreateThread(CpuState* s, const u32* a);
+void CreateWindowExA(CpuState* s, const u32* a);
+void CreateWindowExW(CpuState* s, const u32* a);
+void DefWindowProcA(CpuState* s, const u32* a);
+void DefWindowProcW(CpuState* s, const u32* a);
 void DeleteCriticalSection(CpuState* s, const u32* a);
+void DeleteDC(CpuState* s, const u32* a);
 void DeleteFileA(CpuState* s, const u32* a);
 void DeleteFileW(CpuState* s, const u32* a);
+void DeleteObject(CpuState* s, const u32* a);
+void DestroyCursor(CpuState* s, const u32* a);
+void DestroyWindow(CpuState* s, const u32* a);
 void DeviceIoControl(CpuState* s, const u32* a);
+void DispatchMessageW(CpuState* s, const u32* a);
 void DuplicateHandle(CpuState* s, const u32* a);
+void EmptyClipboard(CpuState* s, const u32* a);
+void EndPaint(CpuState* s, const u32* a);
 void EnterCriticalSection(CpuState* s, const u32* a);
+void EnumDisplayMonitors(CpuState* s, const u32* a);
 void EnumResourceNamesA(CpuState* s, const u32* a);
+void ExtEscape(CpuState* s, const u32* a);
+void FillRect(CpuState* s, const u32* a);
 void FindClose(CpuState* s, const u32* a);
 void FindCloseChangeNotification(CpuState* s, const u32* a);
 void FindFirstChangeNotificationW(CpuState* s, const u32* a);
 void FindFirstFileA(CpuState* s, const u32* a);
 void FindFirstFileW(CpuState* s, const u32* a);
 void FindNextChangeNotification(CpuState* s, const u32* a);
+void FindNextFileA(CpuState* s, const u32* a);
 void FindNextFileW(CpuState* s, const u32* a);
+void FlushConsoleInputBuffer(CpuState* s, const u32* a);
 void FlushFileBuffers(CpuState* s, const u32* a);
 void FormatMessageA(CpuState* s, const u32* a);
 void FreeLibrary(CpuState* s, const u32* a);
 void GetACP(CpuState* s, const u32* a);
+void GetActiveWindow(CpuState* s, const u32* a);
+void GetAncestor(CpuState* s, const u32* a);
+void GetAsyncKeyState(CpuState* s, const u32* a);
+void GetClientRect(CpuState* s, const u32* a);
+void GetClipboardData(CpuState* s, const u32* a);
 void GetCommandLineA(CpuState* s, const u32* a);
 void GetComputerNameA(CpuState* s, const u32* a);
 void GetComputerNameExA(CpuState* s, const u32* a);
@@ -45,45 +75,63 @@ void GetCurrentProcess(CpuState* s, const u32* a);
 void GetCurrentProcessId(CpuState* s, const u32* a);
 void GetCurrentThread(CpuState* s, const u32* a);
 void GetCurrentThreadId(CpuState* s, const u32* a);
+void GetCursorPos(CpuState* s, const u32* a);
+void GetDC(CpuState* s, const u32* a);
+void GetDesktopWindow(CpuState* s, const u32* a);
+void GetDeviceCaps(CpuState* s, const u32* a);
 void GetDiskFreeSpaceExA(CpuState* s, const u32* a);
+void GetDoubleClickTime(CpuState* s, const u32* a);
 void GetDriveTypeA(CpuState* s, const u32* a);
 void GetEnvironmentVariableA(CpuState* s, const u32* a);
 void GetExitCodeThread(CpuState* s, const u32* a);
 void GetFileAttributesW(CpuState* s, const u32* a);
 void GetFileSize(CpuState* s, const u32* a);
 void GetFileType(CpuState* s, const u32* a);
+void GetForegroundWindow(CpuState* s, const u32* a);
 void GetFullPathNameA(CpuState* s, const u32* a);
 void GetFullPathNameW(CpuState* s, const u32* a);
+void GetIconInfo(CpuState* s, const u32* a);
+void GetKeyState(CpuState* s, const u32* a);
+void GetKeyboardLayout(CpuState* s, const u32* a);
+void GetKeyboardState(CpuState* s, const u32* a);
 void GetLastError(CpuState* s, const u32* a);
 void GetLocaleInfoW(CpuState* s, const u32* a);
 void GetLogicalDrives(CpuState* s, const u32* a);
 void GetLongPathNameW(CpuState* s, const u32* a);
+void GetMenu(CpuState* s, const u32* a);
 void GetModuleFileNameA(CpuState* s, const u32* a);
 void GetModuleFileNameW(CpuState* s, const u32* a);
 void GetModuleHandleA(CpuState* s, const u32* a);
 void GetModuleHandleW(CpuState* s, const u32* a);
 void GetModuleInformation(CpuState* s, const u32* a);
+void GetMonitorInfoA(CpuState* s, const u32* a);
 void GetPriorityClass(CpuState* s, const u32* a);
 void GetProcAddress(CpuState* s, const u32* a);
 void GetProcessAffinityMask(CpuState* s, const u32* a);
 void GetProcessHeap(CpuState* s, const u32* a);
 void GetProcessTimes(CpuState* s, const u32* a);
+void GetProcessWindowStation(CpuState* s, const u32* a);
 void GetStartupInfoA(CpuState* s, const u32* a);
 void GetStdHandle(CpuState* s, const u32* a);
 void GetSystemDefaultLCID(CpuState* s, const u32* a);
 void GetSystemDirectoryW(CpuState* s, const u32* a);
 void GetSystemInfo(CpuState* s, const u32* a);
+void GetSystemMetrics(CpuState* s, const u32* a);
 void GetSystemTime(CpuState* s, const u32* a);
 void GetSystemTimeAsFileTime(CpuState* s, const u32* a);
 void GetTempPathW(CpuState* s, const u32* a);
 void GetThreadPriority(CpuState* s, const u32* a);
 void GetTickCount(CpuState* s, const u32* a);
+void GetUserObjectInformationW(CpuState* s, const u32* a);
 void GetVersion(CpuState* s, const u32* a);
 void GetVersionExA(CpuState* s, const u32* a);
 void GetVersionExW(CpuState* s, const u32* a);
 void GetVolumeInformationA(CpuState* s, const u32* a);
 void GetVolumeInformationW(CpuState* s, const u32* a);
 void GetVolumePathNameW(CpuState* s, const u32* a);
+void GetWindowLongA(CpuState* s, const u32* a);
+void GetWindowRect(CpuState* s, const u32* a);
+void GetWindowThreadProcessId(CpuState* s, const u32* a);
 void GetWindowsDirectoryW(CpuState* s, const u32* a);
 void GlobalAlloc(CpuState* s, const u32* a);
 void GlobalFree(CpuState* s, const u32* a);
@@ -101,33 +149,66 @@ void InterlockedDecrement(CpuState* s, const u32* a);
 void InterlockedExchange(CpuState* s, const u32* a);
 void InterlockedExchangeAdd(CpuState* s, const u32* a);
 void InterlockedIncrement(CpuState* s, const u32* a);
+void IntersectRect(CpuState* s, const u32* a);
+void InvalidateRect(CpuState* s, const u32* a);
+void IsClipboardFormatAvailable(CpuState* s, const u32* a);
 void IsDebuggerPresent(CpuState* s, const u32* a);
+void IsDlgButtonChecked(CpuState* s, const u32* a);
+void IsIconic(CpuState* s, const u32* a);
+void IsWindowVisible(CpuState* s, const u32* a);
+void IsZoomed(CpuState* s, const u32* a);
+void KillTimer(CpuState* s, const u32* a);
 void LCMapStringW(CpuState* s, const u32* a);
 void LeaveCriticalSection(CpuState* s, const u32* a);
+void LoadCursorA(CpuState* s, const u32* a);
+void LoadIconA(CpuState* s, const u32* a);
+void LoadImageW(CpuState* s, const u32* a);
 void LoadLibraryA(CpuState* s, const u32* a);
 void LoadLibraryW(CpuState* s, const u32* a);
 void LocalAlloc(CpuState* s, const u32* a);
 void LocalFree(CpuState* s, const u32* a);
+void MessageBoxA(CpuState* s, const u32* a);
+void MessageBoxW(CpuState* s, const u32* a);
+void MonitorFromWindow(CpuState* s, const u32* a);
 void MoveFileA(CpuState* s, const u32* a);
 void MoveFileExW(CpuState* s, const u32* a);
+void MoveWindow(CpuState* s, const u32* a);
 void MultiByteToWideChar(CpuState* s, const u32* a);
+void OpenClipboard(CpuState* s, const u32* a);
 void OpenProcess(CpuState* s, const u32* a);
 void OutputDebugStringA(CpuState* s, const u32* a);
+void PeekMessageA(CpuState* s, const u32* a);
+void PeekMessageW(CpuState* s, const u32* a);
+void PostMessageA(CpuState* s, const u32* a);
+void PostQuitMessage(CpuState* s, const u32* a);
 void QueryPerformanceCounter(CpuState* s, const u32* a);
 void QueryPerformanceFrequency(CpuState* s, const u32* a);
 void QueueUserAPC(CpuState* s, const u32* a);
 void RaiseException(CpuState* s, const u32* a);
 void ReadFile(CpuState* s, const u32* a);
+void RegisterClassA(CpuState* s, const u32* a);
+void RegisterClassExW(CpuState* s, const u32* a);
+void ReleaseCapture(CpuState* s, const u32* a);
+void ReleaseDC(CpuState* s, const u32* a);
 void ReleaseMutex(CpuState* s, const u32* a);
 void ReleaseSemaphore(CpuState* s, const u32* a);
 void RemoveDirectoryA(CpuState* s, const u32* a);
 void RemoveDirectoryW(CpuState* s, const u32* a);
 void ResumeThread(CpuState* s, const u32* a);
+void ScreenToClient(CpuState* s, const u32* a);
+void SendMessageA(CpuState* s, const u32* a);
+void SetActiveWindow(CpuState* s, const u32* a);
+void SetCapture(CpuState* s, const u32* a);
+void SetClipboardData(CpuState* s, const u32* a);
+void SetClipboardViewer(CpuState* s, const u32* a);
+void SetCursor(CpuState* s, const u32* a);
+void SetCursorPos(CpuState* s, const u32* a);
 void SetEndOfFile(CpuState* s, const u32* a);
 void SetEnvironmentVariableA(CpuState* s, const u32* a);
 void SetEvent(CpuState* s, const u32* a);
 void SetFileAttributesW(CpuState* s, const u32* a);
 void SetFilePointer(CpuState* s, const u32* a);
+void SetFocus(CpuState* s, const u32* a);
 void SetLastError(CpuState* s, const u32* a);
 void SetPriorityClass(CpuState* s, const u32* a);
 void SetProcessAffinityMask(CpuState* s, const u32* a);
@@ -135,17 +216,31 @@ void SetThreadAffinityMask(CpuState* s, const u32* a);
 void SetThreadExecutionState(CpuState* s, const u32* a);
 void SetThreadIdealProcessor(CpuState* s, const u32* a);
 void SetThreadPriority(CpuState* s, const u32* a);
+void SetTimer(CpuState* s, const u32* a);
 void SetUnhandledExceptionFilter(CpuState* s, const u32* a);
+void SetWindowLongA(CpuState* s, const u32* a);
+void SetWindowLongW(CpuState* s, const u32* a);
+void SetWindowPos(CpuState* s, const u32* a);
+void SetWindowTextW(CpuState* s, const u32* a);
+void SetWindowsHookExA(CpuState* s, const u32* a);
+void ShowCursor(CpuState* s, const u32* a);
+void ShowWindow(CpuState* s, const u32* a);
 void Sleep(CpuState* s, const u32* a);
 void SleepEx(CpuState* s, const u32* a);
+void SystemParametersInfoA(CpuState* s, const u32* a);
 void SystemTimeToFileTime(CpuState* s, const u32* a);
 void TerminateProcess(CpuState* s, const u32* a);
 void TlsAlloc(CpuState* s, const u32* a);
 void TlsFree(CpuState* s, const u32* a);
 void TlsGetValue(CpuState* s, const u32* a);
 void TlsSetValue(CpuState* s, const u32* a);
+void TranslateMessage(CpuState* s, const u32* a);
 void TryEnterCriticalSection(CpuState* s, const u32* a);
 void UnhandledExceptionFilter(CpuState* s, const u32* a);
+void UnhookWindowsHookEx(CpuState* s, const u32* a);
+void UnregisterClassA(CpuState* s, const u32* a);
+void UpdateWindow(CpuState* s, const u32* a);
+void ValidateRect(CpuState* s, const u32* a);
 void VirtualAlloc(CpuState* s, const u32* a);
 void VirtualFree(CpuState* s, const u32* a);
 void VirtualQuery(CpuState* s, const u32* a);
@@ -277,6 +372,7 @@ void crt_strspn(CpuState* s, const u32* a);
 void crt_strstr(CpuState* s, const u32* a);
 void crt_strtod(CpuState* s, const u32* a);
 void crt_strtol(CpuState* s, const u32* a);
+void crt_strtoui64(CpuState* s, const u32* a);
 void crt_strtoul(CpuState* s, const u32* a);
 void crt_swscanf(CpuState* s, const u32* a);
 void crt_time32(CpuState* s, const u32* a);
@@ -357,6 +453,8 @@ void version_noop(CpuState* s, const u32* a);
 void version_query(CpuState* s, const u32* a);
 void version_size(CpuState* s, const u32* a);
 void ws_noop(CpuState* s, const u32* a);
+void wsprintfA(CpuState* s, const u32* a);
+void wsprintfW(CpuState* s, const u32* a);
 }  // namespace sr::w32
 
 namespace sr::imports {
@@ -377,12 +475,12 @@ const Desc g_import_table[] = {
   {"DINPUT8.dll", "DirectInput8Create", 0, 5, true, sr::w32::dinput8_create},
   {"DSOUND.dll", "#1", 1, 3, true, sr::w32::dsound_create},
   {"DSOUND.dll", "#9", 9, 0, true, sr::w32::dsound_noop},
-  {"GDI32.dll", "CreateSolidBrush", 0, 1, true, nullptr},
-  {"GDI32.dll", "DeleteObject", 0, 1, true, nullptr},
-  {"GDI32.dll", "ExtEscape", 0, 6, true, nullptr},
-  {"GDI32.dll", "DeleteDC", 0, 1, true, nullptr},
-  {"GDI32.dll", "GetDeviceCaps", 0, 2, true, nullptr},
-  {"GDI32.dll", "CreateDCA", 0, 4, true, nullptr},
+  {"GDI32.dll", "CreateSolidBrush", 0, 1, true, sr::w32::CreateSolidBrush},
+  {"GDI32.dll", "DeleteObject", 0, 1, true, sr::w32::DeleteObject},
+  {"GDI32.dll", "ExtEscape", 0, 6, true, sr::w32::ExtEscape},
+  {"GDI32.dll", "DeleteDC", 0, 1, true, sr::w32::DeleteDC},
+  {"GDI32.dll", "GetDeviceCaps", 0, 2, true, sr::w32::GetDeviceCaps},
+  {"GDI32.dll", "CreateDCA", 0, 4, true, sr::w32::CreateDCA},
   {"IMM32.dll", "ImmDisableTextFrameService", 0, 1, true, sr::w32::imm_noop},
   {"IMM32.dll", "ImmGetCompositionStringW", 0, 5, true, sr::w32::imm_noop},
   {"IMM32.dll", "ImmSetCompositionStringW", 0, 7, true, sr::w32::imm_noop},
@@ -525,9 +623,9 @@ const Desc g_import_table[] = {
   {"KERNEL32.dll", "GetCurrentDirectoryA", 0, 2, true, sr::w32::GetCurrentDirectoryA},
   {"KERNEL32.dll", "UnhandledExceptionFilter", 0, 1, true, sr::w32::UnhandledExceptionFilter},
   {"KERNEL32.dll", "GetStartupInfoA", 0, 1, true, sr::w32::GetStartupInfoA},
-  {"KERNEL32.dll", "FlushConsoleInputBuffer", 0, 1, true, nullptr},
+  {"KERNEL32.dll", "FlushConsoleInputBuffer", 0, 1, true, sr::w32::FlushConsoleInputBuffer},
   {"KERNEL32.dll", "FindFirstFileA", 0, 2, true, sr::w32::FindFirstFileA},
-  {"KERNEL32.dll", "FindNextFileA", 0, 83, true, nullptr},
+  {"KERNEL32.dll", "FindNextFileA", 0, 2, true, sr::w32::FindNextFileA},
   {"KERNEL32.dll", "GlobalMemoryStatus", 0, 1, true, sr::w32::GlobalMemoryStatus},
   {"KERNEL32.dll", "GetStdHandle", 0, 1, true, sr::w32::GetStdHandle},
   {"KERNEL32.dll", "GetFileType", 0, 1, true, sr::w32::GetFileType},
@@ -594,7 +692,7 @@ const Desc g_import_table[] = {
   {"MSVCR90.dll", "_wsearchenv", 0, 3, false, sr::w32::crt_wsearchenv},
   {"MSVCR90.dll", "_spawnv", 0, 3, false, sr::w32::crt_spawnv},
   {"MSVCR90.dll", "_wspawnv", 0, 3, false, sr::w32::crt_wspawnv},
-  {"MSVCR90.dll", "_strtoui64", 0, 3, false, nullptr},
+  {"MSVCR90.dll", "_strtoui64", 0, 3, false, sr::w32::crt_strtoui64},
   {"MSVCR90.dll", "_wgetcwd", 0, 2, false, sr::w32::crt_wgetcwd},
   {"MSVCR90.dll", "_wstat64i32", 0, 2, false, sr::w32::crt_wstat64i32},
   {"MSVCR90.dll", "_getdrive", 0, 0, false, sr::w32::crt_getdrive},
@@ -706,95 +804,95 @@ const Desc g_import_table[] = {
   {"SHELL32.dll", "SHGetFolderPathW", 0, 5, true, sr::w32::sh_get_folder_path},
   {"SHELL32.dll", "DragQueryFileW", 0, 4, true, sr::w32::drag_query_file},
   {"SHELL32.dll", "ShellExecuteW", 0, 6, true, sr::w32::shell_execute},
-  {"USER32.dll", "SetWindowLongW", 0, 3, true, nullptr},
-  {"USER32.dll", "CreateWindowExW", 0, 12, true, nullptr},
-  {"USER32.dll", "SetWindowPos", 0, 7, true, nullptr},
-  {"USER32.dll", "GetWindowLongA", 0, 2, true, nullptr},
-  {"USER32.dll", "GetSystemMetrics", 0, 1, true, nullptr},
-  {"USER32.dll", "GetClientRect", 0, 2, true, nullptr},
-  {"USER32.dll", "SetWindowTextW", 0, 2, true, nullptr},
-  {"USER32.dll", "DestroyWindow", 0, 1, true, nullptr},
-  {"USER32.dll", "GetDesktopWindow", 0, 0, true, nullptr},
-  {"USER32.dll", "IsDlgButtonChecked", 0, 2, true, nullptr},
-  {"USER32.dll", "CheckDlgButton", 0, 3, true, nullptr},
-  {"USER32.dll", "GetDoubleClickTime", 0, 0, true, nullptr},
-  {"USER32.dll", "wsprintfA", 0, 2, false, nullptr},
-  {"USER32.dll", "RegisterClassA", 0, 1, true, nullptr},
-  {"USER32.dll", "CreateWindowExA", 0, 12, true, nullptr},
-  {"USER32.dll", "SetClipboardViewer", 0, 1, true, nullptr},
-  {"USER32.dll", "IsClipboardFormatAvailable", 0, 1, true, nullptr},
-  {"USER32.dll", "GetClipboardData", 0, 1, true, nullptr},
-  {"USER32.dll", "TranslateMessage", 0, 1, true, nullptr},
-  {"USER32.dll", "EmptyClipboard", 0, 0, true, nullptr},
-  {"USER32.dll", "SetClipboardData", 0, 2, true, nullptr},
-  {"USER32.dll", "CloseClipboard", 0, 0, true, nullptr},
-  {"USER32.dll", "ChangeClipboardChain", 0, 2, true, nullptr},
-  {"USER32.dll", "wsprintfW", 0, 2, false, nullptr},
-  {"USER32.dll", "GetCursorPos", 0, 1, true, nullptr},
-  {"USER32.dll", "GetKeyboardState", 0, 1, true, nullptr},
-  {"USER32.dll", "DefWindowProcA", 0, 4, true, nullptr},
-  {"USER32.dll", "PeekMessageA", 0, 5, true, nullptr},
-  {"USER32.dll", "GetKeyboardLayout", 0, 1, true, nullptr},
-  {"USER32.dll", "RegisterClassExW", 0, 1, true, nullptr},
-  {"USER32.dll", "SetTimer", 0, 4, true, nullptr},
-  {"USER32.dll", "SetCursor", 0, 1, true, nullptr},
-  {"USER32.dll", "SetCursorPos", 0, 2, true, nullptr},
-  {"USER32.dll", "IntersectRect", 0, 3, true, nullptr},
-  {"USER32.dll", "ReleaseCapture", 0, 0, true, nullptr},
-  {"USER32.dll", "SetCapture", 0, 1, true, nullptr},
-  {"USER32.dll", "GetMenu", 0, 1, true, nullptr},
-  {"USER32.dll", "AdjustWindowRectEx", 0, 4, true, nullptr},
-  {"USER32.dll", "MoveWindow", 0, 6, true, nullptr},
-  {"USER32.dll", "BeginPaint", 0, 2, true, nullptr},
-  {"USER32.dll", "EndPaint", 0, 2, true, nullptr},
-  {"USER32.dll", "EnumDisplayMonitors", 0, 4, true, nullptr},
-  {"USER32.dll", "PeekMessageW", 0, 5, true, nullptr},
-  {"USER32.dll", "DispatchMessageW", 0, 1, true, nullptr},
-  {"USER32.dll", "ClientToScreen", 0, 2, true, nullptr},
-  {"USER32.dll", "KillTimer", 0, 2, true, nullptr},
-  {"USER32.dll", "UnregisterClassA", 0, 2, true, nullptr},
-  {"USER32.dll", "GetKeyState", 0, 1, true, nullptr},
-  {"USER32.dll", "PostMessageA", 0, 4, true, nullptr},
-  {"USER32.dll", "ShowCursor", 0, 1, true, nullptr},
-  {"USER32.dll", "GetWindowRect", 0, 2, true, nullptr},
-  {"USER32.dll", "MonitorFromWindow", 0, 2, true, nullptr},
-  {"USER32.dll", "IsZoomed", 0, 1, true, nullptr},
-  {"USER32.dll", "GetAncestor", 0, 2, true, nullptr},
-  {"USER32.dll", "IsIconic", 0, 1, true, nullptr},
-  {"USER32.dll", "IsWindowVisible", 0, 1, true, nullptr},
-  {"USER32.dll", "SetActiveWindow", 0, 1, true, nullptr},
-  {"USER32.dll", "GetActiveWindow", 0, 0, true, nullptr},
-  {"USER32.dll", "FillRect", 0, 3, true, nullptr},
-  {"USER32.dll", "UpdateWindow", 0, 1, true, nullptr},
-  {"USER32.dll", "ValidateRect", 0, 2, true, nullptr},
-  {"USER32.dll", "InvalidateRect", 0, 3, true, nullptr},
-  {"USER32.dll", "LoadIconA", 0, 2, true, nullptr},
-  {"USER32.dll", "DestroyCursor", 0, 1, true, nullptr},
-  {"USER32.dll", "GetIconInfo", 0, 2, true, nullptr},
-  {"USER32.dll", "LoadImageW", 0, 6, true, nullptr},
-  {"USER32.dll", "UnhookWindowsHookEx", 0, 1, true, nullptr},
-  {"USER32.dll", "SetWindowsHookExA", 0, 4, true, nullptr},
-  {"USER32.dll", "GetAsyncKeyState", 0, 1, true, nullptr},
-  {"USER32.dll", "CallNextHookEx", 0, 4, true, nullptr},
-  {"USER32.dll", "GetForegroundWindow", 0, 0, true, nullptr},
-  {"USER32.dll", "GetWindowThreadProcessId", 0, 2, true, nullptr},
-  {"USER32.dll", "GetMonitorInfoA", 0, 2, true, nullptr},
-  {"USER32.dll", "ScreenToClient", 0, 2, true, nullptr},
-  {"USER32.dll", "SendMessageA", 0, 4, true, nullptr},
-  {"USER32.dll", "LoadCursorA", 0, 2, true, nullptr},
-  {"USER32.dll", "SetWindowLongA", 0, 3, true, nullptr},
-  {"USER32.dll", "SetFocus", 0, 1, true, nullptr},
-  {"USER32.dll", "DefWindowProcW", 0, 4, true, nullptr},
-  {"USER32.dll", "GetDC", 0, 1, true, nullptr},
-  {"USER32.dll", "ReleaseDC", 0, 2, true, nullptr},
-  {"USER32.dll", "SystemParametersInfoA", 0, 4, true, nullptr},
-  {"USER32.dll", "GetProcessWindowStation", 0, 0, true, nullptr},
-  {"USER32.dll", "GetUserObjectInformationW", 0, 5, true, nullptr},
-  {"USER32.dll", "ShowWindow", 0, 2, true, nullptr},
-  {"USER32.dll", "MessageBoxW", 0, 4, true, nullptr},
-  {"USER32.dll", "MessageBoxA", 0, 4, true, nullptr},
-  {"USER32.dll", "OpenClipboard", 0, 1, true, nullptr},
-  {"USER32.dll", "PostQuitMessage", 0, 1, true, nullptr},
+  {"USER32.dll", "SetWindowLongW", 0, 3, true, sr::w32::SetWindowLongW},
+  {"USER32.dll", "CreateWindowExW", 0, 12, true, sr::w32::CreateWindowExW},
+  {"USER32.dll", "SetWindowPos", 0, 7, true, sr::w32::SetWindowPos},
+  {"USER32.dll", "GetWindowLongA", 0, 2, true, sr::w32::GetWindowLongA},
+  {"USER32.dll", "GetSystemMetrics", 0, 1, true, sr::w32::GetSystemMetrics},
+  {"USER32.dll", "GetClientRect", 0, 2, true, sr::w32::GetClientRect},
+  {"USER32.dll", "SetWindowTextW", 0, 2, true, sr::w32::SetWindowTextW},
+  {"USER32.dll", "DestroyWindow", 0, 1, true, sr::w32::DestroyWindow},
+  {"USER32.dll", "GetDesktopWindow", 0, 0, true, sr::w32::GetDesktopWindow},
+  {"USER32.dll", "IsDlgButtonChecked", 0, 2, true, sr::w32::IsDlgButtonChecked},
+  {"USER32.dll", "CheckDlgButton", 0, 3, true, sr::w32::CheckDlgButton},
+  {"USER32.dll", "GetDoubleClickTime", 0, 0, true, sr::w32::GetDoubleClickTime},
+  {"USER32.dll", "wsprintfA", 0, 2, false, sr::w32::wsprintfA},
+  {"USER32.dll", "RegisterClassA", 0, 1, true, sr::w32::RegisterClassA},
+  {"USER32.dll", "CreateWindowExA", 0, 12, true, sr::w32::CreateWindowExA},
+  {"USER32.dll", "SetClipboardViewer", 0, 1, true, sr::w32::SetClipboardViewer},
+  {"USER32.dll", "IsClipboardFormatAvailable", 0, 1, true, sr::w32::IsClipboardFormatAvailable},
+  {"USER32.dll", "GetClipboardData", 0, 1, true, sr::w32::GetClipboardData},
+  {"USER32.dll", "TranslateMessage", 0, 1, true, sr::w32::TranslateMessage},
+  {"USER32.dll", "EmptyClipboard", 0, 0, true, sr::w32::EmptyClipboard},
+  {"USER32.dll", "SetClipboardData", 0, 2, true, sr::w32::SetClipboardData},
+  {"USER32.dll", "CloseClipboard", 0, 0, true, sr::w32::CloseClipboard},
+  {"USER32.dll", "ChangeClipboardChain", 0, 2, true, sr::w32::ChangeClipboardChain},
+  {"USER32.dll", "wsprintfW", 0, 2, false, sr::w32::wsprintfW},
+  {"USER32.dll", "GetCursorPos", 0, 1, true, sr::w32::GetCursorPos},
+  {"USER32.dll", "GetKeyboardState", 0, 1, true, sr::w32::GetKeyboardState},
+  {"USER32.dll", "DefWindowProcA", 0, 4, true, sr::w32::DefWindowProcA},
+  {"USER32.dll", "PeekMessageA", 0, 5, true, sr::w32::PeekMessageA},
+  {"USER32.dll", "GetKeyboardLayout", 0, 1, true, sr::w32::GetKeyboardLayout},
+  {"USER32.dll", "RegisterClassExW", 0, 1, true, sr::w32::RegisterClassExW},
+  {"USER32.dll", "SetTimer", 0, 4, true, sr::w32::SetTimer},
+  {"USER32.dll", "SetCursor", 0, 1, true, sr::w32::SetCursor},
+  {"USER32.dll", "SetCursorPos", 0, 2, true, sr::w32::SetCursorPos},
+  {"USER32.dll", "IntersectRect", 0, 3, true, sr::w32::IntersectRect},
+  {"USER32.dll", "ReleaseCapture", 0, 0, true, sr::w32::ReleaseCapture},
+  {"USER32.dll", "SetCapture", 0, 1, true, sr::w32::SetCapture},
+  {"USER32.dll", "GetMenu", 0, 1, true, sr::w32::GetMenu},
+  {"USER32.dll", "AdjustWindowRectEx", 0, 4, true, sr::w32::AdjustWindowRectEx},
+  {"USER32.dll", "MoveWindow", 0, 6, true, sr::w32::MoveWindow},
+  {"USER32.dll", "BeginPaint", 0, 2, true, sr::w32::BeginPaint},
+  {"USER32.dll", "EndPaint", 0, 2, true, sr::w32::EndPaint},
+  {"USER32.dll", "EnumDisplayMonitors", 0, 4, true, sr::w32::EnumDisplayMonitors},
+  {"USER32.dll", "PeekMessageW", 0, 5, true, sr::w32::PeekMessageW},
+  {"USER32.dll", "DispatchMessageW", 0, 1, true, sr::w32::DispatchMessageW},
+  {"USER32.dll", "ClientToScreen", 0, 2, true, sr::w32::ClientToScreen},
+  {"USER32.dll", "KillTimer", 0, 2, true, sr::w32::KillTimer},
+  {"USER32.dll", "UnregisterClassA", 0, 2, true, sr::w32::UnregisterClassA},
+  {"USER32.dll", "GetKeyState", 0, 1, true, sr::w32::GetKeyState},
+  {"USER32.dll", "PostMessageA", 0, 4, true, sr::w32::PostMessageA},
+  {"USER32.dll", "ShowCursor", 0, 1, true, sr::w32::ShowCursor},
+  {"USER32.dll", "GetWindowRect", 0, 2, true, sr::w32::GetWindowRect},
+  {"USER32.dll", "MonitorFromWindow", 0, 2, true, sr::w32::MonitorFromWindow},
+  {"USER32.dll", "IsZoomed", 0, 1, true, sr::w32::IsZoomed},
+  {"USER32.dll", "GetAncestor", 0, 2, true, sr::w32::GetAncestor},
+  {"USER32.dll", "IsIconic", 0, 1, true, sr::w32::IsIconic},
+  {"USER32.dll", "IsWindowVisible", 0, 1, true, sr::w32::IsWindowVisible},
+  {"USER32.dll", "SetActiveWindow", 0, 1, true, sr::w32::SetActiveWindow},
+  {"USER32.dll", "GetActiveWindow", 0, 0, true, sr::w32::GetActiveWindow},
+  {"USER32.dll", "FillRect", 0, 3, true, sr::w32::FillRect},
+  {"USER32.dll", "UpdateWindow", 0, 1, true, sr::w32::UpdateWindow},
+  {"USER32.dll", "ValidateRect", 0, 2, true, sr::w32::ValidateRect},
+  {"USER32.dll", "InvalidateRect", 0, 3, true, sr::w32::InvalidateRect},
+  {"USER32.dll", "LoadIconA", 0, 2, true, sr::w32::LoadIconA},
+  {"USER32.dll", "DestroyCursor", 0, 1, true, sr::w32::DestroyCursor},
+  {"USER32.dll", "GetIconInfo", 0, 2, true, sr::w32::GetIconInfo},
+  {"USER32.dll", "LoadImageW", 0, 6, true, sr::w32::LoadImageW},
+  {"USER32.dll", "UnhookWindowsHookEx", 0, 1, true, sr::w32::UnhookWindowsHookEx},
+  {"USER32.dll", "SetWindowsHookExA", 0, 4, true, sr::w32::SetWindowsHookExA},
+  {"USER32.dll", "GetAsyncKeyState", 0, 1, true, sr::w32::GetAsyncKeyState},
+  {"USER32.dll", "CallNextHookEx", 0, 4, true, sr::w32::CallNextHookEx},
+  {"USER32.dll", "GetForegroundWindow", 0, 0, true, sr::w32::GetForegroundWindow},
+  {"USER32.dll", "GetWindowThreadProcessId", 0, 2, true, sr::w32::GetWindowThreadProcessId},
+  {"USER32.dll", "GetMonitorInfoA", 0, 2, true, sr::w32::GetMonitorInfoA},
+  {"USER32.dll", "ScreenToClient", 0, 2, true, sr::w32::ScreenToClient},
+  {"USER32.dll", "SendMessageA", 0, 4, true, sr::w32::SendMessageA},
+  {"USER32.dll", "LoadCursorA", 0, 2, true, sr::w32::LoadCursorA},
+  {"USER32.dll", "SetWindowLongA", 0, 3, true, sr::w32::SetWindowLongA},
+  {"USER32.dll", "SetFocus", 0, 1, true, sr::w32::SetFocus},
+  {"USER32.dll", "DefWindowProcW", 0, 4, true, sr::w32::DefWindowProcW},
+  {"USER32.dll", "GetDC", 0, 1, true, sr::w32::GetDC},
+  {"USER32.dll", "ReleaseDC", 0, 2, true, sr::w32::ReleaseDC},
+  {"USER32.dll", "SystemParametersInfoA", 0, 4, true, sr::w32::SystemParametersInfoA},
+  {"USER32.dll", "GetProcessWindowStation", 0, 0, true, sr::w32::GetProcessWindowStation},
+  {"USER32.dll", "GetUserObjectInformationW", 0, 5, true, sr::w32::GetUserObjectInformationW},
+  {"USER32.dll", "ShowWindow", 0, 2, true, sr::w32::ShowWindow},
+  {"USER32.dll", "MessageBoxW", 0, 4, true, sr::w32::MessageBoxW},
+  {"USER32.dll", "MessageBoxA", 0, 4, true, sr::w32::MessageBoxA},
+  {"USER32.dll", "OpenClipboard", 0, 1, true, sr::w32::OpenClipboard},
+  {"USER32.dll", "PostQuitMessage", 0, 1, true, sr::w32::PostQuitMessage},
   {"USP10.dll", "ScriptItemize", 0, 6, true, sr::w32::usp_noop},
   {"USP10.dll", "ScriptBreak", 0, 4, true, sr::w32::usp_noop},
   {"VERSION.dll", "GetFileVersionInfoSizeA", 0, 2, true, sr::w32::version_size},

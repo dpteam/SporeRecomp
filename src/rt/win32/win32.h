@@ -240,6 +240,7 @@ void GetDriveTypeA(CpuState* s, const u32* a);
 void GetLogicalDrives(CpuState* s, const u32* a);
 void FindFirstFileA(CpuState* s, const u32* a);
 void FindFirstFileW(CpuState* s, const u32* a);
+void FindNextFileA(CpuState* s, const u32* a);
 void FindNextFileW(CpuState* s, const u32* a);
 void FindClose(CpuState* s, const u32* a);
 void FindFirstChangeNotificationW(CpuState* s, const u32* a);
@@ -351,4 +352,5 @@ void CreateDCA(CpuState* s, const u32* a);
 void GetDeviceCaps(CpuState* s, const u32* a);
 
 }  // namespace sr::w32
+
 

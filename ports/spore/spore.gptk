@@ -1,30 +1,47 @@
 # GPTOKEYB profile for Spore (RG 35 XX H / muOS).
 #
-# Keyboard-only for now: the game currently runs on its Win32 message loop, so the pad is
-# mapped to the keys Spore binds by default. Once the DInput8 layer lands this file becomes
-# unnecessary — the game will read the pad directly, with the layout below as the mapping.
+# Spore is a mouse-driven game: "go here / action" is a left click, "fly to" is a right
+# click, camera rotation is a middle-drag, and zoom is the wheel. So the pad is mapped to
+# keyboard *and* mouse, following the game's own default bindings (spore.com/comm/tutorials/
+# controls):
+#
+#   A            left click      go here / action / select / use tool   <- the main button
+#   B            right click     fly to / action
+#   X            space           jump, flap wings, toggle units
+#   Y            tab             verb tray / tools palette
+#   L1 / R1      q / e           strafe left / right
+#   L2 / R2      - / +           zoom camera out / in
+#   Start        return          accept (green checkmark)
+#   Select       escape          deselect / options / close dialog
+#   D-Pad        arrows          move camera, menu navigation
+#   Left stick   w a s d         move avatar / drive creature / ship
+#   Right stick  mouse           camera pitch and rotate
+#   R3           backspace       mating call / locating call / camera to hut
+#
+# Keyboard-only fallback keys are kept where they do not conflict, so the port is usable
+# before the DirectInput layer exists.
 back = esc
 start = return
 
-a = space
-b = return
-x = escape
+a = mouse_left
+b = mouse_right
+x = space
 y = tab
 
 l1 = q
-l2 = pageup
 r1 = e
-r2 = pagedown
+l2 = minus
+r2 = equal
 
 up = up
 down = down
 left = left
 right = right
 
-left_analog_up = up
-left_analog_down = down
-left_analog_left = left
-left_analog_right = right
+left_analog_up = w
+left_analog_down = s
+left_analog_left = a
+left_analog_right = d
 
 right_analog_up = mouse_up
 right_analog_down = mouse_down
@@ -33,6 +50,8 @@ right_analog_right = mouse_right
 
 deadzone_mode = axial
 deadzone = 3000
+# The right stick drives the camera; keep it slow enough to aim with.
+mouse_scale = 1200
 
 hotkey = select
 hotkey_start = esc

@@ -1,4 +1,4 @@
-"""Emits src/rt/imports_table.cpp: the descriptor table the runtime dispatches through.
+﻿"""Emits src/rt/imports_table.cpp: the descriptor table the runtime dispatches through.
 
 Input:  analysis/imports_resolved.json  (nargs + calling convention inferred from call sites)
         the IMPL map below               (which host function implements what)
@@ -10,6 +10,7 @@ implement instead of guessing.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -225,6 +226,7 @@ MSVCR = {
     "memcmp": "crt_memcmp", "memchr": "crt_memchr", "qsort": "crt_qsort",
     "atoi": "crt_atoi", "atol": "crt_atol", "atof": "crt_atof",
     "strtol": "crt_strtol", "strtoul": "crt_strtoul", "strtod": "crt_strtod",
+    "_strtoui64": "crt_strtoui64",
     "_ultoa": "crt_ultoa", "_ltoa": "crt_itoa", "_fcvt": "crt_fcvt", "_ecvt": "crt_ecvt",
     "_CIpow": "crt_pow", "_CIsqrt": "crt_ci_sqrt", "_CIlog": "crt_ci_log",
     "_CIcos": "crt_ci_cos", "_CIsin": "crt_ci_sin", "_CIasin": "crt_ci_asin",
@@ -382,6 +384,28 @@ DEFAULT_NARGS = {
 }
 
 
+# Implementations that keep the exact Win32 name map to themselves. This is applied to every
+# DLL (not a hand-written list): listing them by hand is how 397 written functions silently
+# stayed out of the table, and FlushConsoleInputBuffer turned out to be imported from
+# KERNEL32 while its implementation lived in the user32 file.
+def _autowire(resolved_path: Path) -> None:
+    """Adds a self-mapping for every import whose Win32 name a source file defines."""
+    if not resolved_path.exists():
+        return
+    defined = set()
+    for path in sorted(Path("src").rglob("*.cpp")):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(r"^\s*void\s+(\w+)\s*\(CpuState\*", text, re.M):
+            defined.add(m.group(1))
+    for r in json.loads(resolved_path.read_text(encoding="utf-8")):
+        dll, name = r["dll"], r["name"]
+        if name and name in defined:
+            IMPL.setdefault((dll, name), name)
+
+
+_autowire(RESOLVED)
+
+
 def main() -> int:
     if RESOLVED.exists():
         resolved = json.loads(RESOLVED.read_text(encoding="utf-8"))
@@ -465,3 +489,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+

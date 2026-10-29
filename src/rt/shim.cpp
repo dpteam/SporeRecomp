@@ -6,6 +6,7 @@
 
 #include "rt/guest.h"
 #include "rt/d3d9/d3d9.h"
+#include "rt/threads.h"
 #include "rt/win32/msvcr90.h"
 
 #include <exception>
@@ -44,6 +45,7 @@ void init(const Config& cfg) {
 
 void shutdown() {
   d3d::shutdown();
+  threads::shutdown_all();
   if (g_log && g_log != stderr) {
     std::fclose(g_log);
     g_log = nullptr;

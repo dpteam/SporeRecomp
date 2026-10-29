@@ -25,7 +25,11 @@ else
   # The lifted code is long, straight-line and branch-predictable: -O1 gives the same
   # performance as -O2 for it and compiles roughly twice as fast. No -g: debug info for four
   # million instructions costs hundreds of MB of object files and slows every link.
-  GENFLAGS="-std=c++20 -O1 -Isrc -Irecomp/gen"
+  #
+  # SR_OPT=-O0 builds the generated code with no optimisation: about three times faster to
+  # compile, and slow at runtime. Use it when iterating on "does it boot", not for testing
+  # performance.
+  GENFLAGS="-std=c++20 ${SR_OPT:--O1} -Isrc -Irecomp/gen"
 fi
 # Default to a modest job count: on a thermally limited machine 32 parallel compilers fight
 # for the same power budget and finish later than 12 would. Override with SR_JOBS=32.

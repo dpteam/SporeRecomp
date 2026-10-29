@@ -1,8 +1,10 @@
-// SporeRecomp — kernel32: synchronisation, threads, TLS, files.
+﻿// SporeRecomp — kernel32: synchronisation, threads, TLS, files.
 #include <pthread.h>
+#include <dirent.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include <cctype>
 #include <cstdio>
 #include <cstring>
 #include <string>
@@ -12,6 +14,7 @@
 #include "rt/guest.h"
 #include "rt/mem.h"
 #include "rt/shim.h"
+#include "rt/threads.h"
 #include "rt/win32/internal.h"
 #include "rt/win32/win32.h"
 
@@ -212,6 +215,11 @@ void ReleaseSemaphore(CpuState* s, const u32* a) {
 }
 
 void WaitForSingleObject(CpuState* s, const u32* a) {
+  // A thread handle waits for the guest thread to finish.
+  if (a[0] & 0x80000000u) {
+    s->r[0] = threads::join(a[0], a[1]) ? 0 : 0x102;
+    return;
+  }
   Handle* o = handle_of(a[0]);
   if (!o) { s->r[0] = 0; return; }
   if (o->kind == Handle::kSemaphore) {
@@ -273,15 +281,28 @@ void DuplicateHandle(CpuState* s, const u32* a) {
 // threads
 // ---------------------------------------------------------------------------
 void CreateThread(CpuState* s, const u32* a) {
-  u32 h = new_handle(Handle::kThread);
-  Handle* o = handle_of(h);
-  if (o) o->guest_thread = a[2];
-  SR_LOG("CreateThread entry=0x%08x param=0x%08x -> handle %u", a[2], a[3], h);
-  if (a[5]) store<u32>(a[5], h / 4);
-  s->r[0] = h;
+  // CreateThread(attrs, stackSize, startAddr, param, flags, pThreadId)
+  u32 handle = threads::create(a[2], a[3], a[1], (a[4] & 0x4) != 0);
+  if (handle) {
+    SR_LOG("CreateThread entry=0x%08x param=0x%08x -> handle 0x%08x", a[2], a[3], handle);
+  } else {
+    SR_LOG("CreateThread entry=0x%08x FAILED", a[2]);
+  }
+  if (a[5]) store<u32>(a[5], handle ? (handle & 0x7FFFFFFF) : 0);
+  s->r[0] = handle;
 }
 
-void ResumeThread(CpuState* s, const u32*) { s->r[0] = 1; }
+void ResumeThread(CpuState* s, const u32* a) {
+  // Threads created suspended were never started; start them now.
+  if (threads::GuestThread* t = threads::find(a[0])) {
+    if (!t->native) {
+      // Re-create it as a running thread. The guest expects the handle to stay valid, so the
+      // thread is restarted in place rather than replaced.
+      threads::resume(t);
+    }
+  }
+  s->r[0] = 1;
+}
 void SetThreadPriority(CpuState* s, const u32*) { s->r[0] = 1; }
 void GetThreadPriority(CpuState* s, const u32*) { s->r[0] = 0; }
 void SetPriorityClass(CpuState* s, const u32*) { s->r[0] = 1; }
@@ -503,10 +524,151 @@ void GetDiskFreeSpaceExA(CpuState* s, const u32* a) {
 
 void GetDriveTypeA(CpuState* s, const u32*) { s->r[0] = 3; }
 void GetLogicalDrives(CpuState* s, const u32*) { s->r[0] = 0x4; }
-void FindFirstFileA(CpuState* s, const u32*) { s->r[0] = 0xFFFFFFFFu; }
-void FindFirstFileW(CpuState* s, const u32*) { s->r[0] = 0xFFFFFFFFu; }
-void FindNextFileW(CpuState* s, const u32*) { s->r[0] = 0; }
-void FindClose(CpuState* s, const u32*) { s->r[0] = 1; }
+// --- directory enumeration -------------------------------------------------
+// Spore lists save games, packages and mods, so this has to actually work rather than
+// return "nothing found": a wrong answer here means the game cannot see its own data.
+namespace {
+
+struct FindState {
+  std::vector<std::string> names;   // matching entries
+  size_t index = 0;
+  std::string dir;                  // host directory being listed
+  bool is_wide = false;
+};
+
+std::unordered_map<uint32_t, FindState*> g_finds;
+uint32_t g_next_find = 0x000A0000;
+
+// Matches a Windows wildcard pattern ("*.package", "*.*") against a file name.
+bool wildcard_match(const char* pat, const char* name) {
+  while (*pat) {
+    if (*pat == '*') {
+      ++pat;
+      if (!*pat) return true;
+      for (const char* p = name; *p; ++p) {
+        if (wildcard_match(pat, p)) return true;
+      }
+      return false;
+    }
+    if (*pat == '?') {
+      if (!*name) return false;
+      ++pat;
+      ++name;
+      continue;
+    }
+    if (std::tolower(static_cast<unsigned char>(*pat)) !=
+        std::tolower(static_cast<unsigned char>(*name))) {
+      return false;
+    }
+    ++pat;
+    ++name;
+  }
+  return *name == 0;
+}
+
+void fill_find_data(uint32_t out, const std::string& host_dir, const std::string& name,
+                    bool is_wide) {
+  std::string full = host_dir.empty() ? name : host_dir + "/" + name;
+  struct stat st;
+  bool have = stat(full.c_str(), &st) == 0;
+
+  __builtin_memset(gmem().base() + out, 0, is_wide ? 592 : 320);
+  store<uint32_t>(out + 0, have && S_ISDIR(st.st_mode) ? 0x10u : 0x80u);
+  if (have) {
+    uint64_t ns = uint64_t(st.st_mtime) * 1000000000ull;
+    uint64_t ft = (ns / 100) + 116444736000000000ull;
+    store<uint64_t>(out + 12, ft);  // creation
+    store<uint64_t>(out + 20, ft);  // access
+    store<uint64_t>(out + 28, ft);  // write
+    store<uint32_t>(out + 36, uint32_t(uint64_t(st.st_size) >> 32));
+    store<uint32_t>(out + 40, uint32_t(uint64_t(st.st_size)));
+  }
+  if (is_wide) {
+    write_wstr(out + 44, name.c_str(), 260);
+  } else {
+    write_cstr(out + 44, name.c_str());
+  }
+}
+
+uint32_t start_find(const char* guest_pattern, uint32_t out, bool is_wide) {
+  std::string pattern = guest_pattern ? guest_pattern : "";
+  for (char& c : pattern) if (c == '\\') c = '/';
+  std::string dir = ".";
+  std::string mask = pattern;
+  size_t slash = pattern.find_last_of('/');
+  if (slash != std::string::npos) {
+    dir = pattern.substr(0, slash);
+    mask = pattern.substr(slash + 1);
+  }
+  std::string host = to_host_path(dir.c_str());
+
+  auto* st = new FindState();
+  st->dir = host;
+  st->is_wide = is_wide;
+  DIR* d = opendir(host.c_str());
+  if (!d) {
+    SR_LOGV("FindFirstFile(%s): cannot open host dir %s", guest_pattern, host.c_str());
+    delete st;
+    return 0xFFFFFFFFu;
+  }
+  if (mask.empty()) mask = "*";
+  struct dirent* e;
+  while ((e = readdir(d)) != nullptr) {
+    if (e->d_name[0] == '.' && (e->d_name[1] == 0 ||
+        (e->d_name[1] == '.' && e->d_name[2] == 0))) {
+      continue;
+    }
+    if (!wildcard_match(mask.c_str(), e->d_name)) continue;
+    st->names.push_back(e->d_name);
+  }
+  closedir(d);
+  if (st->names.empty()) {
+    delete st;
+    return 0xFFFFFFFFu;
+  }
+  uint32_t h = g_next_find++;
+  g_finds[h] = st;
+  fill_find_data(out, st->dir, st->names[0], is_wide);
+  st->index = 1;
+  return h;
+}
+
+bool next_find(uint32_t handle, uint32_t out) {
+  auto it = g_finds.find(handle);
+  if (it == g_finds.end()) return false;
+  FindState* st = it->second;
+  if (st->index >= st->names.size()) return false;
+  fill_find_data(out, st->dir, st->names[st->index], st->is_wide);
+  ++st->index;
+  return true;
+}
+
+}  // namespace
+
+void FindFirstFileA(CpuState* s, const u32* a) {
+  s->r[0] = start_find(cstr(a[0]), a[1], false);
+}
+
+void FindFirstFileW(CpuState* s, const u32* a) {
+  s->r[0] = start_find(wstr_utf8(a[0]), a[1], true);
+}
+
+void FindNextFileA(CpuState* s, const u32* a) {
+  s->r[0] = next_find(a[0], a[1]) ? 1 : 0;
+}
+
+void FindNextFileW(CpuState* s, const u32* a) {
+  s->r[0] = next_find(a[0], a[1]) ? 1 : 0;
+}
+
+void FindClose(CpuState* s, const u32* a) {
+  auto it = g_finds.find(a[0]);
+  if (it != g_finds.end()) {
+    delete it->second;
+    g_finds.erase(it);
+  }
+  s->r[0] = 1;
+}
 void FindFirstChangeNotificationW(CpuState* s, const u32*) { s->r[0] = 0xFFFFFFFFu; }
 void FindNextChangeNotification(CpuState* s, const u32*) { s->r[0] = 0; }
 void FindCloseChangeNotification(CpuState* s, const u32*) { s->r[0] = 1; }
@@ -518,3 +680,4 @@ void LoadLibraryW(CpuState* s, const u32*) { s->r[0] = kImageBase; }
 void FreeLibrary(CpuState* s, const u32*) { s->r[0] = 1; }
 
 }  // namespace sr::w32
+
