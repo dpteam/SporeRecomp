@@ -1,0 +1,35 @@
+# Reference material (game binaries, template port, PDBs, game data) - never commit
+refs/
+gamedata/
+*.pdb
+*.exe
+*.dll
+
+# Build output
+build/
+out/
+dist/
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.aarch64
+*.x86_64
+*.log
+
+# Generated recomp artifacts (regenerable from tools/lift.py)
+recomp/gen/
+recomp/cache/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Editor / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
