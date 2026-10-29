@@ -147,6 +147,32 @@ class Census:
             (self.call_targets if mn == "call" else self.branch_targets).add(t)
 
     # ------------------------------------------------------------------
+    def _is_function_boundary(self, addr: int) -> bool:
+        """True if `addr` starts a new function rather than continuing the current one.
+
+        MSVC emits functions back to back: the previous one ends with `ret`, followed by
+        `int3` padding, then the next prologue. A `jmp` can land exactly on such a prologue,
+        so without this test the reachability walk merges two functions into one — and then a
+        legitimate `jmp` looks like a jump into the middle of a function.
+        """
+        i = self.index.get(addr)
+        if i is None or i == 0:
+            return False
+        prev = self.mns[i - 1]
+        # Only the unambiguous markers: padding, or an explicit return. A preceding `jmp` is
+        # *not* a boundary — jump-table tails are followed by more of the same function.
+        return prev == "int3" or prev.startswith("ret") or prev.startswith("iret")
+
+    def boundary_addresses(self) -> set[int]:
+        """Every address that follows int3 padding or a return."""
+        out: set[int] = set()
+        addrs, mns = self.addrs, self.mns
+        for i in range(1, len(addrs)):
+            prev = mns[i - 1]
+            if prev == "int3" or prev.startswith("ret") or prev.startswith("iret"):
+                out.add(addrs[i])
+        return out
+
     def recover_functions(self) -> None:
         """Partition the instruction stream into functions by reachability.
 
@@ -193,6 +219,13 @@ class Census:
             if v in idx:
                 roots.append(v)
 
+        # Code that follows int3 padding or a return is a function start even if nothing calls
+        # it directly (SEH prologues, _initterm tables). Adding them as roots is what keeps the
+        # "stop at a boundary" rule from turning real functions into orphans.
+        boundaries = self.boundary_addresses()
+        roots.extend(sorted(boundaries))
+        self.boundary_count = len(boundaries)
+
         root_set = sorted({r for r in roots if r in idx})
         # Strong roots: entry, call targets, code pointers. A walk stops when it reaches
         # one of these, so tail-called functions do not get merged into their caller.
@@ -227,6 +260,13 @@ class Census:
                     if cur != root and cur in strong:
                         # reached another function's entry point (tail call / fallthrough
                         # into the next function): this function ends here
+                        kind = "shared"
+                        break
+                    if cur != root and self._is_function_boundary(cur):
+                        # MSVC lays functions out as ...ret / int3-padding / new prologue.
+                        # A jmp can land on such a prologue (the CRT does this for _initterm
+                        # callbacks and SEH prologues), and without this check the walk
+                        # absorbs the next function into the previous one.
                         kind = "shared"
                         break
                     i = idx[cur]

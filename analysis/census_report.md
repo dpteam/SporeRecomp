@@ -3,9 +3,9 @@
 * .text: 16,559,914 bytes at VA 0x401000 (image base 0x400000)
 * instructions: 5,496,576 (457 undecodable bytes)
 * instructions assigned to a function: 4,763,173 (86.66%)
-* orphan (unreachable but decodable) instructions: 15,444
-* functions: 108,528 (5,615 orphan groups)
-* basic blocks: 235,256
+* orphan (unreachable but decodable) instructions: 11,229
+* functions: 136,851 (4,804 orphan groups)
+* basic blocks: 236,957
 * call targets: 35,829
 * branch targets: 276,933
 * branch targets not on an instruction boundary: 900
@@ -14,31 +14,31 @@
 
 | insns | functions |
 |---|---|
-| 1 | 5,100 |
-| 2-4 | 18,307 |
-| 5-16 | 36,789 |
-| 17-64 | 30,288 |
-| 65-256 | 15,056 |
-| 257-1k | 2,787 |
-| >1k | 201 |
+| 1 | 5,247 |
+| 2-4 | 26,994 |
+| 5-16 | 50,013 |
+| 17-64 | 37,505 |
+| 65-256 | 14,471 |
+| 257-1k | 2,459 |
+| >1k | 162 |
 
 ## Largest functions
 
 * 0x00786570: 12,271 insns, 1 blocks
-* 0x00f7d970: 8,418 insns, 19 blocks
 * 0x00441910: 5,316 insns, 233 blocks
-* 0x01025850: 4,729 insns, 141 blocks
 * 0x011c04c0: 4,129 insns, 2 blocks
 * 0x009f45a0: 4,069 insns, 65 blocks
-* 0x0058e6d0: 3,864 insns, 122 blocks
+* 0x0058e815: 3,760 insns, 119 blocks
 * 0x00b60ec0: 3,615 insns, 270 blocks
 * 0x0118cfd0: 3,357 insns, 1 blocks
 * 0x011d4a30: 3,212 insns, 1 blocks
 * 0x00ab32a0: 3,063 insns, 102 blocks
-* 0x00770390: 2,972 insns, 16 blocks
 * 0x008a95b0: 2,969 insns, 22 blocks
+* 0x00770390: 2,924 insns, 15 blocks
 * 0x0118a7f0: 2,915 insns, 2 blocks
 * 0x004d5080: 2,822 insns, 108 blocks
+* 0x011d2360: 2,785 insns, 1 blocks
+* 0x00d3d820: 2,597 insns, 6 blocks
 
 ## Mnemonic histogram (top 80)
 
