@@ -1,4 +1,4 @@
-// SporeRecomp — MMX / packed-integer and misc helper implementations.
+﻿// SporeRecomp — MMX / packed-integer and misc helper implementations.
 //
 // MMX in this binary is used for image/audio byte shuffling, so the packed-integer
 // semantics have to be exact (saturating adds, packed shifts, unpack interleaves).
@@ -672,6 +672,18 @@ u32 mmx_pmovmskb(CpuState* s, V4 a) {
   u32 m = 0;
   for (int i = 0; i < 8; ++i) m |= ((get_byte(a, i) >> 7) & 1u) << i;
   return m;
+}
+
+V4 mmx_paddusw(CpuState* s, V4 a, V4 b) {
+  (void)s;
+  V4 r{};
+  for (int i = 0; i < 4; ++i) {
+    u32 x = lo16(a, i), y = lo16(b, i);
+    set16lo(r, i, u16(x + y > 65535 ? 65535 : x + y));
+    u32 x2 = hi16(a, i), y2 = hi16(b, i);
+    set16hi(r, i, u16(x2 + y2 > 65535 ? 65535 : x2 + y2));
+  }
+  return r;
 }
 
 }  // namespace sr

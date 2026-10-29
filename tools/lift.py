@@ -1167,6 +1167,10 @@ class Lifter:
         return [f"  {d} = sr::mmx_pshufw(s, {self._sse_read(insn, insn.operands[1])}, "
                 f"{insn.operands[2].imm & 0xFF}u);"]
     def i_paddusb(self, i): return self._mmx_binop(i, "paddusb")
+    def i_paddusw(self, i): return self._mmx_binop(i, "paddusw")
+    def i_movnti(self, insn):
+        return [f"  sr::store<u32>({self.mem_addr_expr(insn, insn.operands[0])}, "
+                f"(u32)({self.read_op(insn, insn.operands[1], 4)}));"]
     def i_psubusb(self, i): return self._mmx_binop(i, "psubusb")
     def i_fisubr(self, insn):
         return [f"  sr::x87_fisubr(s, {self.mem_addr_expr(insn, insn.operands[0])}, "

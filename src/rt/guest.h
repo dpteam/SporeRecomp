@@ -274,6 +274,7 @@ V4 mmx_pminub(CpuState* s, V4 a, V4 b);
 V4 mmx_pmaxub(CpuState* s, V4 a, V4 b);
 V4 mmx_pshufw(CpuState* s, V4 a, u32 imm);
 V4 mmx_paddusb(CpuState* s, V4 a, V4 b);
+V4 mmx_paddusw(CpuState* s, V4 a, V4 b);
 V4 mmx_psubusb(CpuState* s, V4 a, V4 b);
 u32 mmx_pmovmskb(CpuState* s, V4 a);
 V4 mmx_psubusb(CpuState* s, V4 a, V4 b);
@@ -293,4 +294,5 @@ void debug_break(CpuState* s);
 void unsupported(const char* what, u32 addr);
 
 }  // namespace sr
+
 

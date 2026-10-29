@@ -10,13 +10,32 @@ in `analysis/`.
 | `.text` | 16,559,914 bytes at VA 0x401000 |
 | Instructions decoded | 5,496,576 (457 undecodable bytes, 0.003%) |
 | Instructions assigned to a function | 4,763,173 (86.66%) |
-| Functions recovered | **108,528** (102,913 real + 5,615 orphan data groups) |
-| Basic blocks | 235,256 |
-| Instructions lifted to C++ | **4,747,729** |
+| Orphan instructions (data that decodes) | 11,229 |
+| Functions recovered | **136,851** (132,047 real + 4,804 orphan groups) |
+| Basic blocks | 236,957 |
+| Instructions lifted to C++ | **4,751,944** |
 | Unhandled mnemonics | **0** |
 | Imported functions | 495 across 20 DLLs |
-| Imports implemented | 397 (98 remain, all in subsystems not started) |
-| Generated code | 412 chunks, ~460 MB of C++ |
+| Imports implemented | **495 / 495** |
+| Relocations parsed | 379,089 |
+| Generated code | 529 chunks |
+
+## First real run (qemu-aarch64, 2026-10-29)
+
+```
+[mem] guest window at 0x7d103ba80000
+[pe] parsed 495 imports, 379089 relocations, 7 sections
+[pe] gamedata/SporeApp.exe: base=0x00400000 size=0x190e000 entry=0x011e11e1,
+     495 imports implemented, 0 stubbed
+D3D: shim initialised (null backend, vs/ps 3.0 advertised)
+thread: stack 0x7fec0000..0x7ffc0000, TEB 0x7ffdf000, PEB 0x7ffd0000
+entering guest at 0x011e11e1
+guest returned
+```
+
+The PE loads, every import binds, the guest enters its entry point and returns under its own
+control. Nothing has rendered yet: the run stops inside CRT startup, which is the next thing to
+fix.
 
 ## What is implemented
 
@@ -66,12 +85,21 @@ These are worth recording because each one would have cost a debugging session o
    0x7FFDF000. The first deep call chain would have overwritten the TEB. The stack now tops out
    at 0x7FFC0000, below the PEB and TEB.
 3. **RVA vs VA.** The census keyed functions by RVA while the guest's pointers are VAs. Fixing
-   this turned 41,527 "orphan data groups" into real reachable functions — the count went from
-   53,596 to 102,913.
+   this turned 41,527 "orphan data groups" into real reachable functions.
 4. **`heap_free` was a no-op.** With a bump allocator, Spore's constant alloc/free churn would
    have exhausted the arena in minutes. Replaced with a real allocator.
 5. **`ret n` popped the wrong amount.** stdcall returns must pop the return address *and* the
    arguments.
+6. **The PE loader used RVAs as file offsets.** The import directory holds RVAs and every pointer
+   inside it is an RVA too. The first loader walked garbage and reported **236,862 imports** and
+   zero relocations; it now goes through a proper RVA→offset mapping and reports 495 imports and
+   379,089 relocations.
+7. **Function boundaries after `int3`/`ret`.** MSVC lays functions out back to back and the CRT
+   reaches the next one with a `jmp`, not a `call`. Without treating "code after int3 padding or
+   a return" as a function start, the reachability walk merged neighbours, and a legitimate `jmp`
+   looked like a jump into the middle of a function (the first run died with
+   `tail call to unmapped guest address 0x011e0f84`). Boundaries are now both stop points and
+   roots, which also cut orphan instructions from 1,140,957 to 11,229.
 
 ## What is not started
 

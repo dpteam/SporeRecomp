@@ -41,8 +41,8 @@ not an emulator, not Wine.
 |---|---|---|
 | M0 | analysis + scaffold + toolchain | `docs/ANALYSIS.md`, aarch64 toolchain builds |
 | M1 | PE loader + CpuState + call ABI | differential tests green on host and aarch64 (qemu) |
-| M2 | full `.text` lifted, all imports implemented, guest reaches `WinMain` | **done** — 4,747,729 instructions, 0 unhandled, 495/495 imports |
-| M3 | CRT + config + package I/O + D3D9 device + RW4 texture/UI draw | **main menu rendered** |
+| M2 | full `.text` lifted, all imports implemented, guest reaches `WinMain` | **done** — 4,751,944 instructions, 0 unhandled, 495/495 imports, guest enters and returns from its entry point under qemu |
+| M3 | CRT startup + config + package I/O + D3D9 device + RW4 texture/UI draw | **main menu rendered** |
 | M4 | input, audio, menu navigation, save files | menu fully usable |
 | M5 | Cell/Creature stage | playable creature stage |
 | M6 | Tribe/Civilization/Space | playable |

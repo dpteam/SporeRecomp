@@ -1,7 +1,7 @@
 # Lifter report
 
-* functions lifted: 102,913
-* instructions lifted: 4,747,729
+* functions lifted: 132,047
+* instructions lifted: 4,751,944
 * instructions needing work: 0
 
 ## Mnemonics still unhandled
