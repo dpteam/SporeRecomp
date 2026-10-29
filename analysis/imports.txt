@@ -1,0 +1,40 @@
+﻿=== WINMM.dll (3)
+  timeEndPeriod, timeBeginPeriod, timeGetTime
+=== WSOCK32.dll (23)
+  #19, #13, #4, #1, #6, #7, #151, #18, #16, #10, #52, #3, #115, #116, #111, #20, #17, #12, #23, #2, #22, #5, #21
+=== PSAPI.DLL (1)
+  GetModuleInformation
+=== steam_api.dll (3)
+  SteamApps, SteamAPI_Shutdown, SteamAPI_Init
+=== KERNEL32.dll (148)
+  GlobalMemoryStatusEx, QueryPerformanceFrequency, SetThreadPriority, SetPriorityClass, GetPriorityClass, GetThreadPriority, GetCurrentThread, SetThreadAffinityMask, GetProcessAffinityMask, GetProcAddress, GetModuleHandleA, CloseHandle, DeviceIoControl, CreateFileA, LocalFree, LocalAlloc, GetModuleFileNameA, GetSystemInfo, GetVersionExA, FreeLibrary, LoadLibraryA, GetComputerNameExA, CompareStringW, LCMapStringW, InterlockedIncrement, InterlockedDecrement, GetSystemDirectoryW, GetVersionExW, IsDebuggerPresent, SetProcessAffinityMask, OpenProcess, GetCurrentProcessId, SetThreadExecutionState, GetLocaleInfoW, SetLastError, EnumResourceNamesA, GetSystemDefaultLCID, GetWindowsDirectoryW, GetTickCount, VirtualQuery, ResumeThread, GetCurrentThreadId, CreateEventA, FormatMessageA, FlushFileBuffers, TerminateProcess, SetUnhandledExceptionFilter, GetComputerNameA, SystemTimeToFileTime, GetSystemTime, GetModuleFileNameW, OutputDebugStringA, GetExitCodeThread, TlsAlloc, TlsSetValue, DuplicateHandle, SetThreadIdealProcessor, SleepEx, CreateMutexA, WaitForSingleObject, TryEnterCriticalSection, ReleaseMutex, InterlockedExchangeAdd, InterlockedCompareExchange, CreateSemaphoreA, ReleaseSemaphore, InterlockedExchange, TlsFree, RaiseException, QueueUserAPC, CreateThread, HeapAlloc, GetProcessHeap, HeapFree, InitializeCriticalSectionAndSpinCount, VirtualFree, VirtualAlloc, GetSystemTimeAsFileTime, GlobalFree, GlobalUnlock, GlobalLock, GlobalAlloc, GlobalSize, GetVersion, GetModuleHandleW, FindFirstFileW, FindNextFileW, FindClose, SetEvent, CancelIo, GetLongPathNameW, WaitForMultipleObjectsEx, FindCloseChangeNotification, FindNextChangeNotification, WaitForMultipleObjects, FindFirstChangeNotificationW, CreateFileW, GetVolumeInformationW, MultiByteToWideChar, WideCharToMultiByte, GetLastError, GetFileSize, SetEndOfFile, SetFilePointer, ReadFile, WriteFile, GetFileAttributesW, DeleteFileW, MoveFileExW, CopyFileW, SetFileAttributesW, GetTempPathW, GetVolumePathNameW, CreateDirectoryW, GetFullPathNameW, RemoveDirectoryW, SetEnvironmentVariableA, GetEnvironmentVariableA, LoadLibraryW, GetACP, GetFullPathNameA, GetProcessTimes, GetCommandLineA, Sleep, MoveFileA, CreateDirectoryA, RemoveDirectoryA, GetCurrentDirectoryA, UnhandledExceptionFilter, GetStartupInfoA, FlushConsoleInputBuffer, FindFirstFileA, FindNextFileA, GlobalMemoryStatus, GetStdHandle, GetFileType, QueryPerformanceCounter, TlsGetValue, GetDiskFreeSpaceExA, GetVolumeInformationA, GetDriveTypeA, GetLogicalDrives, InitializeCriticalSection, DeleteCriticalSection, EnterCriticalSection, LeaveCriticalSection, DeleteFileA, GetCurrentProcess
+=== USER32.dll (89)
+  SetWindowLongW, CreateWindowExW, SetWindowPos, GetWindowLongA, GetSystemMetrics, GetClientRect, SetWindowTextW, DestroyWindow, GetDesktopWindow, IsDlgButtonChecked, CheckDlgButton, GetDoubleClickTime, wsprintfA, RegisterClassA, CreateWindowExA, SetClipboardViewer, IsClipboardFormatAvailable, GetClipboardData, TranslateMessage, EmptyClipboard, SetClipboardData, CloseClipboard, ChangeClipboardChain, wsprintfW, GetCursorPos, GetKeyboardState, DefWindowProcA, PeekMessageA, GetKeyboardLayout, RegisterClassExW, SetTimer, SetCursor, SetCursorPos, IntersectRect, ReleaseCapture, SetCapture, GetMenu, AdjustWindowRectEx, MoveWindow, BeginPaint, EndPaint, EnumDisplayMonitors, PeekMessageW, DispatchMessageW, ClientToScreen, KillTimer, UnregisterClassA, GetKeyState, PostMessageA, ShowCursor, GetWindowRect, MonitorFromWindow, IsZoomed, GetAncestor, IsIconic, IsWindowVisible, SetActiveWindow, GetActiveWindow, FillRect, UpdateWindow, ValidateRect, InvalidateRect, LoadIconA, DestroyCursor, GetIconInfo, LoadImageW, UnhookWindowsHookEx, SetWindowsHookExA, GetAsyncKeyState, CallNextHookEx, GetForegroundWindow, GetWindowThreadProcessId, GetMonitorInfoA, ScreenToClient, SendMessageA, LoadCursorA, SetWindowLongA, SetFocus, DefWindowProcW, GetDC, ReleaseDC, SystemParametersInfoA, GetProcessWindowStation, GetUserObjectInformationW, ShowWindow, MessageBoxW, MessageBoxA, OpenClipboard, PostQuitMessage
+=== GDI32.dll (6)
+  CreateSolidBrush, DeleteObject, ExtEscape, DeleteDC, GetDeviceCaps, CreateDCA
+=== ADVAPI32.dll (12)
+  GetUserNameW, RegQueryValueExA, RegOpenKeyExA, RegSetValueExA, RegEnumKeyExW, RegQueryValueExW, RegisterEventSourceA, ReportEventA, DeregisterEventSource, RegOpenKeyExW, RegCloseKey, GetUserNameA
+=== SHELL32.dll (3)
+  SHGetFolderPathW, DragQueryFileW, ShellExecuteW
+=== ole32.dll (6)
+  OleInitialize, RegisterDragDrop, RevokeDragDrop, CoLockObjectExternal, OleUninitialize, ReleaseStgMedium
+=== MSVCR90.dll (159)
+  tolower, _controlfp_s, _invoke_watson, ?_type_info_dtor_internal_method@type_info@@QAEXXZ, _except_handler4_common, _time32, __set_app_type, __p__fmode, __p__commode, _adjust_fdiv, __setusermatherr, _configthreadlocale, _initterm_e, _initterm, _acmdln, _ismbblead, _XcptFilter, _exit, _cexit, __getmainargs, _amsg_exit, ?terminate@@YAXXZ, _decode_pointer, _onexit, _lock, _encode_pointer, __dllonexit, _unlock, _getch, signal, isupper, strcmp, vfprintf, ldexp, vsprintf, _aligned_free, _aligned_malloc, wcsncat, _control87, wcscspn, strncat, _controlfp, _ultoa, _strlwr, fputs, _isnan, _finite, _searchenv, _wsearchenv, _spawnv, _wspawnv, _strtoui64, _wgetcwd, _wstat64i32, _getdrive, _wgetdcwd, _fcvt, _ecvt, _beginthreadex, _mktime64, strftime, _localtime64, strtol, strpbrk, isprint, atof, atoi, towupper, setlocale, _setmbcp, _wcslwr, _ltow, strrchr, _gmtime64, abort, _snprintf, ftell, fflush, _vsnprintf, _errno, ferror, longjmp, getenv, tmpfile, fseek, _setjmp3, _ltoa, fgets, _stat64i32, strspn, strcspn, wcsrchr, __iob_func, _aligned_realloc, exit, _purecall, _CIcos, _CIsin, _CIsqrt, memset, memcpy, memmove, _CIasin, _CIfmod, _CIacos, fclose, fprintf, fopen, fwrite, sprintf, _CIpow, wcstoul, _ultow, strtod, _CIlog, floor, ceil, modf, __CxxFrameHandler3, atol, isdigit, _strnicmp, _CxxThrowException, sscanf, _stricmp, swscanf, wcstol, wcsncmp, _wtol, wcsncpy, strncpy, strtoul, strncmp, toupper, strchr, isspace, _wcsicmp, isalnum, wcstod, isalpha, wcsstr, wcschr, _wcsnicmp, towlower, iswctype, isxdigit, memchr, strstr, printf, qsort, _except_handler3, fread, feof, free, realloc, malloc, _time64, rand, _crt_debugger_hook
+=== VERSION.dll (5)
+  GetFileVersionInfoSizeA, GetFileVersionInfoA, VerQueryValueA, VerQueryValueW, GetFileVersionInfoW
+=== d3dx9_27.dll (9)
+  D3DXVec3Transform, D3DXVec3TransformNormal, D3DXCheckVersion, D3DXGetPixelShaderProfile, D3DXGetVertexShaderProfile, D3DXMatrixMultiplyTranspose, D3DXMatrixTranspose, D3DXMatrixMultiply, D3DXCompileShader
+=== DINPUT8.dll (1)
+  DirectInput8Create
+=== IMM32.dll (12)
+  ImmDisableTextFrameService, ImmGetCompositionStringW, ImmSetCompositionStringW, ImmNotifyIME, ImmSetOpenStatus, ImmSimulateHotKey, ImmReleaseContext, ImmGetConversionStatus, ImmGetContext, ImmGetOpenStatus, ImmGetCandidateListW, ImmSetConversionStatus
+=== USP10.dll (2)
+  ScriptItemize, ScriptBreak
+=== dbghelp.dll (7)
+  UnDecorateSymbolName, SymLoadModule64, SymInitialize, SymSetOptions, SymCleanup, SymGetSymFromAddr64, SymGetLineFromAddr64
+=== WS2_32.dll (3)
+  WSAIoctl, #112, WSASocketA
+=== DSOUND.dll (2)
+  #1, #9
+=== d3d9.dll (1)
+  Direct3DCreate9

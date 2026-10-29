@@ -45,6 +45,14 @@ struct X87Reg {
   uint8_t bytes[10];  // 80-bit extended, little endian
 };
 
+// Portable 128-bit vector register (16 bytes, 16-byte aligned). On aarch64 the
+// compiler lowers the float paths to NEON.
+struct alignas(16) V4 {
+  uint32_t u[4];
+  float& f(int i) { return reinterpret_cast<float*>(u)[i]; }
+  const float& f(int i) const { return reinterpret_cast<const float*>(u)[i]; }
+};
+
 struct CpuState {
   uint32_t r[8];        // EAX..EDI
   uint32_t eip;
@@ -67,11 +75,13 @@ struct CpuState {
   uint32_t fpu_top;   // 0..7, rotates on push/pop
 
   // SSE
-  uint64_t xmm[8][2];
+  V4 x0, x1, x2, x3, x4, x5, x6, x7;
 
   // segment bases (flat model, only FS is meaningful: it holds the TEB)
   uint32_t fs_base;
   uint32_t gs_base;
+
+  uint32_t mxcsr;   // SSE control/status
 
   // Win32 TEB / thread bookkeeping
   uint32_t last_error;

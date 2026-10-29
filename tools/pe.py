@@ -58,6 +58,10 @@ class PE:
         o = self.off(rva)
         return self.d[o:self.d.index(b"\0", o)].decode("latin-1")
 
+    def cstr_off(self, file_off: int) -> str:
+        """Reads a NUL-terminated string at a *file offset* (not an RVA)."""
+        return self.d[file_off:self.d.index(b"\0", file_off)].decode("latin-1")
+
     def section_bytes(self, name: str) -> bytes:
         s = self.section(name)
         return self.d[s["roff"]:s["roff"] + s["vsz"]]
@@ -79,7 +83,7 @@ class PE:
                 if not v:
                     break
                 names.append("#%d" % (v & 0xFFFF) if v & 0x80000000
-                             else self.cstr(self.off(v) + 2))
+                             else self.cstr_off(self.off(v) + 2))
                 t += 4
             out.append((dll, names))
             o += 20

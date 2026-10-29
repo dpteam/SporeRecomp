@@ -1,0 +1,3962 @@
+[
+ {
+  "dll": "ADVAPI32.dll",
+  "name": "GetUserNameW",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "ADVAPI32.dll",
+  "name": "RegQueryValueExA",
+  "ordinal": 0,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "ADVAPI32.dll",
+  "name": "RegOpenKeyExA",
+  "ordinal": 0,
+  "nargs": 9,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "ADVAPI32.dll",
+  "name": "RegSetValueExA",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "ADVAPI32.dll",
+  "name": "RegEnumKeyExW",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 0
+ },
+ {
+  "dll": "ADVAPI32.dll",
+  "name": "RegQueryValueExW",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 0
+ },
+ {
+  "dll": "ADVAPI32.dll",
+  "name": "RegisterEventSourceA",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "ADVAPI32.dll",
+  "name": "ReportEventA",
+  "ordinal": 0,
+  "nargs": 9,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "ADVAPI32.dll",
+  "name": "DeregisterEventSource",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "ADVAPI32.dll",
+  "name": "RegOpenKeyExW",
+  "ordinal": 0,
+  "nargs": 10,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "ADVAPI32.dll",
+  "name": "RegCloseKey",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 5
+ },
+ {
+  "dll": "ADVAPI32.dll",
+  "name": "GetUserNameA",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "DINPUT8.dll",
+  "name": "DirectInput8Create",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "DSOUND.dll",
+  "name": "",
+  "ordinal": 1,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "DSOUND.dll",
+  "name": "",
+  "ordinal": 9,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "GDI32.dll",
+  "name": "CreateSolidBrush",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "GDI32.dll",
+  "name": "DeleteObject",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "GDI32.dll",
+  "name": "ExtEscape",
+  "ordinal": 0,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "GDI32.dll",
+  "name": "DeleteDC",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "GDI32.dll",
+  "name": "GetDeviceCaps",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 0
+ },
+ {
+  "dll": "GDI32.dll",
+  "name": "CreateDCA",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "IMM32.dll",
+  "name": "ImmDisableTextFrameService",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "IMM32.dll",
+  "name": "ImmGetCompositionStringW",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "IMM32.dll",
+  "name": "ImmSetCompositionStringW",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "IMM32.dll",
+  "name": "ImmNotifyIME",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "IMM32.dll",
+  "name": "ImmSetOpenStatus",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "IMM32.dll",
+  "name": "ImmSimulateHotKey",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "IMM32.dll",
+  "name": "ImmReleaseContext",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "IMM32.dll",
+  "name": "ImmGetConversionStatus",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "IMM32.dll",
+  "name": "ImmGetContext",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "IMM32.dll",
+  "name": "ImmGetOpenStatus",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "IMM32.dll",
+  "name": "ImmGetCandidateListW",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "IMM32.dll",
+  "name": "ImmSetConversionStatus",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GlobalMemoryStatusEx",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "QueryPerformanceFrequency",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 10
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SetThreadPriority",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 6
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SetPriorityClass",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 6
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetPriorityClass",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetThreadPriority",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 5
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetCurrentThread",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 8
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SetThreadAffinityMask",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetProcessAffinityMask",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetProcAddress",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 13
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetModuleHandleA",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 8
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "CloseHandle",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 32
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "DeviceIoControl",
+  "ordinal": 0,
+  "nargs": 8,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "CreateFileA",
+  "ordinal": 0,
+  "nargs": 13,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "LocalFree",
+  "ordinal": 0,
+  "nargs": 7,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "LocalAlloc",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetModuleFileNameA",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetSystemInfo",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 8
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetVersionExA",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 7
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "FreeLibrary",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 23
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "LoadLibraryA",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 11
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetComputerNameExA",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "CompareStringW",
+  "ordinal": 0,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "LCMapStringW",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "InterlockedIncrement",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "InterlockedDecrement",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 5
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetSystemDirectoryW",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetVersionExW",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "IsDebuggerPresent",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SetProcessAffinityMask",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "OpenProcess",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetCurrentProcessId",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 7
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SetThreadExecutionState",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetLocaleInfoW",
+  "ordinal": 0,
+  "nargs": 69,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SetLastError",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 12
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "EnumResourceNamesA",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetSystemDefaultLCID",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetWindowsDirectoryW",
+  "ordinal": 0,
+  "nargs": 132,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetTickCount",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 5
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "VirtualQuery",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "ResumeThread",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetCurrentThreadId",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "CreateEventA",
+  "ordinal": 0,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "FormatMessageA",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "FlushFileBuffers",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "TerminateProcess",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SetUnhandledExceptionFilter",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetComputerNameA",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SystemTimeToFileTime",
+  "ordinal": 0,
+  "nargs": 8,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetSystemTime",
+  "ordinal": 0,
+  "nargs": 14,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetModuleFileNameW",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "OutputDebugStringA",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetExitCodeThread",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "TlsAlloc",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 7
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "TlsSetValue",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 450
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "DuplicateHandle",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SetThreadIdealProcessor",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SleepEx",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "CreateMutexA",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "WaitForSingleObject",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 10
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "TryEnterCriticalSection",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "ReleaseMutex",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "InterlockedExchangeAdd",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "InterlockedCompareExchange",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "CreateSemaphoreA",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "ReleaseSemaphore",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 5
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "InterlockedExchange",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "TlsFree",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "RaiseException",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 5
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "QueueUserAPC",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "CreateThread",
+  "ordinal": 0,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "HeapAlloc",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetProcessHeap",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 6
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "HeapFree",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "InitializeCriticalSectionAndSpinCount",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 12
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "VirtualFree",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "VirtualAlloc",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 8
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetSystemTimeAsFileTime",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GlobalFree",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GlobalUnlock",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GlobalLock",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GlobalAlloc",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GlobalSize",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetVersion",
+  "ordinal": 0,
+  "nargs": 12,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetModuleHandleW",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "FindFirstFileW",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "FindNextFileW",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "FindClose",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SetEvent",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "CancelIo",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetLongPathNameW",
+  "ordinal": 0,
+  "nargs": 9,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "WaitForMultipleObjectsEx",
+  "ordinal": 0,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "FindCloseChangeNotification",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "FindNextChangeNotification",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "WaitForMultipleObjects",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 0
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "FindFirstChangeNotificationW",
+  "ordinal": 0,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "CreateFileW",
+  "ordinal": 0,
+  "nargs": 7,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetVolumeInformationW",
+  "ordinal": 0,
+  "nargs": 8,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "MultiByteToWideChar",
+  "ordinal": 0,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "WideCharToMultiByte",
+  "ordinal": 0,
+  "nargs": 8,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetLastError",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 9
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetFileSize",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SetEndOfFile",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SetFilePointer",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 6
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "ReadFile",
+  "ordinal": 0,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "WriteFile",
+  "ordinal": 0,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetFileAttributesW",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 6
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "DeleteFileW",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "MoveFileExW",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "CopyFileW",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SetFileAttributesW",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetTempPathW",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetVolumePathNameW",
+  "ordinal": 0,
+  "nargs": 135,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "CreateDirectoryW",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetFullPathNameW",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "RemoveDirectoryW",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "SetEnvironmentVariableA",
+  "ordinal": 0,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetEnvironmentVariableA",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "LoadLibraryW",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetACP",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetFullPathNameA",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetProcessTimes",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetCommandLineA",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "Sleep",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "MoveFileA",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "CreateDirectoryA",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "RemoveDirectoryA",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetCurrentDirectoryA",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "UnhandledExceptionFilter",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetStartupInfoA",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "FlushConsoleInputBuffer",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "FindFirstFileA",
+  "ordinal": 0,
+  "nargs": 84,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "FindNextFileA",
+  "ordinal": 0,
+  "nargs": 83,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GlobalMemoryStatus",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetStdHandle",
+  "ordinal": 0,
+  "nargs": 67,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetFileType",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "QueryPerformanceCounter",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 109
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "TlsGetValue",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 262
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetDiskFreeSpaceExA",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetVolumeInformationA",
+  "ordinal": 0,
+  "nargs": 8,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetDriveTypeA",
+  "ordinal": 0,
+  "nargs": 39,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetLogicalDrives",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "InitializeCriticalSection",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 13
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "DeleteCriticalSection",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 19
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "EnterCriticalSection",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 72
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "LeaveCriticalSection",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 136
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "DeleteFileA",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "KERNEL32.dll",
+  "name": "GetCurrentProcess",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 14
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "tolower",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 14
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_controlfp_s",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_invoke_watson",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "?_type_info_dtor_internal_method@type_info@@QAEXXZ",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_except_handler4_common",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_time32",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "__set_app_type",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "__p__fmode",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "__p__commode",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_adjust_fdiv",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 0
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "__setusermatherr",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_configthreadlocale",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_initterm_e",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_initterm",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_acmdln",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 0
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_ismbblead",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_XcptFilter",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_exit",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_cexit",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "__getmainargs",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_amsg_exit",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "?terminate@@YAXXZ",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_decode_pointer",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 0
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_onexit",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_lock",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_encode_pointer",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "__dllonexit",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_unlock",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_getch",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 0
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "signal",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 0
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "isupper",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strcmp",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "vfprintf",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "ldexp",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "vsprintf",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_aligned_free",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_aligned_malloc",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "wcsncat",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 0
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_control87",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "wcscspn",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strncat",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_controlfp",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": false,
+  "sites": 4
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_ultoa",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": false,
+  "sites": 4
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_strlwr",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "fputs",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_isnan",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": false,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_finite",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": false,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_searchenv",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_wsearchenv",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_spawnv",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_wspawnv",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_strtoui64",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_wgetcwd",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_wstat64i32",
+  "ordinal": 0,
+  "nargs": 14,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_getdrive",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_wgetdcwd",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_fcvt",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_ecvt",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_beginthreadex",
+  "ordinal": 0,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_mktime64",
+  "ordinal": 0,
+  "nargs": 13,
+  "stdcall": false,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strftime",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": false,
+  "sites": 5
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_localtime64",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 10
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strtol",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strpbrk",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "isprint",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 3
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "atof",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "atoi",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 6
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "towupper",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "setlocale",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_setmbcp",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_wcslwr",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_ltow",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": false,
+  "sites": 5
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strrchr",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": false,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_gmtime64",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 4
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "abort",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_snprintf",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 11
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "ftell",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 4
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "fflush",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 6
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_vsnprintf",
+  "ordinal": 0,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 7
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_errno",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "ferror",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "longjmp",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 15
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "getenv",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 6
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "tmpfile",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "fseek",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 7
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_setjmp3",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_ltoa",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": false,
+  "sites": 5
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "fgets",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_stat64i32",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": false,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strspn",
+  "ordinal": 0,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strcspn",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "wcsrchr",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": false,
+  "sites": 3
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "__iob_func",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 23
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_aligned_realloc",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "exit",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_purecall",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_CIcos",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_CIsin",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_CIsqrt",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "memset",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "memcpy",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "memmove",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 236
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_CIasin",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_CIfmod",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_CIacos",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "fclose",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 20
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "fprintf",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": false,
+  "sites": 89
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "fopen",
+  "ordinal": 0,
+  "nargs": 6,
+  "stdcall": false,
+  "sites": 15
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "fwrite",
+  "ordinal": 0,
+  "nargs": 8,
+  "stdcall": false,
+  "sites": 58
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "sprintf",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 60
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_CIpow",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "wcstoul",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 40
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_ultow",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": false,
+  "sites": 4
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strtod",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 17
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_CIlog",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "floor",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "ceil",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 59
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "modf",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 6
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "__CxxFrameHandler3",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "atol",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 20
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "isdigit",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 22
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_strnicmp",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 7
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_CxxThrowException",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "sscanf",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 27
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_stricmp",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": false,
+  "sites": 70
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "swscanf",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 18
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "wcstol",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 20
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "wcsncmp",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 7
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_wtol",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "wcsncpy",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 25
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strncpy",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 62
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strtoul",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 31
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strncmp",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 17
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "toupper",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strchr",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 19
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "isspace",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 8
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_wcsicmp",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": false,
+  "sites": 29
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "isalnum",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 4
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "wcstod",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 14
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "isalpha",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 17
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "wcsstr",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": false,
+  "sites": 3
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "wcschr",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 8
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_wcsnicmp",
+  "ordinal": 0,
+  "nargs": 6,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "towlower",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 6
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "iswctype",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": false,
+  "sites": 18
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "isxdigit",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 3
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "memchr",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 4
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "strstr",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": false,
+  "sites": 15
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "printf",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "qsort",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 7
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_except_handler3",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "fread",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": false,
+  "sites": 4
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "feof",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "free",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 7
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "realloc",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "malloc",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": false,
+  "sites": 8
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_time64",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 28
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "rand",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "MSVCR90.dll",
+  "name": "_crt_debugger_hook",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "PSAPI.DLL",
+  "name": "GetModuleInformation",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "SHELL32.dll",
+  "name": "SHGetFolderPathW",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 0
+ },
+ {
+  "dll": "SHELL32.dll",
+  "name": "DragQueryFileW",
+  "ordinal": 0,
+  "nargs": 140,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "SHELL32.dll",
+  "name": "ShellExecuteW",
+  "ordinal": 0,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SetWindowLongW",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "CreateWindowExW",
+  "ordinal": 0,
+  "nargs": 12,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SetWindowPos",
+  "ordinal": 0,
+  "nargs": 7,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetWindowLongA",
+  "ordinal": 0,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetSystemMetrics",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetClientRect",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 7
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SetWindowTextW",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "DestroyWindow",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetDesktopWindow",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "IsDlgButtonChecked",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "CheckDlgButton",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetDoubleClickTime",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "wsprintfA",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "RegisterClassA",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "CreateWindowExA",
+  "ordinal": 0,
+  "nargs": 11,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SetClipboardViewer",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "IsClipboardFormatAvailable",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetClipboardData",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "TranslateMessage",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "EmptyClipboard",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SetClipboardData",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "CloseClipboard",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "ChangeClipboardChain",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "wsprintfW",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetCursorPos",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetKeyboardState",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "DefWindowProcA",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "PeekMessageA",
+  "ordinal": 0,
+  "nargs": 24,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetKeyboardLayout",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "RegisterClassExW",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SetTimer",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SetCursor",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SetCursorPos",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "IntersectRect",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "ReleaseCapture",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SetCapture",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetMenu",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "AdjustWindowRectEx",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "MoveWindow",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "BeginPaint",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "EndPaint",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "EnumDisplayMonitors",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "PeekMessageW",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 0
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "DispatchMessageW",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "ClientToScreen",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "KillTimer",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "UnregisterClassA",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetKeyState",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "PostMessageA",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "ShowCursor",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetWindowRect",
+  "ordinal": 0,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "MonitorFromWindow",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "IsZoomed",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetAncestor",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "IsIconic",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "IsWindowVisible",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SetActiveWindow",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetActiveWindow",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "FillRect",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "UpdateWindow",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "ValidateRect",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "InvalidateRect",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "LoadIconA",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "DestroyCursor",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetIconInfo",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "LoadImageW",
+  "ordinal": 0,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "UnhookWindowsHookEx",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SetWindowsHookExA",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetAsyncKeyState",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "CallNextHookEx",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetForegroundWindow",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetWindowThreadProcessId",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetMonitorInfoA",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "ScreenToClient",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SendMessageA",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "LoadCursorA",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 0
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SetWindowLongA",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SetFocus",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "DefWindowProcW",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 5
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetDC",
+  "ordinal": 0,
+  "nargs": 7,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "ReleaseDC",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "SystemParametersInfoA",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 5
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetProcessWindowStation",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "GetUserObjectInformationW",
+  "ordinal": 0,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "ShowWindow",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "MessageBoxW",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "MessageBoxA",
+  "ordinal": 0,
+  "nargs": 8,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "OpenClipboard",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "USER32.dll",
+  "name": "PostQuitMessage",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": false,
+  "sites": 1
+ },
+ {
+  "dll": "USP10.dll",
+  "name": "ScriptItemize",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "USP10.dll",
+  "name": "ScriptBreak",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "VERSION.dll",
+  "name": "GetFileVersionInfoSizeA",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "VERSION.dll",
+  "name": "GetFileVersionInfoA",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "VERSION.dll",
+  "name": "VerQueryValueA",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "VERSION.dll",
+  "name": "VerQueryValueW",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "VERSION.dll",
+  "name": "GetFileVersionInfoW",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WINMM.dll",
+  "name": "timeEndPeriod",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "WINMM.dll",
+  "name": "timeBeginPeriod",
+  "ordinal": 0,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "WINMM.dll",
+  "name": "timeGetTime",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 7
+ },
+ {
+  "dll": "WS2_32.dll",
+  "name": "WSAIoctl",
+  "ordinal": 0,
+  "nargs": 9,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WS2_32.dll",
+  "name": "",
+  "ordinal": 112,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WS2_32.dll",
+  "name": "WSASocketA",
+  "ordinal": 0,
+  "nargs": 389,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 19,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 13,
+  "nargs": 12,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 4,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 1,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 6,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 7,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 12
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 151,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 18,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 5
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 16,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 10,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 52,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 3,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 4
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 115,
+  "nargs": 102,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 116,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 111,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 47
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 20,
+  "nargs": 7,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 17,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 12,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 23,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 2,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 22,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 3
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 5,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "WSOCK32.dll",
+  "name": "",
+  "ordinal": 21,
+  "nargs": 6,
+  "stdcall": true,
+  "sites": 12
+ },
+ {
+  "dll": "d3d9.dll",
+  "name": "Direct3DCreate9",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "d3dx9_27.dll",
+  "name": "D3DXVec3Transform",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "d3dx9_27.dll",
+  "name": "D3DXVec3TransformNormal",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "d3dx9_27.dll",
+  "name": "D3DXCheckVersion",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "d3dx9_27.dll",
+  "name": "D3DXGetPixelShaderProfile",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "d3dx9_27.dll",
+  "name": "D3DXGetVertexShaderProfile",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "d3dx9_27.dll",
+  "name": "D3DXMatrixMultiplyTranspose",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "d3dx9_27.dll",
+  "name": "D3DXMatrixTranspose",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "d3dx9_27.dll",
+  "name": "D3DXMatrixMultiply",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "d3dx9_27.dll",
+  "name": "D3DXCompileShader",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "dbghelp.dll",
+  "name": "UnDecorateSymbolName",
+  "ordinal": 0,
+  "nargs": 4,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "dbghelp.dll",
+  "name": "SymLoadModule64",
+  "ordinal": 0,
+  "nargs": 7,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "dbghelp.dll",
+  "name": "SymInitialize",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "dbghelp.dll",
+  "name": "SymSetOptions",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "dbghelp.dll",
+  "name": "SymCleanup",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "dbghelp.dll",
+  "name": "SymGetSymFromAddr64",
+  "ordinal": 0,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "dbghelp.dll",
+  "name": "SymGetLineFromAddr64",
+  "ordinal": 0,
+  "nargs": 5,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "ole32.dll",
+  "name": "OleInitialize",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "ole32.dll",
+  "name": "RegisterDragDrop",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "ole32.dll",
+  "name": "RevokeDragDrop",
+  "ordinal": 0,
+  "nargs": 2,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "ole32.dll",
+  "name": "CoLockObjectExternal",
+  "ordinal": 0,
+  "nargs": 3,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "ole32.dll",
+  "name": "OleUninitialize",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "ole32.dll",
+  "name": "ReleaseStgMedium",
+  "ordinal": 0,
+  "nargs": 1,
+  "stdcall": true,
+  "sites": 2
+ },
+ {
+  "dll": "steam_api.dll",
+  "name": "SteamApps",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "steam_api.dll",
+  "name": "SteamAPI_Shutdown",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ },
+ {
+  "dll": "steam_api.dll",
+  "name": "SteamAPI_Init",
+  "ordinal": 0,
+  "nargs": 0,
+  "stdcall": true,
+  "sites": 1
+ }
+]

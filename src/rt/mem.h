@@ -40,6 +40,10 @@ class GuestMemory {
   // Total committed bytes (for the memory report).
   uint64_t committed() const { return committed_; }
 
+  // Byte-oriented view, for the C-string and file APIs.
+  char* chars() const { return reinterpret_cast<char*>(base_); }
+  char16_t* wchars() const { return reinterpret_cast<char16_t*>(base_); }
+
   // Diagnostics: dumps a range as hex+ascii (used by crash reports and the log).
   void hexdump(uint32_t addr, uint32_t len, char* out, size_t out_size) const;
 
