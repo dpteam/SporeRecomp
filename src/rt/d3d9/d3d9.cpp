@@ -8,9 +8,10 @@
 
 #include <cstdio>
 #include <cstring>
+#include <string>
+#include <unordered_map>
 
 #include "rt/d3d9/com.h"
-#include "rt/d3d9/d3d9.h"
 #include "rt/guest.h"
 #include "rt/mem.h"
 #include "rt/shim.h"

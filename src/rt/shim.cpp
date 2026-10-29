@@ -1,10 +1,11 @@
-// SporeRecomp — shim core: logging, process/thread setup, import registry.
+﻿// SporeRecomp — shim core: logging, process/thread setup, import registry.
 #include "rt/shim.h"
 
 #include <cstdarg>
 #include <cstring>
 
 #include "rt/guest.h"
+#include "rt/imports.h"
 #include "rt/d3d9/d3d9.h"
 #include "rt/threads.h"
 #include "rt/win32/msvcr90.h"
@@ -16,7 +17,6 @@ namespace sr::shim {
 namespace {
 Config g_cfg;
 FILE* g_log = nullptr;
-PeImage* g_image = nullptr;
 CpuState* g_cpu = nullptr;
 
 // Guest layout (mirrors a 32-bit Windows process):
@@ -36,6 +36,15 @@ constexpr uint32_t kPebBase = 0x7FFD0000;
 
 const Config& config() { return g_cfg; }
 CpuState* current() { return g_cpu; }
+
+void* resolve_import(const char* dll, const char* name, uint16_t ordinal) {
+  // The PE loader asks for a host pointer; the actual dispatch goes through the guest stub
+  // table in imports.cpp. Returning the implementation pointer here is enough for the loader's
+  // bookkeeping (it stores the stub address in the IAT, not this pointer).
+  const imports::Desc* d = imports::find(dll, name, ordinal);
+  if (!d || !d->fn) return nullptr;
+  return reinterpret_cast<void*>(d->fn);
+}
 
 void init(const Config& cfg) {
   g_cfg = cfg;
@@ -73,7 +82,6 @@ void log_verbose(const char* fmt, ...) {
 }
 
 bool setup_process(PeImage* img) {
-  g_image = img;
   auto& mem = gmem();
 
   if (!d3d::init()) {
@@ -141,3 +149,5 @@ void run_guest(const PeImage& img) {
 }
 
 }  // namespace sr::shim
+
+

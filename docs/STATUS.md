@@ -78,8 +78,8 @@ These are worth recording because each one would have cost a debugging session o
 | Subsystem | State |
 |---|---|
 | GLES renderer behind D3D9 | not started (null backend in place) |
-| Shader path (`D3DXCompileShader`) | logged, fails cleanly — needs an HLSL front end or bytecode translation |
-| Real guest threads | `CreateThread` returns a handle; no native thread yet |
+| HLSL → GLSL ES translator | **written** — covers RenderWare's generated subset, unit tests in `tools/test_hlsl.py` |
+| Real guest threads | **done** — one native thread per guest thread, own TEB and guest stack |
 | Input (DInput8) | fails cleanly so the guest takes its no-device path |
 | Audio (DSound) | fails cleanly |
 | Networking (Winsock) | stubs |

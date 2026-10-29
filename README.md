@@ -40,4 +40,3 @@ python tools/disasm.py --stats      # summarise an existing pass
 
 RG 35 XX H: Allwinner H700, 4x Cortex-A53 @1.5 GHz (AArch64, NEON), 1 GB RAM, no swap,
 Mali-G31 (GLES 2.0/3.x via `libMali`), muOS 2606 "ANDROMEDA" (glibc 2.44, SDL2 2.28).
-SSH: `root@192.168.1.216`.

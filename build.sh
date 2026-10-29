@@ -34,7 +34,7 @@ fi
 # finish later than a moderate number would.
 JOBS="${SR_JOBS:-12}"
 
-GEN_FILES=$(ls recomp/gen/funcs_*.cpp 2>/dev/null || true)
+GEN_FILES=$(ls recomp/gen/funcs_*.cpp recomp/gen/table.cpp 2>/dev/null || true)
 if [ -z "$GEN_FILES" ]; then
   echo "error: no generated code — run: python tools/lift.py" >&2
   exit 1
