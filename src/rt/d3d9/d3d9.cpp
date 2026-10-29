@@ -39,6 +39,23 @@ void report_stats() {
 
 namespace {
 
+// Compiled GLSL from D3DXCompileShader, keyed by guest buffer address.
+std::unordered_map<u32, std::string> g_glsl;
+
+}  // namespace
+
+void register_glsl(u32 guest_addr, const std::string& glsl, bool is_pixel) {
+  (void)is_pixel;
+  g_glsl[guest_addr] = glsl;
+}
+
+const std::string* find_glsl(u32 guest_addr) {
+  auto it = g_glsl.find(guest_addr);
+  return it == g_glsl.end() ? nullptr : &it->second;
+}
+
+namespace {
+
 // ---------------------------------------------------------------------------
 // IDirect3D9
 // ---------------------------------------------------------------------------
@@ -634,6 +651,11 @@ void dev_create_vertex_shader(CpuState* s, const u32* a, ComObject*) {
   auto* sh = new Shader();
   sh->guest_code = a[1];
   sh->is_pixel = false;
+  // The pointer is a compiled D3DX buffer from D3DXCompileShader; look up its GLSL.
+  if (const std::string* glsl = find_glsl(a[1])) {
+    sh->glsl = *glsl;
+    SR_LOGV("D3D: CreateVertexShader from %u bytes of GLSL", u32(glsl->size()));
+  }
   u32 h = com_create(kKindVertexShader9, 5, sh);
   if (a[2]) store<u32>(a[2], h);
   ++g_stats.vs_created;
@@ -644,6 +666,10 @@ void dev_create_pixel_shader(CpuState* s, const u32* a, ComObject*) {
   auto* sh = new Shader();
   sh->guest_code = a[1];
   sh->is_pixel = true;
+  if (const std::string* glsl = find_glsl(a[1])) {
+    sh->glsl = *glsl;
+    SR_LOGV("D3D: CreatePixelShader from %u bytes of GLSL", u32(glsl->size()));
+  }
   u32 h = com_create(kKindPixelShader9, 5, sh);
   if (a[2]) store<u32>(a[2], h);
   ++g_stats.ps_created;

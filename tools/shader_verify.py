@@ -74,42 +74,76 @@ def validate_stream(data: bytes, pos: int) -> tuple[bool, int, int]:
     return False, tokens, 0
 
 
+def scan_blob(data: bytes) -> tuple[Counter, list[tuple[int, str, int]]]:
+    """Returns (valid blobs by profile, examples) for one byte buffer."""
+    valid: Counter = Counter()
+    examples: list[tuple[int, str, int]] = []
+    n = len(data)
+    for i in range(0, n - 8, 4):
+        tok = struct.unpack_from("<I", data, i)[0]
+        if tok not in VERSIONS:
+            continue
+        ok, tokens, blen = validate_stream(data, i)
+        if ok:
+            name = VERSIONS[tok]
+            valid[name] += 1
+            if len(examples) < 8:
+                examples.append((i, name, blen))
+    return valid, examples
+
+
 def main() -> int:
     limit_mb = None
     if "--limit-mb" in sys.argv:
         limit_mb = int(sys.argv[sys.argv.index("--limit-mb") + 1])
 
-    packages = sorted(DATA.glob("*.package"))
-    if not packages:
-        print(f"no packages in {DATA}")
-        return 1
+    # --unpacked DIR scans extracted resources instead of raw package bytes. This is the
+    # measurement that actually settles the shader question, because the payloads inside a
+    # package are RefPack-compressed and therefore invisible to a raw byte scan.
+    unpacked = None
+    if "--unpacked" in sys.argv:
+        unpacked = Path(sys.argv[sys.argv.index("--unpacked") + 1])
 
-    print("validating candidate shader blobs (token stream must parse to an END token)\n")
-    total_valid = Counter()
+    if unpacked:
+        files = [p for p in unpacked.rglob("*") if p.is_file()]
+        if not files:
+            print(f"no files under {unpacked}")
+            return 1
+        print(f"scanning {len(files)} unpacked resources under {unpacked}\n")
+    else:
+        files = sorted(DATA.glob("*.package"))
+        if not files:
+            print(f"no packages in {DATA} (use --unpacked DIR to scan extracted resources)")
+            return 1
+        print("validating candidate shader blobs in raw package bytes")
+        print("(payloads are RefPack-compressed, so absence here is not proof — "
+              "use --unpacked DIR)\n")
+
+    total_valid: Counter = Counter()
     total_bytes = 0
     examples: list[tuple[str, int, str, int]] = []
+    raw_total = 0
 
-    for p in packages:
-        data = p.read_bytes()
+    for p in files:
+        try:
+            data = p.read_bytes()
+        except OSError as e:
+            print(f"  {p.name:40s} SKIP ({e})")
+            continue
         if limit_mb:
             data = data[: limit_mb * 1024 * 1024]
-        n = len(data)
-        raw = 0
-        valid = 0
-        for i in range(0, n - 8, 4):
-            tok = struct.unpack_from("<I", data, i)[0]
-            if tok not in VERSIONS:
-                continue
-            raw += 1
-            ok, tokens, blen = validate_stream(data, i)
-            if ok:
-                valid += 1
-                name = VERSIONS[tok]
-                total_valid[name] += 1
-                total_bytes += blen
-                if len(examples) < 12:
-                    examples.append((p.name, i, name, blen))
-        print(f"  {p.name:26s} raw tokens: {raw:5,d}   valid blobs: {valid:5,d}")
+        raw_total += sum(1 for i in range(0, len(data) - 8, 4)
+                         if struct.unpack_from("<I", data, i)[0] in VERSIONS)
+        valid, ex = scan_blob(data)
+        total_valid.update(valid)
+        for off, name, blen in ex:
+            total_bytes += blen
+            if len(examples) < 12:
+                examples.append((str(p.name), off, name, blen))
+        if valid:
+            print(f"  {p.name:40s} valid blobs: {sum(valid.values()):5,d}")
+        elif unpacked is None:
+            print(f"  {p.name:26s} valid blobs:     0")
 
     print("\n=== valid shader blobs by profile")
     if total_valid:
@@ -121,13 +155,20 @@ def main() -> int:
         for fname, off, name, blen in examples:
             print(f"  {fname} @ 0x{off:x}: {name}, {blen} bytes")
         print("\n=== conclusion")
-        print("  Real, parseable shader bytecode ships inside the packages.")
-        print("  => the renderer can translate DX9 bytecode to GLSL ES instead of needing an")
-        print("     HLSL compiler.")
+        print("  Real, parseable shader bytecode is present.")
+        print("  => translate DX9 bytecode to GLSL ES; no HLSL front end needed for these.")
     else:
-        print("  none — the raw token counts were coincidental byte patterns.")
-        print("  => shaders are compiled at runtime by D3DXCompileShader; an HLSL front end")
-        print("     is required. (Or the payloads are compressed: unpack first and re-run.)")
+        print("  none found")
+        if unpacked:
+            print("\n=== conclusion")
+            print("  No bytecode even in the unpacked resources.")
+            print("  => shaders are compiled at runtime by D3DXCompileShader: an HLSL front end")
+            print("     (or a replacement D3DX compiler) is required.")
+        else:
+            print("\n=== conclusion")
+            print(f"  {raw_total:,} candidate tokens in raw bytes, none parse as a token stream.")
+            print("  Inconclusive: package payloads are RefPack-compressed. Unpack first and")
+            print("  re-run with --unpacked DIR before drawing a conclusion.")
     return 0
 
 

@@ -12,6 +12,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 #include "rt/cpu.h"
 
@@ -52,6 +53,12 @@ struct Stats {
 };
 extern Stats g_stats;
 void report_stats();
+void shutdown();
+
+// Compiled GLSL handed over by D3DXCompileShader, keyed by the guest buffer address that the
+// caller then passes to CreateVertexShader / CreatePixelShader.
+void register_glsl(u32 guest_addr, const std::string& glsl, bool is_pixel);
+const std::string* find_glsl(u32 guest_addr);
 
 // Registers the COM method tables and creates the singleton IDirect3D9.
 bool init();
@@ -81,7 +88,9 @@ struct Shader {
   u32 size = 0;
   u32 gl_program = 0;
   bool is_pixel = false;
+  std::string glsl;   // translated source, when the shader came from D3DXCompileShader
 };
 
 }  // namespace sr::d3d
+
 

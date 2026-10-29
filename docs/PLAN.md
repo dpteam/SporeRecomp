@@ -53,18 +53,15 @@ not an emulator, not Wine.
 1. **Size**: 16.5 MB of code, 108,528 recovered functions. Lifter quality (jump tables, SEH,
    indirect calls) is the whole game — but it is done: 4,747,729 instructions lifted with zero
    unhandled mnemonics.
-2. **D3D9 + RW4 shaders on Mali-G31 (GLES2/3)**: `D3DXCompileShader` is imported.
-   **Measured so far (inconclusive):** scanning the raw bytes of all 7 retail packages (3.9 GB)
-   found 1,747 candidate shader version tokens, but **zero** of them parse as a valid DX9
-   token stream (`tools/shader_verify.py`). So there is no *uncompressed* shader bytecode lying
-   in the packages. Two explanations remain, and they have very different costs:
-   * the packages are RefPack-compressed and the bytecode is inside compressed blocks
-     → unpack a package and re-run `shader_verify.py`; if it appears, a bytecode → GLSL ES
-     translator (MojoShader-style) is the cheap path;
-   * the game really does compile HLSL at runtime → an HLSL front end is needed, which is a
-     project comparable in size to a quarter of what is already built.
-   The runtime logs every `D3DXCompileShader` request with its entry point and target, so the
-   first successful boot answers this definitively. **This is the single largest unknown left.**
+2. **D3D9 + RW4 shaders on Mali-G31 (GLES2/3)** — **measured and closed** (see
+   `docs/SHADERS.md`). Spore does **not** ship shader bytecode; RenderWare 4 generates HLSL from
+   templates at runtime (`\Spore\SporeEP1ML\Core\RenderWare\platform\src\graphics\core\device\target\dx9\rwgdrvgraph.cpp`)
+   and compiles it with `D3DXCompileShader`. Verified: 1,747 candidate version tokens in 3.9 GB of
+   packages, **zero** parse as a DX9 token stream. So `D3DXCompileShader` must be implemented for
+   real — but the HLSL subset is small and fully enumerable (structs with POSITION/NORMAL/COLOR/
+   TEXCOORD/BINORMAL/TANGENT semantics, `register(cN)` constants, `register(sN)` samplers, `mul`,
+   `tex2D`, `texCUBE`, `frac/saturate/lerp/dot/normalize/pow`, simple `if`/`for`). A few thousand
+   lines of HLSL front end + GLSL ES emitter, not a compiler project.
 3. **Memory**: RG 35 XX H has 1 GB total, muOS has no swap. Spore's PC working set is in the same
    ballpark and its assets are ~3.9 GB of packages. Needs aggressive trimming (mip limits, Galaxy
    textures on demand, package streaming) — real risk, possibly the hardest non-code problem.

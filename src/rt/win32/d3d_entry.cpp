@@ -1,4 +1,4 @@
-// SporeRecomp — Direct3D 9 / D3DX / DirectInput / DirectSound entry points.
+﻿// SporeRecomp — Direct3D 9 / D3DX / DirectInput / DirectSound entry points.
 //
 // The D3D9 object model itself lives in d3d9/com.cpp + d3d9/d3d9.cpp. This file only holds
 // the flat exported functions the guest imports.
@@ -8,6 +8,7 @@
 
 #include "rt/d3d9/com.h"
 #include "rt/d3d9/d3d9.h"
+#include "rt/d3d9/hlsl.h"
 #include "rt/guest.h"
 #include "rt/mem.h"
 #include "rt/shim.h"
@@ -62,20 +63,43 @@ void d3dx_compile_shader(CpuState* s, const u32* a) {
   //                   ppShader, ppErrorMsgs, pConstantTable)
   ++d3d::g_stats.shader_compile_requests;
   const char* src = a[0] ? reinterpret_cast<const char*>(gmem().base() + a[0]) : "";
-  const char* entry = a[4] ? cstr(a[4]) : "?";
-  const char* target = a[5] ? cstr(a[5]) : "?";
-  if (d3d::g_stats.shader_compile_requests <= 40) {
-    // Log the entry point and target of every shader the game wants to compile. That list is
-    // the specification for the shader path we have to build.
-    SR_LOG("D3DX: CompileShader entry=\"%s\" target=\"%s\" srclen=%u", entry, target, a[1]);
-    if (d3d::g_stats.shader_compile_requests <= 3) {
-      SR_LOG("D3DX: source head: %.240s", src);
+  const char* entry = a[4] ? cstr(a[4]) : "main";
+  const char* target = a[5] ? cstr(a[5]) : "vs_2_0";
+
+  // The translator is the real implementation: RenderWare generates HLSL at runtime and needs
+  // a working shader compiler (docs/SHADERS.md).
+  hlsl::CompileResult res = hlsl::compile(src, entry, target);
+
+  if (d3d::g_stats.shader_compile_requests <= 40 || !res.ok) {
+    SR_LOG("D3DX: CompileShader entry=\"%s\" target=\"%s\" srclen=%u -> %s", entry, target,
+           a[1], res.ok ? "ok" : "FAILED");
+    if (!res.ok) {
+      SR_LOG("D3DX:   line %d: %s", res.line, res.error.c_str());
+      if (d3d::g_stats.shader_compile_requests <= 3) {
+        SR_LOG("D3DX:   source head: %.300s", src);
+      }
     }
   }
-  // Report failure so the guest takes its error path instead of using a null shader.
-  if (a[7]) store<u32>(a[7], 0);
+
+  if (!res.ok) {
+    if (a[7]) store<u32>(a[7], 0);
+    if (a[8]) store<u32>(a[8], 0);
+    s->r[0] = 0x88760B59u;  // D3DXERR_INVALIDDATA
+    return;
+  }
+
+  // Hand the GLSL back to the caller as a D3DX buffer. The renderer picks it up from
+  // CreateVertexShader / CreatePixelShader, which receive the same pointer.
+  u32 bytes = u32(res.glsl.size()) + 1;
+  u32 buf = gmem().heap_alloc(16 + bytes);
+  if (!buf) { s->r[0] = 0x8007000Eu; return; }
+  store<u32>(buf + 0, bytes);   // D3DXBuffer::GetBufferSize layout: size first
+  store<u32>(buf + 4, 0);
+  __builtin_memcpy(gmem().base() + buf + 16, res.glsl.c_str(), bytes);
+  d3d::register_glsl(buf + 16, res.glsl, res.is_pixel);
+  if (a[7]) store<u32>(a[7], buf);
   if (a[8]) store<u32>(a[8], 0);
-  s->r[0] = 0x88760B59u;  // D3DXERR_INVALIDDATA
+  s->r[0] = 0;
 }
 
 // --- matrix helpers -------------------------------------------------------
@@ -182,3 +206,4 @@ void dsound_noop(CpuState* s, const u32*) { s->r[0] = 0; }
 void ws_noop(CpuState* s, const u32*) { s->r[0] = 0xFFFFFFFFu; }  // SOCKET_ERROR
 
 }  // namespace sr::w32
+

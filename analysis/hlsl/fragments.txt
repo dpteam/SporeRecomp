@@ -1,0 +1,38 @@
+0x0100acb0  float4 texcoord%d : TEXCOORD%d;
+0x0100acd4  float4 color1 : COLOR1;
+0x0100acf0  float4 color : COLOR0;
+0x0100ad08  float3 binormal : BINORMAL0;
+0x0100ad28  float3 tangent : TANGENT0;
+0x0100ad44  float3 normal : NORMAL0;
+0x0100ad60  float4 position : POSITION0;
+0x0100ae30  float4 color3 :COLOR3;
+0x0100ae48  float4 color2 :COLOR2;
+0x0100ae60  float4 color1 :COLOR1;
+0x0100ae78  float4 color :COLOR0;
+0x0100b21c  float4 binormal : BINORMAL0;
+0x0100b23c  float4 tangent : TANGENT0;
+0x0100b29c  float4 normal2 : NORMAL1;
+0x0100b2b8  float4 position2 : POSITION1;
+0x0100b318  float4 normal : NORMAL0;
+0x0100b454  float%d texcoord%d : TEXCOORD%d;
+0x0100b478  float4 diffuse : COLOR0;
+0x0100b494  float4 position : POSITION;
+0x0100bec0  struct tFrag{    float4 color : COLOR0;};tFrag main(tFrag fragIn){    return fragIn;}
+0x0100bf18  float4x4 clipSpaceMatrix : register(c0);float4   frameTime       : register(c4);struct tVertexIn{    float3 position   : POSITION0;};struct tVertexOut{    float4 clipPosition  : POSITION;    float4 color         : COLOR0;};tVertexOut main(tVertexIn vertIn){    tVertexOut vertOut;    float4 hPos = float4(vertIn.position, 1);    vertOut.clipPosition = mul(hPos, clipSpaceMatrix);    vertOut.color = float4(frac(frameTime[0]), 0, 0, 1);    return vertOut;}
+0x010f6ba7  4float4 texcoord%d :TEXCOORD%d;
+0x010f6bc8  float4 specularAndFog :COLOR1;
+0x010f6be8  float3 binormal :BINORMAL0;
+0x010f6c08  float3 tangent :TANGENT0;
+0x010f6c24  float3 normal :NORMAL0;
+0x010f6c40  float4 position :POSITION0;
+0x010f6d7c  float fog :COLOR1;
+0x010f6d90  float3 specular :COLOR1;
+0x010f6dac  float4 binormal :BINORMAL0;
+0x010f6dcc  float4 tangent :TANGENT0;
+0x010f6e28  float4 normal2 :NORMAL1;
+0x010f6e44  float4 position2 :POSITION1;
+0x010f6e84  float4 normal :NORMAL0;
+0x010f6ee0  float4 fog :COLOR1;
+0x010f6f0c  float%d texcoord%d :TEXCOORD%d;
+0x010f6f30  float4 diffuse :COLOR0;
+0x010f6f4c  float4 position :POSITION;

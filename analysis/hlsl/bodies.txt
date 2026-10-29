@@ -1,0 +1,115 @@
+--- 0x0100afb1 [\bmain\s*\(] ---
+th :DEPTH;
+....float4 color3 :COLOR3;
+.float4 color2 :COLOR2;
+.float4 color1 :COLOR1;
+.float4 color :COLOR0;
+..struct cFragOut
+{
+..Out.depth = Current.depth;
+.Out.color3 = Current.color3;
+...Out.color2 = Current.color2;
+...Out.color1 = Current.color1;
+...Out.color = Current.color;
+.
+%s
+
+...extern uniform %s : register(c%d);
+.extern uniform sampler Sampler%d : register(s%d);
+..main........cFragOut main( cFragIn In )
+{
+cFragCurrent Current;
+cFragOut Out;
+..
+return Out;
+}
+.Graphics/PSDecls............5..<..eBT.-@..I@...?..I?...4...............C..........>...>...>...>........75..<..eB..I@...?...?....w..?...4............5..<..eBT.-@..I@...?..I?...4...............C..........>...>...>...>............75..<..eB..I@...?...?....w..?...4........5..<..eBT.-@..I@...?..I?...4...............C..........>..
+
+--- 0x0100b751 [\bmain\s*\(] ---
+ In.normal2;
+..Current.position2 = In.position2;
+..Current.weights = In.weights;
+..Current.indices = In.indices;
+..Current.texcoord%d = In.texcoord%d;
+....Current.normal = In.normal;
+....Current.position = In.position;
+....Out.pointSize = Current.pointSize;
+.Out.fog = Current.fog;
+.Out.texcoord%d = Current.texcoord%d;
+...Out.diffuse = Current.color;
+...Out.position = Current.position;
+...cVertOut main( cVertIn In )
+{
+cVertCurrent Current;
+cVertOut Out;
+
+.Graphics/VSDecls............5..<..eBT.-@..I@...?..I?...4...............C..........>...>...>...>........75..<..eB..I@...?...?....w..?...4............5..<..eBT.-@..I@...?..I?...4...............C..........>...>...>...>............75..<..eB..I@...?...?....w..?...4..p..0C. 3v...p...p...C.........5..<..eBT.-@..I@...?..I?...4...............C.....
+
+--- 0x0100beef [\bmain\s*\(] ---
+. *...&q.0.p..,q..,q. -q..-q.0.p.@.p.p.q...q...q...q...q. *....q../q..
+q...p.@.p.P.p.P.p.0.p. *...0q...p.P.q.............5..<..eBT.-@..I@...?..I?...4...............C..........>...>...>...>........75..<..eB..I@...?...?....w..?...4............5..<..eBT.-@..I@...?..I?...4...............C..........>...>...>...>........75..<..eB..I@...?...?....w..?...4....struct tFrag{    float4 color : COLOR0;};tFrag main(tFrag fragIn){    return fragIn;}...float4x4 clipSpaceMatrix : register(c0);float4   frameTime       : register(c4);struct tVertexIn{    float3 position   : POSITION0;};struct tVertexOut{    float4 clipPosition  : POSITION;    float4 color         : COLOR0;};tVertexOut main(tVertexIn vertIn){    tVertexOut vertOut;    float4 hPos = float4(vertIn.position, 1);    vertOut.clipPosition = mul(hPo
+
+--- 0x0100bf33 [register\s*\(\s*c\d+\s*\)] ---
+..
+q...p.@.p.P.p.P.p.0.p. *...0q...p.P.q.............5..<..eBT.-@..I@...?..I?...4...............C..........>...>...>...>........75..<..eB..I@...?...?....w..?...4............5..<..eBT.-@..I@...?..I?...4...............C..........>...>...>...>........75..<..eB..I@...?...?....w..?...4....struct tFrag{    float4 color : COLOR0;};tFrag main(tFrag fragIn){    return fragIn;}...float4x4 clipSpaceMatrix : register(c0);float4   frameTime       : register(c4);struct tVertexIn{    float3 position   : POSITION0;};struct tVertexOut{    float4 clipPosition  : POSITION;    float4 color         : COLOR0;};tVertexOut main(tVertexIn vertIn){    tVertexOut vertOut;    float4 hPos = float4(vertIn.position, 1);    vertOut.clipPosition = mul(hPos, clipSpaceMatrix);    vertOut.color = float4(frac(frameTime[0]), 0
+
+--- 0x0100bf5b [register\s*\(\s*c\d+\s*\)] ---
+.............5..<..eBT.-@..I@...?..I?...4...............C..........>...>...>...>........75..<..eB..I@...?...?....w..?...4............5..<..eBT.-@..I@...?..I?...4...............C..........>...>...>...>........75..<..eB..I@...?...?....w..?...4....struct tFrag{    float4 color : COLOR0;};tFrag main(tFrag fragIn){    return fragIn;}...float4x4 clipSpaceMatrix : register(c0);float4   frameTime       : register(c4);struct tVertexIn{    float3 position   : POSITION0;};struct tVertexOut{    float4 clipPosition  : POSITION;    float4 color         : COLOR0;};tVertexOut main(tVertexIn vertIn){    tVertexOut vertOut;    float4 hPos = float4(vertIn.position, 1);    vertOut.clipPosition = mul(hPos, clipSpaceMatrix);    vertOut.color = float4(frac(frameTime[0]), 0, 0, 1);    return vertOut;}.0@q.......{
+
+--- 0x0100c002 [\bmain\s*\(] ---
+.........C..........>...>...>...>........75..<..eB..I@...?...?....w..?...4....struct tFrag{    float4 color : COLOR0;};tFrag main(tFrag fragIn){    return fragIn;}...float4x4 clipSpaceMatrix : register(c0);float4   frameTime       : register(c4);struct tVertexIn{    float3 position   : POSITION0;};struct tVertexOut{    float4 clipPosition  : POSITION;    float4 color         : COLOR0;};tVertexOut main(tVertexIn vertIn){    tVertexOut vertOut;    float4 hPos = float4(vertIn.position, 1);    vertOut.clipPosition = mul(hPos, clipSpaceMatrix);    vertOut.color = float4(frac(frameTime[0]), 0, 0, 1);    return vertOut;}.0@q.......{..@q.`>q.............5..<..eBT.-@..I@...?..I?...4...............C..........>...>...>...>............75..<..eB..I@...?...?....w..?...4................P....6..Pgq...q...
+
+--- 0x0100c078 [\bmul\s*\(] ---
+;tFrag main(tFrag fragIn){    return fragIn;}...float4x4 clipSpaceMatrix : register(c0);float4   frameTime       : register(c4);struct tVertexIn{    float3 position   : POSITION0;};struct tVertexOut{    float4 clipPosition  : POSITION;    float4 color         : COLOR0;};tVertexOut main(tVertexIn vertIn){    tVertexOut vertOut;    float4 hPos = float4(vertIn.position, 1);    vertOut.clipPosition = mul(hPos, clipSpaceMatrix);    vertOut.color = float4(frac(frameTime[0]), 0, 0, 1);    return vertOut;}.0@q.......{..@q.`>q.............5..<..eBT.-@..I@...?..I?...4...............C..........>...>...>...>............75..<..eB..I@...?...?....w..?...4................P....6..Pgq...q...q.@...pgq..gq..gq.0hq.0iq..iq. }q..jq.@....Cq.pCq..Cq..Eq.@kq..Dq..kq. lq.`lq..lq..lq...q.P.q...q. .q.PDq...q...q..[q.
+
+--- 0x010f6cdf [\bmain\s*\(] ---
+?....w..?...4..>...>...>...>.........5..<..I@...4.......75..<..eB..I@...?...?....w..?...4float4 texcoord%d :TEXCOORD%d;
+.float4 specularAndFog :COLOR1;
+.float3 binormal :BINORMAL0;
+....float3 tangent :TANGENT0;
+..float3 normal :NORMAL0;
+....float4 position :POSITION0;
+....
+struct PS_IN
+{
+....struct PS_CURRENT
+{
+....struct PS_OUT
+{
+....ps_3_0..ps_2_a..ps_2_0..ps_1_4..ps_1_3..ps_1_2..ps_1_1..PS_OUT main( PS_IN In )
+{
+PS_CURRENT Current;
+PS_OUT Out;
+....>...>...>...>.........5..<..I@...4.......75..<..eB..I@...?...?....w..?...4float pointSize :PSIZE;
+....float fog :COLOR1;
+.float3 specular :COLOR1;
+...float4 binormal :BINORMAL0;
+....float4 tangent :TANGENT0;
+..float4 weights2 :BLENDWEIGHT1;
+.int4 indices2 :BLENDINDICES1;
+..float4 normal2 :NORMAL1;
+...float4 position2 :POSITION1;
+...float4 weig
+
+--- 0x010f703f [\bmain\s*\(] ---
+
+....float3 specular;
+...struct VS_CURRENT
+{
+....float4 fog :COLOR1;
+....float fog :FOG;
+....float%d texcoord%d :TEXCOORD%d;
+....float4 diffuse :COLOR0;
+....float4 position :POSITION;
+.struct VS_OUT
+{
+....Current.specular = In.specular;
+....Out.specularAndFog.w = Current.fog;
+....Out.specularAndFog.xyz = Current.specular;
+.Out.specular = Current.specular;
+...vs_3_0..vs_2_a..vs_2_0..vs_1_1..VS_OUT main( VS_IN In )
+{
+VS_CURRENT Current;
+VS_OUT Out;
+
+...>...>...>...>.........5..<..I@...4.......75..<..eB..I@...?...?....w..?...4........Unable to identity pixel shader version 0x%x - using MaxTextureBlendStages (%d).\Spore\SporeEP1ML\Core\RenderWare\platform\src\graphics\core\device\target\dx9\rwgdrvgraph.cpp....>...>...>...>.........5..<..I@...4.......75..<..eB..I@...?...?....w..?...4...........
