@@ -134,32 +134,73 @@ void HeapReAlloc(CpuState* s, const u32* a) {
 }
 
 void VirtualAlloc(CpuState* s, const u32* a) {
-  u32 addr = a[0], size = a[1];
+  // VirtualAlloc(pAddress, size, allocationType, protect)
+  //
+  // Address rounding matters more than it looks. Windows rounds the requested address DOWN:
+  // to 64 KB for MEM_RESERVE, to the page size (4 KB) for MEM_COMMIT, and returns the rounded
+  // address. Spore calls VirtualAlloc(0x10000710, 0x400000, MEM_COMMIT) and builds its whole
+  // pool layout from the returned value — returning the unrounded 0x10000710 instead of
+  // 0x10000000 put every block 0x710 bytes off and corrupted the pool's free list.
+  u32 addr = a[0], size = a[1], type = a[2];
+  if (size == 0) { s->r[0] = 0; return; }
+
+  const bool reserve = (type & 0x2000) != 0;
+  const u32 granularity = reserve ? 0x10000u : 0x1000u;
+
   if (!addr) {
-    s->r[0] = guest_alloc(size);
+    // No address requested: hand out a region above the CRT arena.
+    static u32 next = 0x1000'0000;
+    addr = (next + granularity - 1) & ~(granularity - 1);
+    next = addr + ((size + 0xFFFF) & ~0xFFFFu);
+    if (next > 0x7000'0000u) { s->r[0] = 0; s->last_error = 0x08; return; }  // NOT_ENOUGH_MEMORY
   } else {
-    if (gmem().map(addr, size)) s->r[0] = addr; else s->r[0] = 0;
+    // Round the requested address down, exactly like Windows does.
+    addr &= ~(granularity - 1);
   }
+
+  if (!gmem().map(addr, size)) {
+    s->r[0] = 0;
+    s->last_error = 0x08;
+    return;
+  }
+  s->r[0] = addr;
 }
 
 void VirtualFree(CpuState* s, const u32* a) {
-  if (a[2] == 0x8000) {  // MEM_RELEASE
-    gmem().release(a[0], 0x1000);
+  // VirtualFree(pAddress, size, freeType)
+  u32 addr = a[0], size = a[1], type = a[2];
+  if (type & 0x8000) {  // MEM_RELEASE
+    // Without a size, release is a no-op for us: the address space is cheap and the game may
+    // still hold interior pointers. Decommitting here caused more faults than it saved.
+    (void)addr;
+    s->r[0] = 1;
+    return;
+  }
+  if (type & 0x4000) {  // MEM_DECOMMIT
+    gmem().release(addr, size);
   }
   s->r[0] = 1;
 }
 
 void VirtualQuery(CpuState* s, const u32* a) {
-  // MEMORY_BASIC_INFORMATION: BaseAddress, AllocationBase, Protect, RegionSize, State...
+  // VirtualQuery(pAddress, lpBuffer, dwLength) -> MEMORY_BASIC_INFORMATION.
+  //
+  // This must report the truth. Spore's allocator walks its own region list and calls
+  // VirtualQuery to decide whether a range is really committed; the first version of this
+  // function answered "MEM_COMMIT / PAGE_READWRITE" for every address, so the allocator
+  // believed a region it had only reserved and then dereferenced an unmapped page (fault at
+  // guest address 0x0c, inside the free-list code).
+  u32 addr = a[0];
   u32 out = a[1];
+  bool committed = gmem().is_committed(addr);
   if (out) {
-    u32 base = a[0] & ~0xFFFu;
-    store<u32>(out + 0, base);
-    store<u32>(out + 4, base);
-    store<u32>(out + 8, 0x04);        // PAGE_READWRITE
-    store<u32>(out + 12, 0x1000);     // RegionSize
-    store<u32>(out + 16, 0x1000);     // MEM_COMMIT
-    store<u32>(out + 20, 0x04);
+    u32 base = addr & ~0xFFFu;
+    store<u32>(out + 0, base);                       // BaseAddress
+    store<u32>(out + 4, committed ? base : 0);       // AllocationBase
+    store<u32>(out + 8, committed ? 0x04 : 0x01);    // Protect: RW or NOACCESS
+    store<u32>(out + 12, 0x1000);                    // RegionSize
+    store<u32>(out + 16, committed ? 0x1000 : 0x2000);  // State: MEM_COMMIT / MEM_RESERVE
+    store<u32>(out + 20, committed ? 0x04 : 0x01);
   }
   s->r[0] = out ? 28 : 0;
 }

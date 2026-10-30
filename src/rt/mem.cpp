@@ -1,9 +1,10 @@
-// SporeRecomp — guest memory implementation.
+﻿// SporeRecomp — guest memory implementation.
 #include "rt/mem.h"
 
 #include <sys/mman.h>
 
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 
 namespace sr {
@@ -18,6 +19,21 @@ inline uint32_t page_up(uint32_t a) { return (a + uint32_t(kPageMask)) & ~uint32
 GuestMemory& GuestMemory::instance() {
   static GuestMemory m;
   return m;
+}
+
+GuestMemory& gmem() { return GuestMemory::instance(); }
+
+const uint8_t* guest_base() {
+  // Cached: this is called for every guest memory access in lifted code.
+  static const uint8_t* base = nullptr;
+  if (!base) base = GuestMemory::instance().base();
+  return base;
+}
+
+bool check_mem() {
+  static int enabled = -1;
+  if (enabled < 0) enabled = std::getenv("SR_CHECK_MEM") != nullptr ? 1 : 0;
+  return enabled != 0;
 }
 
 bool GuestMemory::init() {
@@ -42,8 +58,17 @@ bool GuestMemory::map(uint32_t addr, uint32_t size) {
     std::fprintf(stderr, "[mem] map 0x%08x+0x%x failed\n", lo, hi - lo);
     return false;
   }
+  for (uint32_t p = lo >> 12; p < (hi >> 12); ++p) {
+    committed_pages_[p >> 5] |= 1u << (p & 31);
+  }
   committed_ += hi - lo;
   return true;
+}
+
+bool GuestMemory::is_committed(uint32_t addr) const {
+  uint32_t p = addr >> 12;
+  if (p >= kPages) return false;
+  return (committed_pages_[p >> 5] >> (p & 31)) & 1u;
 }
 
 void GuestMemory::release(uint32_t addr, uint32_t size) {
@@ -53,6 +78,9 @@ void GuestMemory::release(uint32_t addr, uint32_t size) {
   // Drop the physical pages, keep the address range reserved.
   madvise(base_ + lo, size_t(hi - lo), MADV_DONTNEED);
   mprotect(base_ + lo, size_t(hi - lo), PROT_NONE);
+  for (uint32_t p = lo >> 12; p < (hi >> 12); ++p) {
+    committed_pages_[p >> 5] &= ~(1u << (p & 31));
+  }
   committed_ -= hi - lo;
 }
 
@@ -83,10 +111,19 @@ uint32_t GuestMemory::heap_alloc(uint32_t size, uint32_t align) {
   uint32_t cls = (need + 15) >> kClassShift;
 
   uint32_t blk = 0;
-  if (cls < kClasses) {
+  // SR_NO_REUSE=1 turns the free lists off (pure bump allocation). Used to tell apart "the
+  // allocator is corrupting data" from "the guest is corrupting data".
+  if (getenv("SR_NO_REUSE") != nullptr) {
+    blk = 0;
+  } else if (cls < kClasses) {
     if (free_lists_[cls]) {
       blk = free_lists_[cls];
       free_lists_[cls] = load<uint32_t>(blk + 8);
+      // Restore the magic: heap_free() poisons it to detect double frees, and a block taken
+      // from a free list must be a live block again. Without this, the *next* free() of the
+      // same block is not recognised, and heap_realloc() cannot find its header — it then
+      // copies zero bytes and silently loses the caller's data.
+      store<uint32_t>(blk + 12, kHeapMagic);
     }
   } else if (big_free_head_) {
     // first fit over the large-block list
@@ -97,6 +134,7 @@ uint32_t GuestMemory::heap_alloc(uint32_t size, uint32_t align) {
         uint32_t next = load<uint32_t>(cur + 8);
         if (prev) store<uint32_t>(prev + 8, next); else big_free_head_ = next;
         blk = cur;
+        store<uint32_t>(blk + 12, kHeapMagic);
         break;
       }
       prev = cur;
@@ -125,6 +163,7 @@ uint32_t GuestMemory::heap_alloc(uint32_t size, uint32_t align) {
   heap_used_ += size;
   return user;
 }
+
 
 void GuestMemory::heap_free(uint32_t addr) {
   if (!addr) return;
@@ -166,7 +205,10 @@ uint32_t GuestMemory::heap_realloc(uint32_t addr, uint32_t size) {
   if (cap >= size) return addr;  // already big enough: keep the pointer, no copy
   uint32_t nw = heap_alloc(size);
   if (!nw) return 0;
-  __builtin_memcpy(base_ + nw, base_ + addr, cap);
+  // Copy only the bytes that exist. If `cap` could not be determined (0), the block is not
+  // one of ours — copying `size` bytes from it would read past the end of the allocation.
+  uint32_t copy = cap < size ? cap : size;
+  if (copy) __builtin_memcpy(base_ + nw, base_ + addr, copy);
   heap_free(addr);
   return nw;
 }
@@ -188,3 +230,5 @@ void GuestMemory::hexdump(uint32_t addr, uint32_t len, char* out, size_t out_siz
 }
 
 }  // namespace sr
+
+

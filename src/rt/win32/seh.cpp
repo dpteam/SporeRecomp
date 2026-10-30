@@ -1,4 +1,4 @@
-// SporeRecomp — Win32 structured exception handling and C++ exceptions.
+﻿// SporeRecomp — Win32 structured exception handling and C++ exceptions.
 //
 // The guest uses the MSVC x86 SEH model:
 //   * FS:[0] holds a linked list of EXCEPTION_REGISTRATION_RECORD
@@ -19,6 +19,7 @@
 
 #include "rt/guest.h"
 #include "rt/mem.h"
+#include "rt/seh.h"
 #include "rt/shim.h"
 #include "rt/win32/win32.h"
 
@@ -26,15 +27,7 @@ namespace sr::seh {
 
 using u32 = uint32_t;
 
-// EXCEPTION_RECORD layout (Win32)
-struct ExceptionRecord {
-  u32 code;
-  u32 flags;
-  u32 record;      // nested record, unused
-  u32 address;     // faulting instruction
-  u32 num_params;
-  u32 params[15];
-};
+// EXCEPTION_RECORD comes from rt/seh.h.
 
 // CONTEXT for x86: 0x2CC bytes. We only need the integer registers, the control dwords and
 // the segment selectors, but the size matters because the guest allocates it.
@@ -213,3 +206,5 @@ void seh_cxx_frame_handler3(CpuState* s, const u32* a) {
 }
 
 }  // namespace sr::w32
+
+

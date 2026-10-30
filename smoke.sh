@@ -41,7 +41,6 @@ if [ -n "${SR_DATA:-}" ] && [ -d "$SR_DATA/Data" ]; then
 else
   echo "[smoke] no game data (set SR_DATA=/path/to/SporeRetail to include Data/)"
 fi
-
 cd "$STAGE"
 # The cross toolchain's dynamic loader is not at the path qemu looks for by default; point it
 # at the aarch64 sysroot explicitly.

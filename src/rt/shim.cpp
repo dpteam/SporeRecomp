@@ -4,9 +4,11 @@
 #include <cstdarg>
 #include <cstring>
 
+#include "rt/crash.h"
 #include "rt/guest.h"
 #include "rt/imports.h"
 #include "rt/d3d9/d3d9.h"
+#include "rt/seh.h"
 #include "rt/threads.h"
 #include "rt/win32/msvcr90.h"
 
@@ -134,20 +136,45 @@ bool setup_process(PeImage* img) {
 void run_guest(const PeImage& img) {
   GuestFn entry = find_function(img.base + img.entry_point);
   if (!entry) {
-    // The entry point is not lifted (yet). Report precisely so the lifter can be extended.
     SR_LOG("FATAL: entry point 0x%08x is not in the lifted function table",
            img.base + img.entry_point);
     return;
   }
-  try {
-    entry(g_cpu);
-  } catch (const w32::Longjmp& lj) {
-    SR_LOG("guest stack unwound by longjmp to 0x%08x (value %u)", lj.target, lj.value);
-  } catch (const std::exception& e) {
-    SR_LOG("FATAL: host exception escaped the guest: %s", e.what());
+
+  // Loop, not a single call: a handled guest access violation resumes the guest, so the entry
+  // point can be re-entered with the restored CPU context after a fault.
+  for (;;) {
+    if (!crash::arm_resume()) {
+      // Returned from the signal handler after a handled exception: continue at s->eip.
+      u32 eip = g_cpu->eip;
+      SR_LOG("resuming guest at 0x%08x after a handled exception", eip);
+      GuestFn fn = find_function(eip);
+      if (fn) {
+        fn(g_cpu);
+      } else if (const FunctionRange* r = find_range(eip)) {
+        if (r->mid) r->mid(g_cpu, eip); else r->fn(g_cpu);
+      } else {
+        SR_LOG("FATAL: cannot resume at 0x%08x", eip);
+        return;
+      }
+      continue;
+    }
+
+    try {
+      entry(g_cpu);
+      return;  // the guest returned normally
+    } catch (const w32::Longjmp& lj) {
+      SR_LOG("guest stack unwound by longjmp to 0x%08x (value %u)", lj.target, lj.value);
+      return;
+    } catch (const std::exception& e) {
+      SR_LOG("FATAL: host exception escaped the guest: %s", e.what());
+      return;
+    }
   }
 }
 
 }  // namespace sr::shim
+
+
 
 

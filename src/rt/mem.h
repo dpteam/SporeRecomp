@@ -6,20 +6,32 @@
 //
 // Guest address -> host address is a fixed offset, so the lifted code and the shims can
 // use raw pointers and a single base addition.
+//
+// NOTE: the ~416 generated translation units include `rt/access.h`, not this header. Keep the
+// two in sync only where it matters (`gmem()` and the base pointer); anything added here is
+// free to change without triggering a full re-lift rebuild.
 #pragma once
 
 #include <cstddef>
 #include <cstdint>
+
+#include "rt/access.h"
 
 namespace sr {
 
 constexpr uint64_t kGuestSpaceSize = 0x1'0000'0000ull;
 constexpr uint32_t kImageBase = 0x00400000;
 
-// Guest heap arena: 1.5 GB of *virtual* space. Nothing is committed until it is used, so the
-// 1 GB of physical RAM on the device is not touched by the reservation itself.
-constexpr uint32_t kHeapStart = 0x1000'0000;
-constexpr uint32_t kHeapEnd = 0x7000'0000;
+// Guest heap arena: used by the CRT shim (malloc/free) and by the loader's own allocations.
+// Spore manages its own memory on top of VirtualAlloc, so this arena must NOT overlap the
+// range the game reserves for itself — the two allocators used to fight over the same pages,
+// which corrupted a free list and crashed static initialisation.
+//
+// Layout:
+//   0x0010_0000 .. 0x0F00_0000   CRT heap arena (this allocator)
+//   0x1000_0000 .. 0x7000_0000   left to the guest's own VirtualAlloc calls
+constexpr uint32_t kHeapStart = 0x0010'0000;
+constexpr uint32_t kHeapEnd = 0x0F00'0000;
 
 class GuestMemory {
  public:
@@ -33,6 +45,10 @@ class GuestMemory {
 
   // Releases pages but keeps the address space valid for a later map().
   void release(uint32_t addr, uint32_t size);
+
+  // True if the page containing `addr` is committed. VirtualQuery and the guest's own
+  // allocator depend on this being accurate.
+  bool is_committed(uint32_t addr) const;
 
   // Marks a range executable (the image and JIT-ed thunks need it).
   bool make_executable(uint32_t addr, uint32_t size);
@@ -70,21 +86,15 @@ class GuestMemory {
   static constexpr uint32_t kClassShift = 4;              // size >> 4
   uint32_t free_lists_[kClasses]{};
   uint32_t big_free_head_ = 0;                            // linked list of large free blocks
+
+  // One bit per 4 KB page: 4 GB / 4 KB / 8 = 128 KB of metadata. Cheap, and it is what makes
+  // is_committed() exact.
+  static constexpr uint32_t kPages = kGuestSpaceSize / 4096;
+  static constexpr uint32_t kPageWords = kPages / 32;
+  uint32_t committed_pages_[kPageWords]{};
 };
 
-inline GuestMemory& gmem() { return GuestMemory::instance(); }
-
-// Little-endian loads/stores used by lifted code. The guest is x86, the host is aarch64:
-// both are little-endian, so a memcpy is the correct and fastest thing.
-template <typename T>
-inline T load(uint32_t addr) {
-  T v;
-  __builtin_memcpy(&v, gmem().base() + addr, sizeof(T));
-  return v;
-}
-template <typename T>
-inline void store(uint32_t addr, T v) {
-  __builtin_memcpy(gmem().base() + addr, &v, sizeof(T));
-}
+// gmem(), load<> and store<> live in rt/access.h (included above) because the generated
+// code depends on them and must not be rebuilt when the allocator changes.
 
 }  // namespace sr

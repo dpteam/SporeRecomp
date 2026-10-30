@@ -5,6 +5,7 @@
 // guest's own state — EIP, registers, and the guest call chain taken from the guest stack.
 // That is usually enough to name the exact lifted function and the caller.
 #include <csignal>
+#include <csetjmp>
 #include <cstdio>
 #include <cstring>
 #include <execinfo.h>
@@ -13,12 +14,20 @@
 #include "rt/crash.h"
 #include "rt/guest.h"
 #include "rt/mem.h"
+#include "rt/seh.h"
 #include "rt/shim.h"
 #include "rt/win32/msvcr90.h"
 
 namespace sr::crash {
 
 namespace {
+
+void dump_guest_state();
+
+// A handled guest access violation resumes here: the signal handler cannot return to the
+// faulting instruction, so it jumps back to the guest entry point with the restored context.
+sigjmp_buf g_resume;
+volatile sig_atomic_t g_resume_ready = 0;
 
 constexpr int kMaxFrames = 48;
 
@@ -106,6 +115,13 @@ void dump_guest_state() {
   }
 }
 
+
+}  // namespace
+
+void dump_current() { dump_guest_state(); }
+
+namespace {
+
 void dump_native_frames() {
   void* frames[kMaxFrames];
   int count = backtrace(frames, kMaxFrames);
@@ -139,6 +155,24 @@ void on_fatal(int sig, siginfo_t* info, void* ucontext) {
                     fault >= base && fault < base + 0x100000000ull ? "" : " OUTSIDE guest space");
   (void)write(2, buf, size_t(n));
 
+  // A fault inside the guest window is a Windows access violation. Dispatch it through the
+  // guest's own SEH chain first; only an unhandled violation is fatal.
+  if (sig == SIGSEGV && fault >= base && fault < base + 0x100000000ull &&
+      g_resume_ready && shim::current()) {
+    CpuState* s = shim::current();
+    seh::ExceptionRecord rec{};
+    rec.code = 0xC0000005u;
+    rec.address = s->eip;
+    rec.num_params = 2;
+    rec.params[0] = 0;  // read or write is not distinguished by the hardware fault address
+    rec.params[1] = unsigned(fault - base);
+    if (seh::dispatch(s, rec)) {
+      // The handler restored the context: jump back to the entry point and continue.
+      g_resume_ready = 0;
+      siglongjmp(g_resume, 1);
+    }
+  }
+
   dump_guest_state();
   dump_native_frames();
   // Do not return: the state is inconsistent and continuing would produce a worse report.
@@ -153,7 +187,7 @@ void install() {
   std::memset(&sa, 0, sizeof(sa));
   sa.sa_sigaction = on_fatal;
   sigemptyset(&sa.sa_mask);
-  sa.sa_flags = SA_SIGINFO | SA_RESTART;
+  sa.sa_flags = SA_SIGINFO | SA_RESTART | SA_NODEFER;
   sigaction(SIGSEGV, &sa, nullptr);
   sigaction(SIGBUS, &sa, nullptr);
   sigaction(SIGILL, &sa, nullptr);
@@ -161,5 +195,13 @@ void install() {
   sigaction(SIGABRT, &sa, nullptr);
 }
 
+bool arm_resume() {
+  g_resume_ready = 1;
+  return sigsetjmp(g_resume, 1) == 0;
+}
+
 }  // namespace sr::crash
+
+
+
 
