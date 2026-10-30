@@ -12,6 +12,7 @@
 #include "rt/guest.h"
 #include "rt/mem.h"
 #include "rt/pe.h"
+#include "rt/crash.h"
 #include "rt/d3d9/hlsl.h"
 #include "rt/shim.h"
 #include "rt/selftest.h"
@@ -88,6 +89,7 @@ int main(int argc, char** argv) {
   cfg.verbose = verbose;
   cfg.trace_imports = trace_imports;
   sr::shim::init(cfg);
+  sr::crash::install();
 
   SR_LOG("SporeRecomp starting");
   SR_LOG("game dir: %s", game_dir.c_str());
@@ -128,4 +130,5 @@ int main(int argc, char** argv) {
   sr::shim::shutdown();
   return 0;
 }
+
 

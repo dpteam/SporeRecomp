@@ -21,8 +21,22 @@ constexpr u32 kStubMax = 4096;
 u32 g_next_stub = 0;
 const Desc* g_stub_owner[kStubMax]{};
 unsigned g_missing = 0;
+bool g_stubs_mapped = false;
 
 }  // namespace
+
+// The stub range has to be real, mapped memory, not just numbers: the CRT walks its own IAT
+// (to resolve __imp_ pointers, check optional APIs) and dereferences the values it finds there.
+// Unmapped addresses turned that into a SIGSEGV inside CRT startup.
+bool init() {
+  if (g_stubs_mapped) return true;
+  if (!gmem().map(kStubBase, kStubMax * kStubStride)) {
+    SR_LOG("FATAL: cannot map the import stub range at 0x%08x", kStubBase);
+    return false;
+  }
+  g_stubs_mapped = true;
+  return true;
+}
 
 const Desc* find(const char* dll, const char* name, uint16_t ordinal) {
   for (const Desc* d = g_import_table; d->dll; ++d) {
@@ -37,11 +51,15 @@ const Desc* find(const char* dll, const char* name, uint16_t ordinal) {
 }
 
 u32 make_stub(const Desc* d) {
+  if (!init()) return 0;
   if (g_next_stub >= kStubMax) {
     SR_LOG("FATAL: import stub table exhausted");
     return 0;
   }
   u32 addr = kStubBase + g_next_stub * kStubStride;
+  // Fill the stub with int3 so that executing it by accident traps instead of running
+  // zeroes (which decode as `add [eax], al` and corrupt memory silently).
+  for (u32 i = 0; i < kStubStride; ++i) gmem().base()[addr + i] = 0xCC;
   g_stub_owner[g_next_stub] = d;
   ++g_next_stub;
   return addr;

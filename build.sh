@@ -41,21 +41,24 @@ if [ -z "$GEN_FILES" ]; then
 fi
 SRC_FILES=$(ls src/*.cpp src/rt/*.cpp src/rt/win32/*.cpp src/rt/d3d9/*.cpp 2>/dev/null)
 
-# Newest header: any object older than this is stale.
+# Newest header that the *generated* chunks depend on. They include only these four, so a new
+# runtime header (crash.h, hlsl.h, ...) must not trigger a 530-chunk rebuild.
+GEN_HDR=$(ls -t src/rt/cpu.h src/rt/mem.h src/rt/guest.h recomp/gen/protos.h 2>/dev/null | head -1)
+# Newest header overall, for the hand-written runtime sources.
 NEWEST_HDR=$(ls -t src/rt/*.h src/rt/*/*.h recomp/gen/protos.h 2>/dev/null | head -1)
 
 needs_build() {
-  local obj="$1" src="$2"
+  local obj="$1" src="$2" hdr="$3"
   [ "$FORCE" = "1" ] && return 0
   [ -f "$obj" ] || return 0
   [ "$src" -nt "$obj" ] && return 0
-  [ -n "$NEWEST_HDR" ] && [ "$NEWEST_HDR" -nt "$obj" ] && return 0
+  [ -n "$hdr" ] && [ "$hdr" -nt "$obj" ] && return 0
   return 1
 }
 
 compile_one() {
-  local src="$1" obj="$2" flags="$3"
-  if needs_build "$obj" "$src"; then
+  local src="$1" obj="$2" flags="$3" hdr="$4"
+  if needs_build "$obj" "$src" "$hdr"; then
     if ! $CXX $flags -c -o "$obj" "$src" 2> "$obj.err"; then
       echo "=== FAILED: $src"
       head -20 "$obj.err"
@@ -66,7 +69,7 @@ compile_one() {
   return 0
 }
 export -f compile_one needs_build
-export CXX CXXFLAGS GENFLAGS FORCE NEWEST_HDR
+export CXX CXXFLAGS GENFLAGS FORCE NEWEST_HDR GEN_HDR
 
 N_RT=$(echo "$SRC_FILES" | wc -w)
 N_GEN=$(echo "$GEN_FILES" | wc -w)
@@ -77,15 +80,15 @@ TODO_LIST=""
 TODO_COUNT=0
 for f in $SRC_FILES; do
   obj="$OUT/$(basename "${f%.cpp}").o"
-  if needs_build "$obj" "$f"; then
-    TODO_LIST="$TODO_LIST$f|$obj|$CXXFLAGS"$'\n'
+  if needs_build "$obj" "$f" "$NEWEST_HDR"; then
+    TODO_LIST="$TODO_LIST$f|$obj|$CXXFLAGS|$NEWEST_HDR"$'\n'
     TODO_COUNT=$((TODO_COUNT + 1))
   fi
 done
 for f in $GEN_FILES; do
   obj="$OUT/$(basename "${f%.cpp}").o"
-  if needs_build "$obj" "$f"; then
-    TODO_LIST="$TODO_LIST$f|$obj|$GENFLAGS"$'\n'
+  if needs_build "$obj" "$f" "$GEN_HDR"; then
+    TODO_LIST="$TODO_LIST$f|$obj|$GENFLAGS|$GEN_HDR"$'\n'
     TODO_COUNT=$((TODO_COUNT + 1))
   fi
 done
@@ -93,8 +96,8 @@ echo "[build] $TODO_COUNT to compile, $((N_RT + N_GEN - TODO_COUNT)) up to date,
 
 if [ "$TODO_COUNT" -gt 0 ]; then
   printf '%s' "$TODO_LIST" | xargs -P "$JOBS" -I{} bash -c '
-    IFS="|" read -r src obj flags <<< "{}"
-    compile_one "$src" "$obj" "$flags" || exit 255
+    IFS="|" read -r src obj flags hdr <<< "{}"
+    compile_one "$src" "$obj" "$flags" "$hdr" || exit 255
   ' || { echo "[build] compile failed"; exit 1; }
 fi
 

@@ -152,15 +152,20 @@ class Census:
 
         MSVC emits functions back to back: the previous one ends with `ret`, followed by
         `int3` padding, then the next prologue. A `jmp` can land exactly on such a prologue,
-        so without this test the reachability walk merges two functions into one — and then a
-        legitimate `jmp` looks like a jump into the middle of a function.
+        so without this test the reachability walk merges two functions into one.
+
+        Exception: a branch *target* is never a boundary. MSVC also splits a function into a
+        hot path that ends in `ret` and a cold path right after it (SEH handlers, error
+        paths); a `jcc` from earlier in the same function jumps over the `ret` into that cold
+        path. Treating it as a new function breaks the function in half.
         """
         i = self.index.get(addr)
         if i is None or i == 0:
             return False
+        if addr in self.branch_targets:
+            return False
         prev = self.mns[i - 1]
-        # Only the unambiguous markers: padding, or an explicit return. A preceding `jmp` is
-        # *not* a boundary — jump-table tails are followed by more of the same function.
+        # Only the unambiguous markers: padding, or an explicit return.
         return prev == "int3" or prev.startswith("ret") or prev.startswith("iret")
 
     def boundary_addresses(self) -> set[int]:

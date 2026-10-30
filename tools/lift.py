@@ -20,6 +20,7 @@ Design rules (these are what make 100k functions tractable):
 """
 from __future__ import annotations
 
+import bisect
 import json
 import re
 import struct
@@ -311,6 +312,47 @@ class Lifter:
             # Tail call: no return address is pushed, so the callee's `ret` returns to *our*
             # caller. Native tail call, guest stack unchanged.
             return [f"  sr::guest_tail(s, 0x{tgt:08x}u); return;"]
+        # Jump table: `jmp dword ptr [table + reg*4]`. Resolving it to a switch keeps the jump
+        # inside the function, which is what the original code does. Without this, every
+        # switch statement in the game became a tail call to an address in the middle of a
+        # function (or, worse, an unmapped address).
+        if op.type == csx.X86_OP_MEM and op.mem.index != 0 and op.mem.disp:
+            table = op.mem.disp & 0xFFFFFFFF
+            index = self._addr_reg(self.md.reg_name(op.mem.index))
+            scale = op.mem.scale
+            # Read entries until one leaves the image. Validity is decided per entry: a table
+            # can live outside the function (MSVC puts switch tables in .rdata) while its
+            # targets are inside it.
+            targets: list[int] = []
+            for k in range(256):
+                addr = table + k * scale * 4
+                o = self.pe.off_va(addr)
+                if o is None or o + 4 > len(self.pe.d):
+                    break
+                tgt = int.from_bytes(self.pe.d[o:o + 4], "little")
+                # A plausible target is an address inside .text.
+                if not (self.pe.imagebase <= tgt < self.pe.imagebase + 0x01000000):
+                    break
+                if tgt not in self._all_block_starts:
+                    break
+                targets.append(tgt)
+            if targets and all(t in self._labels for t in targets):
+                lines = [f"  switch ((u32)({index})) {{"]
+                for k, tgt in enumerate(targets):
+                    lines.append(f"    case {k}u: goto L_{tgt:08x};")
+                lines.append("    default: break;")
+                lines.append("  }")
+                return lines
+            if targets:
+                # The table points at blocks that belong to *other* functions: a switch that
+                # tail-calls them. Dispatch through the guest so the callee's `ret` returns to
+                # our caller.
+                lines = [f"  switch ((u32)({index})) {{"]
+                for k, tgt in enumerate(targets):
+                    lines.append(f"    case {k}u: sr::guest_tail(s, 0x{tgt:08x}u); return;")
+                lines.append("    default: break;")
+                lines.append("  }")
+                return lines
         return [f"  {{ sr::guest_jump_indirect(s, (u32)({self.read_op(insn, op, 4)})); return; }}"]
 
     def _jcc(self, insn, cc: int):
@@ -446,7 +488,7 @@ class Lifter:
         ops = insn.operands
         size = op_size(ops[0])
         if len(ops) == 1:
-            return [f"  sr::imul_1(s, {size});"]
+            return [f"  sr::imul_1(s, (u32)({self.read_op(insn, ops[0], size)}), {size});"]
         if len(ops) == 2:
             a = self.read_op(insn, ops[0], size)
             b = self.read_op(insn, ops[1], size)
@@ -1301,9 +1343,34 @@ class Lifter:
         # function (tail call into another lifted function, or a jump into the middle of
         # one). Those become guest tail calls, never dangling gotos.
         self._labels = labels
+        # Bounds of this function, used to validate jump-table entries.
+        self._func_start = start
+        self._func_end = max((b["end"] for b in blocks), default=start)
         # Blocks of this function that other functions jump into. MSVC shares code tails
         # between functions, so a `jmp` can legitimately land in the middle of another
         # function; those addresses need an entry point of their own.
+        #
+        # A cross-function target can also fall *inside* a block rather than on its start
+        # (the SEH prologue pattern jumps past the prologue into the handler body). Those get
+        # a label inside the block, so the mid-entry dispatcher can reach them too.
+        func_end = max((b["end"] for b in blocks), default=start)
+        # Binary search into the sorted cross-target list instead of scanning all of them for
+        # every one of 132,047 functions (that scan is what made the lift take an hour).
+        lo = bisect.bisect_left(self._cross_sorted, start)
+        hi = bisect.bisect_left(self._cross_sorted, func_end)
+        # A target belongs to exactly one function: the one whose *block* contains it.
+        # Function ranges can overlap (blocks are not contiguous), so a plain range test
+        # assigns the same label to two functions and the second one gets an undefined goto.
+        ranges = [(b["start"], b["end"]) for b in blocks]
+
+        def owned(a: int) -> bool:
+            for bs, be in ranges:
+                if bs <= a < be:
+                    return True
+            return False
+
+        intra = [a for a in self._cross_sorted[lo:hi] if owned(a)]
+        labels |= set(intra)
         mid = sorted(labels & self._cross_targets)
         out = [f"// {f['n_insns']} instructions, {f['n_blocks']} blocks"
                + (" (orphan: not reachable from a root)" if f.get("orphan") else "")]
@@ -1329,8 +1396,17 @@ class Lifter:
         code = self.pe.d
         for b in blocks:
             out.append(f"L_{b['start']:08x}:;")
+            # Block-level EIP: a crash report then names the basic block that faulted instead
+            # of just the function. One store per block is cheap and makes every future crash
+            # directly disassemblable.
+            out.append(f"  s->eip = 0x{b['start']:08x};")
             addr = b["start"]
             while addr < b["end"]:
+                # A cross-function jump can land inside this block (not just at its start):
+                # emit a label there so the mid-entry dispatcher can reach it.
+                if addr != b["start"] and addr in labels:
+                    out.append(f"L_{addr:08x}:;")
+                    out.append(f"  s->eip = 0x{addr:08x};")
                 o = self.pe.off_va(addr)
                 got = None
                 for insn in self.md.disasm(code[o:o + 16], addr):
@@ -1352,8 +1428,14 @@ class Lifter:
             elif kind == "jmp_indirect":
                 out.append("  return;  // indirect jump: dispatch table handles it")
             elif kind == "shared":
-                # falls into another function: tail call it
-                out.append(f"  sr::guest_tail(s, 0x{b['end']:08x}u); return;")
+                # The walk stopped at an address that was already owned. Two cases:
+                #   * it is a block of *this* function (the census reached it by another path)
+                #     -> just continue there, it is a normal label;
+                #   * it belongs to another function -> a real tail call.
+                if b["end"] in labels:
+                    out.append(f"  goto L_{b['end']:08x};")
+                else:
+                    out.append(f"  sr::guest_tail(s, 0x{b['end']:08x}u); return;")
             elif kind in ("int3", "trap", "orphan"):
                 out.append("  return;")
         if not blocks:
@@ -1363,7 +1445,12 @@ class Lifter:
 
     def run(self, limit: int | None = None) -> None:
         GEN.mkdir(parents=True, exist_ok=True)
-        for old in GEN.glob("funcs_*.cpp"):
+        # Remove every generated file, not just the chunks: a previous run with a different
+        # function count leaves stale chunks behind, and they duplicate definitions at link
+        # time (415 chunks now vs 529 before).
+        for old in GEN.glob("*.cpp"):
+            old.unlink()
+        for old in GEN.glob("*.h"):
             old.unlink()
         # Only lift functions reachable from a root; orphan groups are data islands.
         real = [f for f in self.funcs if not f.get("orphan")]
@@ -1374,13 +1461,20 @@ class Lifter:
         # Every block address that some *other* function jumps to AND that is not itself a
         # function start. Jumps to a function start are handled by the normal dispatch table,
         # so only the genuinely shared code tails need a mid-entry dispatcher.
+        #
+        # A block's successor can be a block that the census never decoded (kind "shared"):
+        # the walk stopped because the address was already owned by another function. Those
+        # are exactly the cross-function jumps this table exists for, so they are included.
         self._cross_targets = set()
         for f in real:
             mine = {b["start"] for b in self.blocks[f["start"]]}
             for b in self.blocks[f["start"]]:
                 for succ in b["succ"]:
-                    if succ not in mine and succ not in self._lifted:
-                        self._cross_targets.add(succ)
+                    if succ in mine:
+                        continue  # internal branch
+                    if succ in self._lifted:
+                        continue  # jumps to a function start: normal dispatch
+                    self._cross_targets.add(succ)
         # Split into chunks so the compiler can work on them in parallel and no single
         # translation unit gets absurdly large (the whole lift is ~15M lines of C++).
         CHUNK = 250
@@ -1395,6 +1489,13 @@ class Lifter:
             if mine & self._cross_targets:
                 mid_functions.add(f["start"])
         self._mid_functions = mid_functions
+        self._cross_sorted = sorted(self._cross_targets)
+        # Every block start in the program: a jump-table entry is valid only if it points at
+        # one, which is what distinguishes a real table from data that merely looks like one.
+        self._all_block_starts = set()
+        for f in self.funcs:
+            for b in self.blocks[f["start"]]:
+                self._all_block_starts.add(b["start"])
         print(f"[lift] {len(mid_functions):,} functions need a mid-entry dispatcher",
               flush=True)
 
@@ -1477,4 +1578,6 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
 

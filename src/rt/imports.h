@@ -38,6 +38,9 @@ const Desc* find(const char* dll, const char* name, uint16_t ordinal);
 // The full table, terminated by an entry with dll == nullptr.
 extern const Desc g_import_table[];
 
+// Registers the stub range. Must be called before the first make_stub().
+bool init();
+
 // Allocates a unique guest stub address for a descriptor and returns it.
 u32 make_stub(const Desc* d);
 

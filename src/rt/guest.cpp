@@ -331,13 +331,18 @@ void shld(CpuState* s, u32 dst, u32 src, u32 count, int size, int right) {
   store<u32>(s->r[4], r);  // caller re-reads via write_op; see lifter note
 }
 
-void imul_1(CpuState* s, int size) {
+void imul_1(CpuState* s, u32 operand, int size) {
+  // One-operand `imul r/m`: EAX * operand -> EDX:EAX (signed). The operand used to be lost
+  // here, so the multiply ran EAX * EAX, which turned every compiler-emitted division idiom
+  // (`mov eax, magic; imul ecx`) into garbage — including the magic-number division that
+  // Spore's container code uses, which is what produced a bogus pointer and a crash deep in
+  // static initialisation.
   if (size == 4) {
-    s64 r = s64(s32(s->r[0])) * s64(s32(s->r[0]));
-    s->r[0] = u32(r);
+    s64 r = s64(s32(s->r[0])) * s64(s32(operand));
+    s->r[0] = u32(u64(r));
     s->r[2] = u32(u64(r) >> 32);
   } else {
-    s32 r = s32(s16(s->r[0])) * s32(s16(s->r[0]));
+    s32 r = s32(s16(s->r[0])) * s32(s16(operand));
     s->r[0] = u32(u16(r));
     s->r[2] = u32(u16(r >> 16));
   }

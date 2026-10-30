@@ -209,7 +209,15 @@ void QueryPerformanceFrequency(CpuState* s, const u32* a) {
 }
 
 void QueryPerformanceCounter(CpuState* s, const u32* a) {
-  if (a[0]) store<u64>(a[0], now_ns());
+  // The guest passes a pointer to an 8-byte counter. Writing through `store<u64>` needs the
+  // target page to be committed, and Spore's timer object lives in a heap block that was
+  // allocated by the CRT — which may still be unmapped if it came from a fresh arena page.
+  // Committing on demand here is what keeps the very first timing call from faulting.
+  u32 p = a[0];
+  if (p) {
+    gmem().map(p & ~0xFFFu, 0x1000);
+    store<u64>(p, now_ns());
+  }
   s->r[0] = 1;
 }
 

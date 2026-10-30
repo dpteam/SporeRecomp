@@ -1,6 +1,6 @@
 # Lifter report
 
-* functions lifted: 132,047
+* functions lifted: 103,726
 * instructions lifted: 4,751,944
 * instructions needing work: 0
 

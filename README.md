@@ -1,7 +1,7 @@
 # SporeRecomp
 
 Static binary recompilation of **Spore (SporeApp.exe, GA release, Win32 PE)** for
-**Anbernic RG 35 XX H / H700 — Linux aarch64, muOS**.
+**Anbernic RG35XX H / H700 — Linux aarch64, muOS**.
 
 Method is the same one that produced `refs/NFSU2_Template`: lift the guest x86-32 code to
 native C++, replace Windows/D3D9/DInput/DSound with a native runtime, cross-compile to aarch64,
@@ -38,5 +38,5 @@ python tools/disasm.py --stats      # summarise an existing pass
 
 ## Target device
 
-RG 35 XX H: Allwinner H700, 4x Cortex-A53 @1.5 GHz (AArch64, NEON), 1 GB RAM, no swap,
+RG35XX H: Allwinner H700, 4x Cortex-A53 @1.5 GHz (AArch64, NEON), 1 GB RAM, no swap,
 Mali-G31 (GLES 2.0/3.x via `libMali`), muOS 2606 "ANDROMEDA" (glibc 2.44, SDL2 2.28).

@@ -32,6 +32,16 @@ cp "$EXE" "$STAGE/gamedata/SporeApp.exe"
 cp "$BIN" "$STAGE/spore"
 chmod +x "$STAGE/spore"
 
+# Spore asserts without its .package files, so the smoke test can run against real data.
+# SR_DATA points at a directory containing the Data/ folder; it is symlinked, not copied
+# (the retail packages are ~3.9 GB).
+if [ -n "${SR_DATA:-}" ] && [ -d "$SR_DATA/Data" ]; then
+  ln -sfn "$SR_DATA/Data" "$STAGE/gamedata/Data"
+  echo "[smoke] game data linked from $SR_DATA/Data ($(du -sh "$SR_DATA/Data" 2>/dev/null | cut -f1))"
+else
+  echo "[smoke] no game data (set SR_DATA=/path/to/SporeRetail to include Data/)"
+fi
+
 cd "$STAGE"
 # The cross toolchain's dynamic loader is not at the path qemu looks for by default; point it
 # at the aarch64 sysroot explicitly.

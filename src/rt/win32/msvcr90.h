@@ -5,6 +5,11 @@
 
 namespace sr::w32 {
 
+// Progress through the C++ initialiser table, for crash reports.
+unsigned initterm_index();
+unsigned initterm_total();
+uint32_t initterm_current();
+
 // Thrown by longjmp(): the only way to abandon the native frames between the longjmp and the
 // setjmp that created the jump buffer. Caught at the guest entry point.
 struct Longjmp {

@@ -173,23 +173,47 @@ void crt_aligned_realloc(CpuState* s, const u32* a) { crt_realloc(s, a); }
 // ---------------------------------------------------------------------------
 // CRT startup handshake
 // ---------------------------------------------------------------------------
+// Progress through the C++ initialiser table, for crash reports. Spore has ~31,000 static
+// initialisers; knowing which one was running is the difference between a day and a minute.
+static unsigned g_initterm_index = 0;
+static unsigned g_initterm_total = 0;
+static u32 g_initterm_current = 0;
+
+unsigned initterm_index() { return g_initterm_index; }
+unsigned initterm_total() { return g_initterm_total; }
+u32 initterm_current() { return g_initterm_current; }
+
 void crt_initterm(CpuState* s, const u32* a) {
   // Walks a table of function pointers calling each one: the C++ static initialisers.
   u32 first = a[0], last = a[1];
-  unsigned n = 0;
+  unsigned n = 0, skipped = 0;
+  unsigned total = (last - first) / 4;
+  SR_LOG("initterm: table 0x%08x..0x%08x (%u bytes, %u slots)", first, last,
+         last - first, total);
+  g_initterm_total = total;
+  g_initterm_index = 0;
   for (u32 p = first; p < last; p += 4) {
     u32 fn = load<u32>(p);
     if (!fn) continue;
     GuestFn f = find_function(fn);
     if (!f) {
-      SR_LOG("initterm: initialiser 0x%08x is not lifted", fn);
+      ++skipped;
+      SR_LOG("initterm: initialiser at 0x%08x (0x%08x) is not lifted", p, fn);
       continue;
+    }
+    g_initterm_current = fn;
+    if (shim::config().verbose) {
+      SR_LOG("initterm: [%u/%u] calling 0x%08x", n + 1, total, fn);
     }
     guest_push_ret(s, 0xFFFFFFFFu);
     f(s);
     ++n;
+    g_initterm_index = n;
+    if (n % 2000 == 0) {
+      SR_LOG("initterm: %u/%u initialisers done (at 0x%08x)", n, total, fn);
+    }
   }
-  SR_LOG("initterm: ran %u initialisers", n);
+  SR_LOG("initterm: ran %u initialisers, skipped %u", n, skipped);
   s->r[0] = 0;
 }
 
@@ -1106,6 +1130,7 @@ void crt_longjmp(CpuState* s, const u32* a) {
 }
 
 }  // namespace sr::w32
+
 
 
 

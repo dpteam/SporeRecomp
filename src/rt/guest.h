@@ -85,7 +85,7 @@ void rep_stosb(CpuState* s);
 void set_shift_flags(CpuState* s, u32 a, u32 count, u32 result, int bits);
 void bt_op(CpuState* s, u32 base, u32 bit, int size, int op);  // 0=bt 1=bts 2=btr 3=btc
 void shld(CpuState* s, u32 dst, u32 src, u32 count, int size, int right);
-void imul_1(CpuState* s, int size);
+void imul_1(CpuState* s, u32 operand, int size);
 void mul_1(CpuState* s, u32 v, int size);
 void div_1(CpuState* s, u32 v, int size, bool is_signed);
 u32 bswap32(u32 v);
@@ -309,5 +309,6 @@ void debug_break(CpuState* s);
 void unsupported(const char* what, u32 addr);
 
 }  // namespace sr
+
 
 
